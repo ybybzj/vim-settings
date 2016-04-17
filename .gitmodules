@@ -61,3 +61,6 @@
 [submodule "bundle/papercolor-theme"]
 	path = bundle/papercolor-theme
 	url = https://github.com/NLKNguyen/papercolor-theme.git
+[submodule "bundle/vim-rest-console"]
+	path = bundle/vim-rest-console
+	url = https://github.com/diepm/vim-rest-console.git
