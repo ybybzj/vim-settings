@@ -40,3 +40,24 @@
 [submodule "bundle/YouCompleteMe"]
 	path = bundle/YouCompleteMe
 	url = https://github.com/Valloric/YouCompleteMe.git
+[submodule "bundle/image.vim"]
+	path = bundle/image.vim
+	url = https://github.com/ashisha/image.vim
+[submodule "bundle/vim-devicons"]
+	path = bundle/vim-devicons
+	url = https://github.com/ryanoasis/vim-devicons.git
+[submodule "papercolor-theme"]
+	path = papercolor-theme
+	url = https://github.com/NLKNguyen/papercolor-theme.git
+[submodule "vim-javascript"]
+	path = vim-javascript
+	url = https://github.com/pangloss/vim-javascript.git
+[submodule "bundle/vim-airline-themes"]
+	path = bundle/vim-airline-themes
+	url = https://github.com/vim-airline/vim-airline-themes.git
+[submodule "bundle/vim-javascript"]
+	path = bundle/vim-javascript
+	url = https://github.com/pangloss/vim-javascript.git
+[submodule "bundle/papercolor-theme"]
+	path = bundle/papercolor-theme
+	url = https://github.com/NLKNguyen/papercolor-theme.git
