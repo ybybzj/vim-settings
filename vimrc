@@ -8,15 +8,20 @@ set statusline+=%*
 
 " normal settings
 set number
+set relativenumber
 set noswapfile
 set cursorline
 set laststatus=2
 set statusline+=%F
 " set color scheme
-set background=dark
-colorscheme Monokai
-set mouse=a
+set t_Co=256
+set background=light
+colorscheme PaperColor
+let g:airline_theme='PaperColor'
+let g:PaperColor_Light_Override = { 'cursorline' : '#dfffff', 'matchparen': '#00afff'}
 
+set mouse=a
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
@@ -50,7 +55,7 @@ nnoremap <leader>n :enew<cr>
 nnoremap <leader>ve :e ~/.vimrc<cr>
 
 " Edit i3config
-nnoremap <leader>i3 :e ~/.config/i3/config<cr>
+nnoremap <leader>i3 :e ~/.i3/config<cr>
 
 cnoremap %% <C-R>=fnameescape(expand('%:h')).'/'<cr>
 map <leader>ew :e %%
@@ -76,11 +81,39 @@ inoremap <silent> <C-Y> <C-R>"
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#exsentions#tabline#fnamemod = ':t'
 
-" Setting for ctrlP {{{
-" Setup some default ignores
-let g:ctrlp_custom_ignore = {
-   \ 'dir':  '\v[\/](\.(git|hg|svn)|\_site)$',
-   \ 'file': '\v\.(exe|so|dll|class|png|jpg|jpeg)$',
- \ }
-" Use the nearest .git directory as the cwd
-let g:ctrlp_working_path_mode = 'r'
+" ctrlp settings
+let g:ctrlp_working_path_mode = 'ra'
+
+" YouCompleteMe settings
+let g:ycm_min_num_of_chars_for_completion = 2
+let g:ycm_autoclose_preview_window_after_completion = 1
+let g:ycm_complete_in_comments = 1
+let g:ycm_key_list_select_completion = ['<c-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<c-b>', '<Up>']
+
+" NERDTress File highlighting
+function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
+ exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
+ exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
+endfunction
+
+call NERDTreeHighlightFile('jade', 'green', 'none', 'green', '#151515')
+call NERDTreeHighlightFile('ini', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('md', 'blue', 'none', '#3366FF', '#151515')
+call NERDTreeHighlightFile('yml', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('config', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('conf', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('json', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('html', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('styl', 'cyan', 'none', 'cyan', '#151515')
+call NERDTreeHighlightFile('css', 'cyan', 'none', 'cyan', '#151515')
+call NERDTreeHighlightFile('coffee', 'Red', 'none', 'red', '#151515')
+call NERDTreeHighlightFile('js', 'Red', 'none', '#ffa500', '#151515')
+call NERDTreeHighlightFile('php', 'Magenta', 'none', '#ff00ff', '#151515')
+
+" setup rust
+let g:rustfmt_autosave = 1
+let g:ycm_rust_src_path = '/opt/rust/rustc-1.8.0/src'
+
+" setup sudo write
+command W :execute ':silent w !sudo tee % > /dev/null' | :edit!
