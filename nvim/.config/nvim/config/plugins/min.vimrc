@@ -6,7 +6,7 @@ Plug 'tpope/vim-sensible'
 Plug 'scrooloose/nerdtree'
 Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 Plug 'junegunn/fzf.vim'
-Plug 'roxma/nvim-completion-manager'
+Plug 'filipekiss/nvim-completion-manager'
 Plug 'eugen0329/vim-esearch'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
