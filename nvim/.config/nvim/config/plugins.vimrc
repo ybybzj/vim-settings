@@ -1,7 +1,9 @@
-" NCM start
+" NCM2 start
+autocmd BufEnter * call ncm2#enable_for_buffer()
 inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-" NCM end
+set completeopt=noinsert,menuone,noselect
+" NCM2 end
 
 " NERDTree Start
 function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
@@ -33,18 +35,20 @@ let g:vimreason_extra_args_expr_reason = '"--print-width " . ' .  "min([80, winw
 " Language Server Client Start
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_serverCommands = {
-  \ 'reason': ['ocaml-language-server', '--stdio'],
-  \ 'ocaml': ['ocaml-language-server', '--stdio'],
+  \ 'reason': ['reason-language-server'],
   \ 'rust': ['rls'],
   \ 'javascript': ['javascript-typescript-stdio'],
   \ 'javascript.jsx': ['javascript-typescript-stdio'],
+  \ 'typescript': ['javascript-typescript-stdio'],
+  \ 'sh': ['bash-language-server', 'start'],
   \ }
 let g:LanguageClient_selectionUI = "fzf"
 
 nnoremap <silent> gd :call LanguageClient_textDocument_definition()<cr>
-nnoremap <silent> <F4> :call LanguageClient_textDocument_formatting()<cr>
-nnoremap <silent> <cr> :call LanguageClient_textDocument_hover()<cr>
-nnoremap <silent> gf :call LanguageClient_textDocument_documentSymbol()<cr>
+" nnoremap <silent> <F4> :call LanguageClient_textDocument_formatting()<cr>
+nnoremap <silent> <space> :call LanguageClient_textDocument_hover()<cr>
+nnoremap <silent> gs :call LanguageClient_textDocument_documentSymbol()<cr>
+nnoremap <silent> gf :call LanguageClient_textDocument_codeAction()<cr>
 " Language Server Client End
 
 " Emmet Start
@@ -55,20 +59,32 @@ autocmd FileType html,css,jsx EmmetInstall
 " ale {{{
 let g:ale_linters = {
 \   'javascript': ['eslint'],
-\   'typescript': ['eslint'],
+\   'typescript': ['tslint'],
 \   'sass': ['prettier'],
 \}
+let g:ale_fixers = {
+\   '*': ['remove_trailing_lines', 'trim_whitespace'],
+\   'javascript': ['prettier'],
+\   'typescript': ['prettier'],
+\   'rust': ['rls'],
+\   'reason': ['refmt'],
+\}
+nmap <silent> <F7> <Plug>(ale_previous_wrap)
+nmap <silent> <F8> <Plug>(ale_next_wrap)
+nnoremap <silent> <F4> :ALEFix<cr>
 " ale }}}
 
-" esearch {{{
-let g:esearch = {
-  \ 'adapter':    'ag',
-  \ 'backend':    'nvim',
-  \ 'out':        'win',
-  \ 'batch_size': 1000,
-  \ 'use':        ['visual', 'hlsearch', 'last'],
-  \}
-" esearch }}}
+" vim-grepper {{{
+nnoremap <leader>F :Grepper -tool ag -cword -noprompt<cr>
+nmap gS <Plug>(GrepperOperator)
+xmap gS <Plug>(GrepperOperator)
+let g:grepper               = {}
+let g:grepper.tools         = ['ag', 'git', 'rg']
+let g:grepper.jump          = 0
+let g:grepper.next_tool     = '<leader>g'
+let g:grepper.simple_prompt = 1
+let g:grepper.quickfix      = 0
+" vim-grepper }}}
 
 " fzf {{{
 nnoremap <C-p> :Files ~<cr>
