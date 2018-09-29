@@ -35,11 +35,11 @@ let g:vimreason_extra_args_expr_reason = '"--print-width " . ' .  "min([80, winw
 " Language Server Client Start
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_serverCommands = {
-  \ 'reason': ['reason-language-server'],
+  \ 'reason': ['reason-language-server.exe'],
   \ 'rust': ['rls'],
-  \ 'javascript': ['javascript-typescript-stdio'],
-  \ 'javascript.jsx': ['javascript-typescript-stdio'],
-  \ 'typescript': ['javascript-typescript-stdio'],
+  \ 'javascript': ['typescript-language-server', '--stdio'],
+  \ 'javascript.jsx': ['typescript-language-server', '--stdio'],
+  \ 'typescript': ['typescript-language-server', '--stdio'],
   \ 'sh': ['bash-language-server', 'start'],
   \ }
 let g:LanguageClient_selectionUI = "fzf"
@@ -75,11 +75,13 @@ nnoremap <silent> <F4> :ALEFix<cr>
 " ale }}}
 
 " vim-grepper {{{
-nnoremap <leader>F :Grepper -tool ag -cword -noprompt<cr>
+nnoremap <silent> <leader>F :Grepper -tool ag -cword -noprompt<cr>
 nmap gS <Plug>(GrepperOperator)
 xmap gS <Plug>(GrepperOperator)
 let g:grepper               = {}
 let g:grepper.tools         = ['ag', 'git', 'rg']
+let g:grepper.repo          = ['.git', '.hg', '.svn']
+let g:grepper.dir           = 'repo,file'
 let g:grepper.jump          = 0
 let g:grepper.next_tool     = '<leader>g'
 let g:grepper.simple_prompt = 1
