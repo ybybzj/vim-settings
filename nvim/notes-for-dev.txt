@@ -1,0 +1,20 @@
+1. language servers
+
+reasonml :  
+  npm i -g bs-platform reason-cli@latest-linux
+  download https://github.com/jaredly/reason-language-server/releases
+  
+typescript/javascript: 
+  npm i -g typescript-language-server
+  npm i -g neovim
+  npm i -g typescript
+  npm i -g prettier eslint tslint
+rust: 
+  rustup component add rls-preview rust-analysis rust-src
+bash: 
+  npm i -g bash-language-server
+others:
+  https://langserver.org/
+  
+2. after plug installed
+:UpdateRemotePlugins
