@@ -20,6 +20,11 @@ set ts=2 sts=2 sw=2 expandtab
 
 set mouse=a
 
+" set folding
+
+set foldmethod=syntax
+set nofoldenable
+
 " setup sudo write
 command! W :execute ':silent w !sudo tee % > /dev/null' | :edit!
 
