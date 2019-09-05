@@ -1,8 +1,7 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =6
-let g:netrw_dirhist_1='/home/jackzj/my-reason'
-let g:netrw_dirhist_2='/home/jackzj'
-let g:netrw_dirhist_3='/home/jackzj/my-reason'
-let g:netrw_dirhist_4='/home/jackzj/my-reason/test'
-let g:netrw_dirhist_5='/home/jackzj/my-reason/test/src'
-let g:netrw_dirhist_6='/home/jackzj/Downloads'
+let g:netrw_dirhist_cnt =5
+let g:netrw_dirhist_1='/home/jackzj'
+let g:netrw_dirhist_2='/home/jackzj/.i3'
+let g:netrw_dirhist_3='/home/jackzj'
+let g:netrw_dirhist_4='/home/jackzj/.i3'
+let g:netrw_dirhist_5='/home/jackzj'

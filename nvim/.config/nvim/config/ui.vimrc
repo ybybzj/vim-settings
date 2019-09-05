@@ -6,5 +6,5 @@ colorscheme material
 let g:material_theme_style = 'dark'
 let g:material_terminal_italics = 1
 " hi Normal guibg=NONE ctermbg=NONE
-" let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts = 1
 

@@ -19,7 +19,9 @@ autocmd BufEnter * silent! lcd %:p:h
 set ts=2 sts=2 sw=2 expandtab
 
 set mouse=a
-
+" folding
+set foldmethod=syntax
+set nofoldenable
 " setup sudo write
 command! W :execute ':silent w !sudo tee % > /dev/null' | :edit!
 

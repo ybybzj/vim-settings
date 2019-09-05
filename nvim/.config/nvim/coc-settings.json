@@ -1,0 +1,25 @@
+{
+  "languageserver": {
+    "reason": {
+      "command": "/home/jackzj/my_bins/reason-language-server/reason-language-server",
+      "filetypes": ["reason"]
+    },
+    /* "ocaml": { */
+    /*    "command": "ocaml-language-server", */
+    /*    "args": ["--stdio"], */
+    /*    "filetypes": ["ocaml", "reason"] */
+    /*  }, */
+   "bash": {
+      "command": "bash-language-server",
+      "args": ["start"],
+      "filetypes": ["sh"],
+      "ignoredRootPaths": ["~"]
+    },
+  "dockerfile": {
+      "command": "docker-langserver",
+      "filetypes": ["dockerfile"],
+      "args": ["--stdio"]
+    }
+  },
+  "coc.source.omni.filetypes": ["reason", "ocaml"]
+}
