@@ -1,7 +1,7 @@
 {
   "languageserver": {
     "reason": {
-      "command": "/home/jackzj/my_bins/reason-language-server/reason-language-server",
+      "command": "/home/jackzj/my_bins/reason-language-server",
       "filetypes": ["reason"]
     },
     /* "ocaml": { */
