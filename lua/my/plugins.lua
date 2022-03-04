@@ -51,6 +51,9 @@ return packer.startup({
 		use("karb94/neoscroll.nvim")
 		use("phaazon/hop.nvim")
 
+		use("antoinemadec/FixCursorHold.nvim") -- This is needed to fix lsp doc highlight
+		use("folke/which-key.nvim")
+
 		-- common dependencies
 		use("nvim-lua/popup.nvim")
 		use("nvim-lua/plenary.nvim")
@@ -118,6 +121,8 @@ return packer.startup({
 		use("jose-elias-alvarez/nvim-lsp-ts-utils")
 		use("simrat39/rust-tools.nvim")
 
+		-- finder
+		use("nvim-telescope/telescope.nvim")
 		-- Automatically set up your configuration after cloning packer.nvim
 		-- Put this at the end after all plugins
 		if PACKER_BOOTSTRAP then

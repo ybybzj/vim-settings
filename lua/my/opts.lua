@@ -20,6 +20,7 @@ opt.splitbelow = true -- Put new windows below current
 opt.splitright = true -- Put new windows right of current
 opt.tabstop = 2 -- Number of spaces tabs count for
 opt.termguicolors = true -- True color support
+opt.timeoutlen = 100 -- Time in milliseconds to wait for a mapped sequence to complete.
 opt.wildmode = { "list", "longest" } -- Command-line completion mode
 opt.wrap = false -- Disable line wrap
 cmd("set mouse=a")
