@@ -109,6 +109,10 @@ return packer.startup({
 		use("windwp/nvim-autopairs")
 		use("numToStr/Comment.nvim")
 
+		-- git
+		use("lewis6991/gitsigns.nvim")
+		use("kdheepak/lazygit.nvim")
+
 		-- programming languages
 		use("rescript-lang/vim-rescript")
 		use("jose-elias-alvarez/nvim-lsp-ts-utils")

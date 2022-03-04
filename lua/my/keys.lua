@@ -44,3 +44,5 @@ map("n", "<leader>hl", ":HopChar1<cr>")
 -- minimap --
 map("n", "<leader>m", ":MinimapToggle<cr>")
 
+-- lazygit --
+map("n", "<leader>gg", ":LazyGit<CR>", { silent = true })
