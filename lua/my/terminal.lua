@@ -10,7 +10,34 @@ require("toggleterm").setup({
 	direction = "horizontal",
 	close_on_exit = true,
 })
+local Terminal = require("toggleterm.terminal").Terminal
+local lazygit = Terminal:new({
+	cmd = "lazygit",
+	hidden = true,
+	size = 20,
+	hide_numbers = true,
+	shade_filetypes = {},
+	shade_terminals = true,
+	shading_factor = 2,
+	start_in_insert = true,
+	insert_mappings = true,
+	persist_size = true,
+	direction = "float",
+	close_on_exit = true,
+	shell = vim.o.shell,
+	float_opts = {
+		border = "curved",
+		winblend = 0,
+		highlights = {
+			border = "Normal",
+			background = "Normal",
+		},
+	},
+})
 
+function _lazygit_toggle()
+	lazygit:toggle()
+end
 -- local Terminal = require("toggleterm.terminal").Terminal
 -- local devTerm = Terminal:new({ size = 15, hidden = true, direction = "horizontal", close_on_exit = true })
 --

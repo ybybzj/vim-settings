@@ -2,6 +2,7 @@ local status_ok, telescope = pcall(require, "telescope")
 if not status_ok then
 	return
 end
+telescope.load_extension("fzf")
 
 local actions = require("telescope.actions")
 telescope.setup({
@@ -10,6 +11,7 @@ telescope.setup({
 		prompt_prefix = " ",
 		selection_caret = " ",
 		path_display = { "smart" },
+		scroll_strategy = "limit",
 
 		mappings = {
 			i = {
@@ -76,12 +78,58 @@ telescope.setup({
 			},
 		},
 	},
+	vimgrep_arguments = {
+		"rg",
+		"--color=never",
+		"--no-heading",
+		"--with-filename",
+		"--line-number",
+		"--column",
+		"--hidden",
+	},
 	pickers = {
 		-- Default configuration for builtin pickers goes here:
-		-- picker_name = {
-		--   picker_config_key = value,
-		--   ...
-		-- }
+		find_files = {
+			path_display = { "absolute" },
+			theme = "dropdown",
+			layout_config = { width = 0.8 },
+		},
+		oldfiles = {
+			path_display = { "absolute" },
+			theme = "dropdown",
+			layout_config = { width = 0.8 },
+			initial_mode = "normal",
+		},
+		grep_string = {
+			layout_strategy = "horizontal",
+			layout_config = { width = 0.8 },
+			additional_args = function(opts)
+				local args = {}
+				local case = opts.case
+				if case == "smart" then
+					table.insert(args, "--smart-case")
+				elseif case == "ignore" then
+					table.insert(args, "--ignore-case")
+				else
+					table.insert(args, "--case-sensitive")
+				end
+				--
+				-- table.insert(args, "--")
+				--
+				-- local search = opts.search
+				--
+				-- if not search or #search == 0 then
+				-- 	if opts.search_cword then
+				-- 		search = "'\\b" .. vim.fn.expand("<cword>") .. "\\b'"
+				-- 	else
+				-- 		search = "'" .. vim.fn.input(">?") .. "'"
+				-- 	end
+				-- end
+				--
+				-- table.insert(args, search)
+				return args
+			end,
+		},
 		-- Now the picker_config_key will be applied every time you call this
 		-- builtin picker
 	},
@@ -91,5 +139,12 @@ telescope.setup({
 		--   extension_config_key = value,
 		-- }
 		-- please take a look at the readme of the extension you want to configure
+		fzf = {
+			fuzzy = true, -- false will only do exact matching
+			override_generic_sorter = true, -- override the generic sorter
+			override_file_sorter = true, -- override the file sorter
+			case_mode = "smart_case", -- or "ignore_case" or "respect_case"
+			-- the default case_mode is "smart_case"
+		},
 	},
 })

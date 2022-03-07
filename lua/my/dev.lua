@@ -9,4 +9,9 @@ require("trouble").setup({
 })
 
 -- autopairs
-require('nvim-autopairs').setup{}
+require("nvim-autopairs").setup({})
+
+-- blank indent line
+require("indent_blankline").setup({
+	show_end_of_line = true,
+})

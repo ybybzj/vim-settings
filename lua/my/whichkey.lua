@@ -79,9 +79,10 @@ local opts = {
 }
 
 local mappings = {
+	-- git
 	g = {
 		name = "Git",
-		g = { "<cmd>lua _LAZYGIT_TOGGLE()<CR>", "Lazygit" },
+		g = { "<cmd>lua _lazygit_toggle()<CR>", "Lazygit" },
 		j = { "<cmd>lua require 'gitsigns'.next_hunk()<cr>", "Next Hunk" },
 		k = { "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", "Prev Hunk" },
 		l = { "<cmd>lua require 'gitsigns'.blame_line()<cr>", "Blame" },
@@ -96,12 +97,42 @@ local mappings = {
 		o = { "<cmd>Telescope git_status<cr>", "Open changed file" },
 		b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
 		c = { "<cmd>Telescope git_commits<cr>", "Checkout commit" },
+		f = { "<cmd>Telescope git_bcommits<cr>", "Checkout commit for file" },
 		d = {
 			"<cmd>Gitsigns diffthis HEAD<cr>",
 			"Diff",
 		},
 	},
+	-- finder
+	f = {
+		name = "Finder",
+		o = { "<cmd>lua require('telescope.builtin').oldfiles()<cr>", "find recent files" },
+		f = { "<cmd>lua require('telescope.builtin').find_files()<cr>", "find files" },
+		b = { "<cmd>lua require('telescope.builtin').buffers()<cr>", "find buffers" },
+		s = { "<cmd>lua require('telescope.builtin').live_grep()<cr>", "live grep" },
+		w = {
+			"<cmd>lua require('my.finder.utils').grep_word()<cr>",
+			"find word in project",
+		},
+		r = {
+			"<cmd>lua require('my.finder.utils').grep_last()<cr>",
+			"repeat last search",
+		},
+	},
+
+	-- lsp
+	l = {
+		name = "LSP",
+		r = { "<cmd>lua require('telescope.builtin').lsp_references()<cr>", "find references" },
+		s = { "<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>", "find symbols in document" },
+		a = { "<cmd>lua require('telescope.builtin').lsp_code_actions()<cr>", "list code actions" },
+		d = { "<cmd>TroubleToggle document_diagnostics<cr>", "list diagnostics" },
+		f = { "<cmd>Format<cr>", "format document" },
+	},
 }
 
 which_key.setup(setup)
 which_key.register(mappings, opts)
+local map = require("my.shared").mapkey
+map("", "<leader>cp", "<cmd>lua require(\"my.helpers\").cd_root(vim.fn.expand('%:p:h'), vim.fn.getcwd())<cr>")
+map("", "<C-p>", "<cmd>lua require('telescope.builtin').oldfiles()<cr>")

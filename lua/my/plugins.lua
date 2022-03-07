@@ -104,17 +104,15 @@ return packer.startup({
 		use("williamboman/nvim-lsp-installer") -- simple to use language server installer
 		use("tamago324/nlsp-settings.nvim") -- language server settings defined in json for
 		use("jose-elias-alvarez/null-ls.nvim") -- for formatters and linters
-		use("tami5/lspsaga.nvim")
 		use("folke/trouble.nvim")
 
 		-- dev
 		use("wfxr/minimap.vim")
 		use("windwp/nvim-autopairs")
 		use("numToStr/Comment.nvim")
-
+		use("lukas-reineke/indent-blankline.nvim")
 		-- git
 		use("lewis6991/gitsigns.nvim")
-		use("kdheepak/lazygit.nvim")
 
 		-- programming languages
 		use("rescript-lang/vim-rescript")
@@ -123,6 +121,7 @@ return packer.startup({
 
 		-- finder
 		use("nvim-telescope/telescope.nvim")
+		use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
 		-- Automatically set up your configuration after cloning packer.nvim
 		-- Put this at the end after all plugins
 		if PACKER_BOOTSTRAP then
