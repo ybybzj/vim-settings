@@ -111,6 +111,10 @@ return packer.startup({
 		use("windwp/nvim-autopairs")
 		use("numToStr/Comment.nvim")
 		use("lukas-reineke/indent-blankline.nvim")
+
+		-- bufferline
+		use({ "akinsho/bufferline.nvim", requires = "kyazdani42/nvim-web-devicons" })
+
 		-- git
 		use("lewis6991/gitsigns.nvim")
 
