@@ -111,7 +111,7 @@ return packer.startup({
 		use("windwp/nvim-autopairs")
 		use("numToStr/Comment.nvim")
 		use("lukas-reineke/indent-blankline.nvim")
-
+		use({ "stevearc/aerial.nvim" })
 		-- bufferline
 		use({ "akinsho/bufferline.nvim", requires = "kyazdani42/nvim-web-devicons" })
 

@@ -79,6 +79,8 @@ local opts = {
 }
 
 local mappings = {
+	-- convinient shortcuts
+	o = { "<cmd>AerialToggle left<cr>", "Toogle Lsp Outline" },
 	-- git
 	g = {
 		name = "Git",
@@ -128,6 +130,7 @@ local mappings = {
 		a = { "<cmd>lua require('telescope.builtin').lsp_code_actions()<cr>", "list code actions" },
 		d = { "<cmd>TroubleToggle document_diagnostics<cr>", "list diagnostics" },
 		f = { "<cmd>Format<cr>", "format document" },
+		o = { "<cmd>AerialToggle left<cr>", "toggle outline" },
 	},
 }
 
