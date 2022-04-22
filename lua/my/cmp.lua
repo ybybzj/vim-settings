@@ -1,19 +1,19 @@
 local cmp_status_ok, cmp = pcall(require, "cmp")
 if not cmp_status_ok then
-  return
+	return
 end
 
 local snip_status_ok, luasnip = pcall(require, "luasnip")
 if not snip_status_ok then
-  return
+	return
 end
 
 require("luasnip.loaders.from_vscode").lazy_load()
 
 local check_backspace = function()
-	local col = vim.fn.col "." - 1
-	return col == 0 or vim.fn.getline("."):sub(col, col):match "%s"
-      end
+	local col = vim.fn.col(".") - 1
+	return col == 0 or vim.fn.getline("."):sub(col, col):match("%s")
+end
 
 local kind_icons = {
 	Text = "",
@@ -41,8 +41,8 @@ local kind_icons = {
 	Event = "",
 	Operator = "",
 	TypeParameter = "",
-      }
-      -- find more here: https://www.nerdfonts.com/cheat-sheet
+}
+-- find more here: https://www.nerdfonts.com/cheat-sheet
 cmp.setup({
 	snippet = {
 		-- REQUIRED - you must specify a snippet engine
@@ -87,36 +87,36 @@ cmp.setup({
 	formatting = {
 		fields = { "kind", "abbr", "menu" },
 		format = function(entry, vim_item)
-		  -- Kind icons
-		  vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
-		  -- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
-		  vim_item.menu = ({
-		    nvim_lsp = "[LSP]",
-		    luasnip = "[Snippet]",
-		    buffer = "[Buffer]",
-		    path = "[Path]",
-		  })[entry.source.name]
-		  return vim_item
+			-- Kind icons
+			vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
+			-- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
+			vim_item.menu = ({
+				nvim_lsp = "[LSP]",
+				luasnip = "[Snippet]",
+				buffer = "[Buffer]",
+				path = "[Path]",
+			})[entry.source.name]
+			return vim_item
 		end,
-	      },
+	},
 	sources = {
 		{ name = "nvim_lsp" },
-		{ name = 'luasnip' }, -- For luasnip users.
-		{ name = 'nvim_lua' },
+		{ name = "luasnip" }, -- For luasnip users.
+		{ name = "nvim_lua" },
 		{ name = "buffer" },
-		{ name = 'emoji' },
+		{ name = "emoji" },
 	},
 	confirm_opts = {
 		behavior = cmp.ConfirmBehavior.Replace,
 		select = false,
-	      },
-	      documentation = {
-		border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
-	      },
-	      experimental = {
+	},
+	window = {
+		documentation = "native",
+	},
+	experimental = {
 		ghost_text = false,
 		native_menu = false,
-	      },
+	},
 })
 
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).

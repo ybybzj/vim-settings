@@ -19,7 +19,8 @@ map("", "<leader>vr", ":Reload<cr>")
 map("n", "<leader>ve", ":e ~/.config/nvim/<cr>")
 map("n", "<leader>i3", ":e ~/.i3/config<cr>")
 map("n", "<cr>", ":noh<cr><cr>")
-
+map("n", "<Up>", "gk")
+map("n", "<Down>", "gj")
 ------- copy --------------
 map("v", "<M-c>", '"+y<cr>')
 map("n", "<M-v>", '"+P<cr>')

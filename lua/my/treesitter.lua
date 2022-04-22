@@ -1,10 +1,23 @@
 local status_ok, ts = pcall(require, "nvim-treesitter.configs")
 if not status_ok then
-  return
+	return
 end
 ts.setup({
-	ensure_installed = "maintained",
-  sync_install = false, -- install languages synchronously (only applied to `ensure_installed`)
+	ensure_installed = {
+		"c",
+		"lua",
+		"rust",
+		"zig",
+		"javascript",
+		"typescript",
+		"go",
+		"css",
+		"html",
+		"tsx",
+		"toml",
+		"yaml",
+	},
+	sync_install = false, -- install languages synchronously (only applied to `ensure_installed`)
 	highlight = { enable = true },
 	incremental_selection = {
 		enable = true,

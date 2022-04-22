@@ -22,6 +22,6 @@ opt.tabstop = 2 -- Number of spaces tabs count for
 opt.termguicolors = true -- True color support
 opt.timeoutlen = 150 -- Time in milliseconds to wait for a mapped sequence to complete.
 opt.wildmode = { "list", "longest" } -- Command-line completion mode
-opt.wrap = false -- Disable line wrap
+opt.wrap = true -- Disable line wrap
 cmd("set mouse=a")
 cmd("set noswapfile")
