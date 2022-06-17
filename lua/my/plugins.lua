@@ -122,10 +122,19 @@ return packer.startup({
 		use("rescript-lang/vim-rescript")
 		use("jose-elias-alvarez/nvim-lsp-ts-utils")
 		use("simrat39/rust-tools.nvim")
+		use("ziglang/zig.vim")
 
 		-- finder
 		use("nvim-telescope/telescope.nvim")
 		use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
+		-- quickfix
+		use({ "kevinhwang91/nvim-bqf", ft = "qf" })
+		use({
+			"junegunn/fzf",
+			run = function()
+				vim.fn["fzf#install"]()
+			end,
+		})
 		-- Automatically set up your configuration after cloning packer.nvim
 		-- Put this at the end after all plugins
 		if PACKER_BOOTSTRAP then

@@ -27,7 +27,12 @@ lsp_installer.on_server_ready(function(server)
 		local ts_opts = require("my.lsp.settings.tsserver")
 		opts = vim.tbl_deep_extend("force", opts, ts_opts)
 	end
-
+	if server.name == "zls" then
+		opts.on_attach = function(client, bufnr)
+			client.resolved_capabilities.document_formatting = false
+			handlers.on_attach(client, bufnr)
+		end
+	end
 	-- This setup() function is exactly the same as lspconfig's setup function.
 	-- Refer to https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md
 	server:setup(opts)

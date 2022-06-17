@@ -19,13 +19,14 @@ local diagnostics = {
 
 local diff = {
 	"diff",
-	colored = false,
+	colored = true,
 	symbols = { added = " ", modified = " ", removed = " " }, -- changes diff symbols
 	cond = hide_in_width,
 }
 
 local mode = {
 	"mode",
+	icons_enabled = true,
 	fmt = function(str)
 		return "-- " .. str .. " --"
 	end,
@@ -33,8 +34,8 @@ local mode = {
 
 local filetype = {
 	"filetype",
-	icons_enabled = false,
-	icon = nil,
+	icons_enabled = true,
+	icon = { align = "left" },
 }
 
 local branch = {
@@ -70,14 +71,19 @@ lualine.setup({
 		section_separators = { left = "", right = "" },
 		disabled_filetypes = { "alpha", "dashboard", "NvimTree", "Outline" },
 		always_divide_middle = true,
+		globalstatus = true,
 	},
 	sections = {
-		lualine_a = { branch, diagnostics },
-		lualine_b = { mode },
-		lualine_c = {},
+		lualine_a = { mode },
+		lualine_b = { branch, diff },
+		lualine_c = { {
+			"filename",
+			file_status = true,
+			path = 3,
+		}, "filesize" },
 
 		lualine_x = { "aerial" },
-		lualine_y = { diff, spaces, "encoding", filetype },
+		lualine_y = { diagnostics, spaces, "encoding", filetype },
 		lualine_z = { location },
 		-- lualine_z = { progress },
 	},

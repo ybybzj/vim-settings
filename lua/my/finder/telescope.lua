@@ -2,7 +2,6 @@ local status_ok, telescope = pcall(require, "telescope")
 if not status_ok then
 	return
 end
-telescope.load_extension("fzf")
 
 local actions = require("telescope.actions")
 telescope.setup({
@@ -100,6 +99,20 @@ telescope.setup({
 			layout_config = { width = 0.8 },
 			initial_mode = "normal",
 		},
+		live_grep = {
+			additional_args = function(opts)
+				local args = {}
+				local case = opts.case
+				if case == "smart" then
+					table.insert(args, "--smart-case")
+				elseif case == "ignore" then
+					table.insert(args, "--ignore-case")
+				else
+					table.insert(args, "--case-sensitive")
+				end
+				return args
+			end,
+		},
 		grep_string = {
 			layout_strategy = "horizontal",
 			layout_config = { width = 0.8 },
@@ -148,3 +161,5 @@ telescope.setup({
 		},
 	},
 })
+
+telescope.load_extension("fzf")

@@ -1,3 +1,4 @@
+local handlers = require("my.lsp.handlers")
 return {
 	settings = {
 		Lua = {
@@ -12,4 +13,8 @@ return {
 			},
 		},
 	},
+	on_attach = function(client, bufnr)
+		client.resolved_capabilities.document_formatting = false
+		handlers.on_attach(client, bufnr)
+	end,
 }

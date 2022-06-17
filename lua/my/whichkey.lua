@@ -111,11 +111,17 @@ local mappings = {
 		o = { "<cmd>lua require('telescope.builtin').oldfiles()<cr>", "find recent files" },
 		f = { "<cmd>lua require('telescope.builtin').find_files()<cr>", "find files" },
 		b = { "<cmd>lua require('telescope.builtin').buffers()<cr>", "find buffers" },
-		s = { "<cmd>lua require('telescope.builtin').live_grep()<cr>", "live grep" },
+		s = { "<cmd>lua require('telescope.builtin').live_grep({case = 'smart'})<cr>", "live grep" },
+		S = { "<cmd>lua require('telescope.builtin').live_grep()<cr>", "live grep with case sensitive" },
 		w = {
-			"<cmd>lua require('my.finder.utils').grep_word()<cr>",
+			"<cmd>lua require('my.finder.utils').grep_word({case = 'smart'})<cr>",
 			"find word in project",
 		},
+		W = {
+			"<cmd>lua require('my.finder.utils').grep_word()<cr>",
+			"find word in project with case sensitive",
+		},
+
 		r = {
 			"<cmd>lua require('my.finder.utils').grep_last()<cr>",
 			"repeat last search",

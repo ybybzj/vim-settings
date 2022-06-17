@@ -15,12 +15,15 @@ map <leader>ev :vsp %%
 map("n", "<M-s>", "<Esc>:wa<cr><Esc>")
 map("i", "<M-s>", "<Esc>:wa<cr>")
 map("", "<M-q>", "<Esc>:q<cr>")
+map("", "<M-Q>", "<Esc>:qa<cr>")
 map("", "<leader>vr", ":Reload<cr>")
 map("n", "<leader>ve", ":e ~/.config/nvim/<cr>")
 map("n", "<leader>i3", ":e ~/.i3/config<cr>")
 map("n", "<cr>", ":noh<cr><cr>")
 map("n", "<Up>", "gk")
 map("n", "<Down>", "gj")
+------- fold --------------
+map("n", "<leader>zc", "ziza")
 ------- copy --------------
 map("v", "<M-c>", '"+y<cr>')
 map("n", "<M-v>", '"+P<cr>')

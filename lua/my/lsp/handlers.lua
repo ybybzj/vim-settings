@@ -77,7 +77,7 @@ local function lsp_keymaps(bufnr)
 		[[
 	     augroup LspAutocommands
 	         autocmd! * <buffer>
-	         autocmd BufWritePost <buffer> lua vim.lsp.buf.formatting()
+	         autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting()
 	     augroup END
 	     ]],
 		true
