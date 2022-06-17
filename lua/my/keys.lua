@@ -22,8 +22,6 @@ map("n", "<leader>i3", ":e ~/.i3/config<cr>")
 map("n", "<cr>", ":noh<cr><cr>")
 map("n", "<Up>", "gk")
 map("n", "<Down>", "gj")
-------- fold --------------
-map("n", "<leader>zc", "ziza")
 ------- copy --------------
 map("v", "<M-c>", '"+y<cr>')
 map("n", "<M-v>", '"+P<cr>')
