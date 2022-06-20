@@ -117,6 +117,7 @@ return packer.startup({
 
 		-- git
 		use("lewis6991/gitsigns.nvim")
+		use("tpope/vim-fugitive")
 
 		-- programming languages
 		use("rescript-lang/vim-rescript")
@@ -136,7 +137,7 @@ return packer.startup({
 			end,
 		})
 		-- fold
-		use({ "kevinhwang91/nvim-ufo", requires = "kevinhwang91/promise-async" })
+		-- use({ "kevinhwang91/nvim-ufo", requires = "kevinhwang91/promise-async" })
 		-- Automatically set up your configuration after cloning packer.nvim
 		-- Put this at the end after all plugins
 		if PACKER_BOOTSTRAP then
