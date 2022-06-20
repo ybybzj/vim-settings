@@ -128,6 +128,7 @@ return packer.startup({
 		-- finder
 		use("nvim-telescope/telescope.nvim")
 		use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
+		use({ "nvim-telescope/telescope-ui-select.nvim" })
 		-- quickfix
 		use({ "kevinhwang91/nvim-bqf", ft = "qf" })
 		use({
