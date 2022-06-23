@@ -54,6 +54,8 @@ return packer.startup({
 		use("antoinemadec/FixCursorHold.nvim") -- This is needed to fix lsp doc highlight
 		use("folke/which-key.nvim")
 
+		-- dialog ui
+		use({ "stevearc/dressing.nvim" })
 		-- common dependencies
 		use("nvim-lua/popup.nvim")
 		use("nvim-lua/plenary.nvim")
@@ -128,7 +130,7 @@ return packer.startup({
 		-- finder
 		use("nvim-telescope/telescope.nvim")
 		use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
-		use({ "nvim-telescope/telescope-ui-select.nvim" })
+		-- use({ "nvim-telescope/telescope-ui-select.nvim" })
 		-- quickfix
 		use({ "kevinhwang91/nvim-bqf", ft = "qf" })
 		use({
@@ -137,8 +139,32 @@ return packer.startup({
 				vim.fn["fzf#install"]()
 			end,
 		})
-		-- fold
-		-- use({ "kevinhwang91/nvim-ufo", requires = "kevinhwang91/promise-async" })
+		-- copilot
+		-- use("github/copilot.vim")
+		use({
+			"zbirenbaum/copilot.lua",
+			event = "VimEnter",
+			config = function()
+				vim.defer_fn(function()
+					require("copilot").setup({
+						-- cmp = {
+						-- 	enabled = true,
+						-- 	method = "getPanelCompletions",
+						-- },
+						-- panel = { -- no config options yet
+						-- 	enabled = true,
+						-- },
+						-- ft_disable = {},
+						-- plugin_manager_path = vim.fn.stdpath("data") .. "/site/pack/packer",
+						-- server_opts_overrides = {},
+					})
+				end, 100)
+			end,
+		})
+		use({
+			"zbirenbaum/copilot-cmp",
+			module = "copilot_cmp",
+		})
 		-- Automatically set up your configuration after cloning packer.nvim
 		-- Put this at the end after all plugins
 		if PACKER_BOOTSTRAP then

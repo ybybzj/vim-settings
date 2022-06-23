@@ -8,7 +8,7 @@ bufferline.setup({
 		diagnostics = "nvim_lsp",
 		diagnostics_indicator = function(
 			count,
-			level--[[ , diagnostics_dict, context ]]
+			level --[[ , diagnostics_dict, context ]]
 		)
 			local icon = level:match("error") and " " or " "
 			return " " .. icon .. count
@@ -62,7 +62,7 @@ bufferline.setup({
 		--     return true
 		--   end
 		-- end,
-		-- offsets = { { filetype = "NvimTree", text = "", padding = 1 } },
+		offsets = { { filetype = "nerdtree", text = "File Explorer" } },
 		show_buffer_icons = true,
 		show_buffer_close_icons = true,
 		show_close_icon = true,

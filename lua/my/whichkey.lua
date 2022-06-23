@@ -139,7 +139,7 @@ local mappings = {
 		s = { "<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>", "find symbols in document" },
 		a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "list code actions" },
 		d = { "<cmd>TroubleToggle document_diagnostics<cr>", "list diagnostics" },
-		f = { "<cmd>Format<cr>", "format document" },
+		f = { "<cmd>lua vim.lsp.buf.formatting_sync()<cr>", "format document" },
 		o = { "<cmd>AerialToggle left<cr>", "toggle outline" },
 	},
 }
@@ -149,3 +149,6 @@ which_key.register(mappings, opts)
 local map = require("my.shared").mapkey
 map("", "<leader>cp", "<cmd>lua require(\"my.helpers\").cd_root(vim.fn.expand('%:p:h'), vim.fn.getcwd())<cr>")
 map("", "<C-p>", "<cmd>lua require('telescope.builtin').oldfiles()<cr>")
+map("", "<F8>", "<cmd>lua vim.diagnostic.goto_next({severity = {min = vim.diagnostic.severity.WARN}})<cr>")
+map("", "<F7>", "<cmd>lua vim.diagnostic.goto_next()<cr>")
+map("", "<leader>k", "<cmd>lua vim.diagnostic.open_float()<cr>")

@@ -87,6 +87,11 @@ cmp.setup({
 	formatting = {
 		fields = { "kind", "abbr", "menu" },
 		format = function(entry, vim_item)
+			if entry.source.name == "copilot" then
+				vim_item.kind = "[] Copilot"
+				vim_item.kind_hl_group = "CmpItemKindCopilot"
+				return vim_item
+			end
 			-- Kind icons
 			vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
 			-- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
@@ -99,13 +104,15 @@ cmp.setup({
 			return vim_item
 		end,
 	},
-	sources = {
+	sources = cmp.config.sources({
 		{ name = "nvim_lsp" },
 		{ name = "luasnip" }, -- For luasnip users.
 		{ name = "nvim_lua" },
+		{ name = "copilot" },
 		{ name = "buffer" },
 		{ name = "emoji" },
-	},
+	}),
+
 	confirm_opts = {
 		behavior = cmp.ConfirmBehavior.Replace,
 		select = false,
@@ -114,8 +121,26 @@ cmp.setup({
 		documentation = cmp.config.window.bordered(),
 	},
 	experimental = {
-		ghost_text = false,
+		ghost_text = true,
 		native_menu = false,
+	},
+	sorting = {
+		priority_weight = 2,
+		comparators = {
+			--		require("copilot_cmp.comparators").prioritize,
+			--require("copilot_cmp.comparators").score,
+			--		-- Below is the default comparitor list and order for nvim-cmp
+			cmp.config.compare.offset,
+			--		-- cmp.config.compare.scopes, --this is commented in nvim-cmp too
+			cmp.config.compare.exact,
+			cmp.config.compare.score,
+			cmp.config.compare.recently_used,
+			cmp.config.compare.locality,
+			cmp.config.compare.kind,
+			cmp.config.compare.sort_text,
+			cmp.config.compare.length,
+			cmp.config.compare.order,
+		},
 	},
 })
 
@@ -136,3 +161,5 @@ cmp.setup.cmdline(":", {
 		{ name = "cmdline" },
 	}),
 })
+
+vim.api.nvim_set_hl(0, "CmpItemKindCopilot", { fg = "#6CC644" })
