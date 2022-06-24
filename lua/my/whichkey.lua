@@ -81,6 +81,14 @@ local opts = {
 local mappings = {
 	-- convinient shortcuts
 	o = { "<cmd>AerialToggle left<cr>", "Toogle Lsp Outline" },
+	-- session
+	s = {
+		name = "Session",
+		r = { "<cmd>lua MiniSessions.read()<cr>", "Read Session" },
+		s = { "<cmd>lua MiniSessions.select()<cr>", "Select Session" },
+		w = { "<cmd>lua MiniSessions.write('Session.vim')<cr>", "Write Local Session" },
+		W = { "<cmd>lua MiniSessions.write('GlobalSession.vim')<cr>", "Write Global Session" },
+	},
 	-- git
 	g = {
 		name = "Git",

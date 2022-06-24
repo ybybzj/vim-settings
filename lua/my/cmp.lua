@@ -105,12 +105,14 @@ cmp.setup({
 		end,
 	},
 	sources = cmp.config.sources({
-		{ name = "nvim_lsp" },
-		{ name = "luasnip" }, -- For luasnip users.
-		{ name = "nvim_lua" },
-		{ name = "copilot" },
-		{ name = "buffer" },
-		{ name = "emoji" },
+		{ name = "nvim_lsp", priority = 8, max_item_count = 25 },
+
+		{ name = "nvim_lua", priority = 7 },
+		{ name = "buffer", priority = 7, keyword_length = 3 },
+		{ name = "luasnip", priority = 6 }, -- For luasnip users.
+		{ name = "copilot", priority = 6 },
+		{ name = "path", priority = 5 },
+		{ name = "emoji", priority = 4 },
 	}),
 
 	confirm_opts = {
@@ -125,21 +127,19 @@ cmp.setup({
 		native_menu = false,
 	},
 	sorting = {
-		priority_weight = 2,
+		priority_weight = 1.0,
 		comparators = {
-			--		require("copilot_cmp.comparators").prioritize,
-			--require("copilot_cmp.comparators").score,
-			--		-- Below is the default comparitor list and order for nvim-cmp
-			cmp.config.compare.offset,
-			--		-- cmp.config.compare.scopes, --this is commented in nvim-cmp too
-			cmp.config.compare.exact,
-			cmp.config.compare.score,
-			cmp.config.compare.recently_used,
+			-- compare.score_offset, -- not good at all
 			cmp.config.compare.locality,
-			cmp.config.compare.kind,
-			cmp.config.compare.sort_text,
-			cmp.config.compare.length,
+			cmp.config.compare.recently_used,
+			cmp.config.compare.exact,
+			cmp.config.compare.score, -- based on :  score = score + ((#sources - (source_index - 1)) * sorting.priority_weight)
+			cmp.config.compare.offset,
 			cmp.config.compare.order,
+			-- cmp.config.compare.scopes, -- what?
+			cmp.config.compare.sort_text,
+			cmp.config.compare.kind,
+			cmp.config.compare.length, -- useless
 		},
 	},
 })
