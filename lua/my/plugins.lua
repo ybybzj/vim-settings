@@ -141,30 +141,30 @@ return packer.startup({
 		})
 		-- copilot
 		-- use("github/copilot.vim")
-		use({
-			"zbirenbaum/copilot.lua",
-			event = "VimEnter",
-			config = function()
-				vim.defer_fn(function()
-					require("copilot").setup({
-						-- cmp = {
-						-- 	enabled = true,
-						-- 	method = "getPanelCompletions",
-						-- },
-						-- panel = { -- no config options yet
-						-- 	enabled = true,
-						-- },
-						-- ft_disable = {},
-						-- plugin_manager_path = vim.fn.stdpath("data") .. "/site/pack/packer",
-						-- server_opts_overrides = {},
-					})
-				end, 100)
-			end,
-		})
-		use({
-			"zbirenbaum/copilot-cmp",
-			module = "copilot_cmp",
-		})
+		-- use({
+		-- 	"zbirenbaum/copilot.lua",
+		-- 	event = "VimEnter",
+		-- 	config = function()
+		-- 		vim.defer_fn(function()
+		-- 			require("copilot").setup({
+		-- 				-- cmp = {
+		-- 				-- 	enabled = true,
+		-- 				-- 	method = "getPanelCompletions",
+		-- 				-- },
+		-- 				-- panel = { -- no config options yet
+		-- 				-- 	enabled = true,
+		-- 				-- },
+		-- 				-- ft_disable = {},
+		-- 				-- plugin_manager_path = vim.fn.stdpath("data") .. "/site/pack/packer",
+		-- 				-- server_opts_overrides = {},
+		-- 			})
+		-- 		end, 100)
+		-- 	end,
+		-- })
+		-- use({
+		-- 	"zbirenbaum/copilot-cmp",
+		-- 	module = "copilot_cmp",
+		-- })
 		-- Automatically set up your configuration after cloning packer.nvim
 		-- Put this at the end after all plugins
 		if PACKER_BOOTSTRAP then

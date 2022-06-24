@@ -87,11 +87,11 @@ cmp.setup({
 	formatting = {
 		fields = { "kind", "abbr", "menu" },
 		format = function(entry, vim_item)
-			if entry.source.name == "copilot" then
-				vim_item.kind = "[] Copilot"
-				vim_item.kind_hl_group = "CmpItemKindCopilot"
-				return vim_item
-			end
+			-- 	if entry.source.name == "copilot" then
+			-- 		vim_item.kind = "[] Copilot"
+			-- 		vim_item.kind_hl_group = "CmpItemKindCopilot"
+			-- 		return vim_item
+			-- 	end
 			-- Kind icons
 			vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
 			-- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
@@ -110,7 +110,7 @@ cmp.setup({
 		{ name = "nvim_lua", priority = 7 },
 		{ name = "buffer", priority = 7, keyword_length = 3 },
 		{ name = "luasnip", priority = 6 }, -- For luasnip users.
-		{ name = "copilot", priority = 6 },
+		-- { name = "copilot", priority = 6 },
 		{ name = "path", priority = 5 },
 		{ name = "emoji", priority = 4 },
 	}),
