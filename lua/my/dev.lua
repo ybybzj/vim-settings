@@ -9,7 +9,14 @@ require("trouble").setup({
 })
 
 -- autopairs
-require("nvim-autopairs").setup({})
+local status_ok, npairs = pcall(require, "nvim-autopairs")
+
+if status_ok then
+	npairs.setup()
+
+	local Rule = require("nvim-autopairs.rule")
+	npairs.add_rule(Rule("|", "|", "zig"))
+end
 
 -- blank indent line
 require("indent_blankline").setup({

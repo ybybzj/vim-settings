@@ -120,6 +120,8 @@ return packer.startup({
 		-- git
 		use("lewis6991/gitsigns.nvim")
 		use("tpope/vim-fugitive")
+		use("sindrets/diffview.nvim")
+		use("akinsho/git-conflict.nvim")
 
 		-- programming languages
 		use("rescript-lang/vim-rescript")

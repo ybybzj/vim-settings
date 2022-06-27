@@ -16,6 +16,7 @@ map("n", "<M-s>", "<Esc>:wa<cr><Esc>")
 map("i", "<M-s>", "<Esc>:wa<cr>")
 map("", "<M-q>", "<Esc>:q<cr>")
 map("", "<M-Q>", "<Esc>:qa<cr>")
+map("", "<leader>ct", "<Esc>:tabclose<cr>")
 map("", "<leader>vr", ":Reload<cr>")
 map("n", "<leader>ve", ":e ~/.config/nvim/<cr>")
 map("n", "<leader>i3", ":e ~/.i3/config<cr>")
@@ -47,4 +48,4 @@ map("n", "<leader>hl", ":HopChar1<cr>")
 map("n", "<leader>m", ":MinimapToggle<cr>")
 
 -- lazygit --
-map("n", "<leader>gg", "<cmd>lua _lazygit_toggle()<CR>", { silent = true })
+map("n", "<leader>gg", "<cmd>lua _git_toggle()<CR>", { silent = true })

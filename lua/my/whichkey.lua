@@ -92,11 +92,11 @@ local mappings = {
 	-- git
 	g = {
 		name = "Git",
-		s = { "<cmd>G<cr>", "Git Status" },
-		g = { "<cmd>lua _lazygit_toggle()<CR>", "Lazygit" },
+		s = { "<cmd>DiffviewOpen<cr>", "Git Status" },
+		g = { "<cmd>lua _git_toggle()<CR>", "GitUI" },
 		j = { "<cmd>lua require 'gitsigns'.next_hunk()<cr>", "Next Hunk" },
 		k = { "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", "Prev Hunk" },
-		l = { "<cmd>lua require 'gitsigns'.blame_line()<cr>", "Blame" },
+		l = { "<cmd>lua require 'gitsigns'.blame_line({full=true})<cr>", "Blame" },
 		p = { "<cmd>lua require 'gitsigns'.preview_hunk()<cr>", "Preview Hunk" },
 		r = { "<cmd>lua require 'gitsigns'.reset_hunk()<cr>", "Reset Hunk" },
 		R = { "<cmd>lua require 'gitsigns'.reset_buffer()<cr>", "Reset Buffer" },
