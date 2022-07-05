@@ -116,6 +116,37 @@ local mappings = {
 			"<cmd>Gitsigns diffthis HEAD<cr>",
 			"Diff",
 		},
+		m = {
+			name = "Merge conflict",
+			o = {
+				"<cmd>GitConflictChooseOurs<cr>",
+				"Select the current changes",
+			},
+			t = {
+				"<cmd>GitConflictChooseTheirs<cr>",
+				"Select the incoming changes",
+			},
+			b = {
+				"<cmd>GitConflictChooseBoth<cr>",
+				"Select both changes",
+			},
+			n = {
+				"<cmd>GitConflictChooseNone<cr>",
+				"Select both none of the changes",
+			},
+			l = {
+				"<cmd>GitConflictNextConflict<cr>",
+				"Move to the next conflict.",
+			},
+			h = {
+				"<cmd>GitConflictPrevConflict<cr>",
+				"Move to the previous conflict",
+			},
+			q = {
+				"<cmd>GitConflictListQf<cr>",
+				"Get all conflict to quickfix",
+			},
+		},
 	},
 	-- finder
 	f = {
@@ -145,7 +176,7 @@ local mappings = {
 		name = "LSP",
 		r = { "<cmd>lua require('telescope.builtin').lsp_references()<cr>", "find references" },
 		s = { "<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>", "find symbols in document" },
-		a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "list code actions" },
+		a = { "<cmd>Lspsaga code_action<cr>", "list code actions" },
 		d = { "<cmd>TroubleToggle document_diagnostics<cr>", "list diagnostics" },
 		f = { "<cmd>lua vim.lsp.buf.formatting_sync()<cr>", "format document" },
 		o = { "<cmd>AerialToggle left<cr>", "toggle outline" },
