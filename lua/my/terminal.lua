@@ -11,8 +11,8 @@ require("toggleterm").setup({
 	close_on_exit = true,
 })
 local Terminal = require("toggleterm.terminal").Terminal
-local gitui = Terminal:new({
-	cmd = "gitui",
+local git_term = Terminal:new({
+	cmd = "lazygit",
 	hidden = true,
 	size = 20,
 	hide_numbers = true,
@@ -36,7 +36,7 @@ local gitui = Terminal:new({
 })
 
 function _git_toggle()
-	gitui:toggle()
+	git_term:toggle()
 end
 -- local Terminal = require("toggleterm.terminal").Terminal
 -- local devTerm = Terminal:new({ size = 15, hidden = true, direction = "horizontal", close_on_exit = true })
