@@ -1,5 +1,5 @@
 local cmd = vim.cmd
-local g =  vim.g
+local g = vim.g
 ------------------theme-------------------------
 cmd("set background=dark")
 -- cmd("colorscheme material")
@@ -19,5 +19,5 @@ cmd("set background=dark")
 g.sonokai_style = "atlantis"
 g.sonokai_enable_italic = 1
 g.sonokai_disable_italic_comment = 1
--- g.sonokai_transparent_background = 1
+-- -- g.sonokai_transparent_background = 1
 cmd("colorscheme sonokai")
