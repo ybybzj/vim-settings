@@ -89,7 +89,6 @@ return packer.startup({
 		use("ryanoasis/vim-devicons")
 		use("preservim/nerdtree")
 		use("Xuyuanp/nerdtree-git-plugin")
-		use("tiagofumo/vim-nerdtree-syntax-highlight")
 
 		-- theme
 		use("shaunsingh/nord.nvim")
@@ -103,16 +102,20 @@ return packer.startup({
 		use("akinsho/nvim-toggleterm.lua")
 
 		-- treesitter
-		use({
-			"nvim-treesitter/nvim-treesitter",
-      run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
-		})
+		 use({ 
+		 	'nvim-treesitter/nvim-treesitter', 
+         run = function()
+             local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
+             ts_update()
+         end,
+       })
 		use({ "nvim-treesitter/nvim-treesitter-textobjects" })
 		use("JoosepAlviste/nvim-ts-context-commentstring")
 
 		-- lsp
+		use("williamboman/mason.nvim") -- simple to use language server installer
+    use("williamboman/mason-lspconfig.nvim")
 		use("neovim/nvim-lspconfig") -- enable LSP
-		use("williamboman/nvim-lsp-installer") -- simple to use language server installer
 		use("tamago324/nlsp-settings.nvim") -- language server settings defined in json for
 		use("jose-elias-alvarez/null-ls.nvim") -- for formatters and linters
 		use("folke/trouble.nvim")
