@@ -87,8 +87,20 @@ return packer.startup({
 
 		-- nerd tree
 		use("ryanoasis/vim-devicons")
-		use("preservim/nerdtree")
-		use("Xuyuanp/nerdtree-git-plugin")
+		--[[ use("preservim/nerdtree") ]]
+		--[[ use("Xuyuanp/nerdtree-git-plugin") ]]
+
+		-- neo tree
+
+		use({
+			"nvim-neo-tree/neo-tree.nvim",
+			branch = "v2.x",
+			requires = {
+				"nvim-lua/plenary.nvim",
+				"kyazdani42/nvim-web-devicons", -- not strictly required, but recommended
+				"MunifTanjim/nui.nvim",
+			},
+		})
 
 		-- theme
 		use("shaunsingh/nord.nvim")
@@ -102,19 +114,19 @@ return packer.startup({
 		use("akinsho/nvim-toggleterm.lua")
 
 		-- treesitter
-		 use({ 
-		 	'nvim-treesitter/nvim-treesitter', 
-         run = function()
-             local ts_update = require('nvim-treesitter.install').update({ with_sync = true })
-             ts_update()
-         end,
-       })
+		use({
+			"nvim-treesitter/nvim-treesitter",
+			run = function()
+				local ts_update = require("nvim-treesitter.install").update({ with_sync = true })
+				ts_update()
+			end,
+		})
 		use({ "nvim-treesitter/nvim-treesitter-textobjects" })
 		use("JoosepAlviste/nvim-ts-context-commentstring")
 
 		-- lsp
 		use("williamboman/mason.nvim") -- simple to use language server installer
-    use("williamboman/mason-lspconfig.nvim")
+		use("williamboman/mason-lspconfig.nvim")
 		use("neovim/nvim-lspconfig") -- enable LSP
 		use("tamago324/nlsp-settings.nvim") -- language server settings defined in json for
 		use("jose-elias-alvarez/null-ls.nvim") -- for formatters and linters

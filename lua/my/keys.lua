@@ -3,7 +3,7 @@ local cmd = vim.cmd
 
 ------------------key mappings -----------------------
 vim.g.mapleader = ","
-map("", "<leader>l", ":NERDTreeToggle<cr>")
+map("", "<leader>l", ":Neotree toggle<cr>")
 map("", "<leader>cd", ":cd %:p:h<cr>")
 cmd([[
 cnoremap %% <C-R>=fnameescape(expand('%:h')).'/'<cr>
