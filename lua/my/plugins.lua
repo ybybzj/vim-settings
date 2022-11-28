@@ -142,6 +142,7 @@ return packer.startup({
 		use("numToStr/Comment.nvim")
 		use("lukas-reineke/indent-blankline.nvim")
 		use({ "stevearc/aerial.nvim" })
+		use({ "kevinhwang91/nvim-ufo", requires = "kevinhwang91/promise-async" })
 		-- bufferline
 		use({ "akinsho/bufferline.nvim", requires = "kyazdani42/nvim-web-devicons" })
 
@@ -162,6 +163,7 @@ return packer.startup({
 		use("nvim-telescope/telescope.nvim")
 		-- use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
 		-- use({ "nvim-telescope/telescope-ui-select.nvim" })
+
 		-- quickfix
 		use({ "kevinhwang91/nvim-bqf", ft = "qf" })
 		use({

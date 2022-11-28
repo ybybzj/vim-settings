@@ -81,7 +81,23 @@ ts.setup({
 })
 
 -- folding
-vim.wo.foldcolumn = "1"
-vim.wo.foldenable = false
-vim.wo.foldmethod = "expr"
-vim.wo.foldexpr = "nvim_treesitter#foldexpr()"
+local status_ok, ufo = pcall(require, "ufo")
+if not status_ok then
+	return
+end
+
+vim.o.foldcolumn = "1" -- '0' is not bad
+vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decrease the value
+vim.o.foldlevelstart = 99
+vim.o.foldenable = true
+
+vim.keymap.set("n", "zR", ufo.openAllFolds)
+vim.keymap.set("n", "zM", ufo.closeAllFolds)
+vim.keymap.set("n", "zr", ufo.openFoldsExceptKinds)
+vim.keymap.set("n", "zm", function() ufo.closeFoldsWith(1) end) -- closeAllFolds == closeFoldsWith(0)
+
+ufo.setup({
+	provider_selector = function(bufnr, filetype, buftype)
+		return { "lsp", "treesitter" }
+	end,
+})
