@@ -94,10 +94,39 @@ vim.o.foldenable = true
 vim.keymap.set("n", "zR", ufo.openAllFolds)
 vim.keymap.set("n", "zM", ufo.closeAllFolds)
 vim.keymap.set("n", "zr", ufo.openFoldsExceptKinds)
-vim.keymap.set("n", "zm", function() ufo.closeFoldsWith(1) end) -- closeAllFolds == closeFoldsWith(0)
+vim.keymap.set("n", "zm", function()
+	ufo.closeFoldsWith(1)
+end) -- closeAllFolds == closeFoldsWith(0)
+
+local ftMap = {
+	vim = "indent",
+	python = { "indent" },
+	git = "",
+}
+
+---@param bufnr number
+---@return Promise
+local function customizeSelector(bufnr)
+	local function handleFallbackException(err, providerName)
+		if type(err) == "string" and err:match("UfoFallbackException") then
+			return require("ufo").getFolds(bufnr, providerName)
+		else
+			return require("promise").reject(err)
+		end
+	end
+
+	return require("ufo")
+		.getFolds(bufnr, "lsp")
+		:catch(function(err)
+			return handleFallbackException(err, "treesitter")
+		end)
+		:catch(function(err)
+			return handleFallbackException(err, "indent")
+		end)
+end
 
 ufo.setup({
 	provider_selector = function(bufnr, filetype, buftype)
-		return { "lsp", "treesitter" }
+		return ftMap[filetype] or customizeSelector
 	end,
 })
