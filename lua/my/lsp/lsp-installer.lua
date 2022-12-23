@@ -39,7 +39,7 @@ lspcfg.sumneko_lua.setup(lspcfg_opts("my.lsp.settings.sumneko_lua"))
 
 lspcfg.tsserver.setup(lspcfg_opts("my.lsp.settings.tsserver"))
 
-lspcfg.rescriptls.setup(lspcfg_opts())
+lspcfg.rescriptls.setup(lspcfg_opts("my.lsp.settings.rescript"))
 
 lspcfg.zls.setup(lspcfg_opts("my.lsp.settings.zls"))
 

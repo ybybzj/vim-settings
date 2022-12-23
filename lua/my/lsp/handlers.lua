@@ -108,4 +108,6 @@ if status_ok then
 end
 
 M.capabilities = capabilities
+
+M.lsp_keymaps = lsp_keymaps
 return M
