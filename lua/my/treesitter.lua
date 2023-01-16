@@ -16,6 +16,7 @@ ts.setup({
 		"tsx",
 		"toml",
 		"yaml",
+		"markdown",
 	},
 	sync_install = false, -- install languages synchronously (only applied to `ensure_installed`)
 	highlight = { enable = true },
