@@ -4,6 +4,12 @@ if not status_ok then
 end
 
 local actions = require("telescope.actions")
+
+local shared_layout = {
+	width = 0.8,
+	scroll_speed = 1,
+}
+
 telescope.setup({
 	defaults = {
 
@@ -42,6 +48,8 @@ telescope.setup({
 				["<M-q>"] = actions.send_selected_to_qflist + actions.open_qflist,
 				["<C-l>"] = actions.complete_tag,
 				["<C-_>"] = actions.which_key, -- keys from pressing <C-/>
+				["<ScrollWheelDown>"] = actions.preview_scrolling_down,
+				["<ScrollWheelUp>"] = actions.preview_scrolling_up,
 			},
 
 			n = {
@@ -69,6 +77,8 @@ telescope.setup({
 
 				["<C-u>"] = actions.preview_scrolling_up,
 				["<C-d>"] = actions.preview_scrolling_down,
+				["<ScrollWheelDown>"] = actions.preview_scrolling_down,
+				["<ScrollWheelUp>"] = actions.preview_scrolling_up,
 
 				["<PageUp>"] = actions.results_scrolling_up,
 				["<PageDown>"] = actions.results_scrolling_down,
@@ -91,12 +101,12 @@ telescope.setup({
 		find_files = {
 			path_display = { "absolute" },
 			theme = "dropdown",
-			layout_config = { width = 0.8 },
+			layout_config = shared_layout,
 		},
 		oldfiles = {
 			path_display = { "absolute" },
 			theme = "dropdown",
-			layout_config = { width = 0.8 },
+			layout_config = shared_layout,
 			initial_mode = "normal",
 		},
 		live_grep = {
@@ -112,10 +122,12 @@ telescope.setup({
 				end
 				return args
 			end,
+
+			layout_config = shared_layout,
 		},
 		grep_string = {
 			layout_strategy = "horizontal",
-			layout_config = { width = 0.8 },
+			layout_config = shared_layout,
 			additional_args = function(opts)
 				local args = {}
 				local case = opts.case
@@ -162,4 +174,4 @@ telescope.setup({
 	},
 })
 
--- telescope.load_extension("fzf")
+telescope.load_extension("fzf")

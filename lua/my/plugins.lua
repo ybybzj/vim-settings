@@ -171,8 +171,8 @@ return packer.startup({
 		use("ziglang/zig.vim")
 
 		-- finder
-		use("nvim-telescope/telescope.nvim")
-		-- use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
+		use({"nvim-telescope/telescope.nvim", branch = '0.1.x'})
+		use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
 		-- use({ "nvim-telescope/telescope-ui-select.nvim" })
 
 		-- quickfix

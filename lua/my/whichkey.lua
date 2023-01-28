@@ -167,7 +167,7 @@ local mappings = {
 		},
 
 		r = {
-			"<cmd>lua require('my.finder.utils').grep_last()<cr>",
+			"<cmd>lua require('telescope.builtin').resume()<cr>",
 			"repeat last search",
 		},
 	},
