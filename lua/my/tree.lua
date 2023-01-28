@@ -17,6 +17,11 @@ neoTree.setup({
 	filesystem = {
 		follow_current_file = true,
 		hijack_netrw_behavior = "open_current",
-    use_libuv_file_watcher = true
+		use_libuv_file_watcher = true,
+	},
+	window = {
+		mappings = {
+			["u"] = "navigate_up",
+		},
 	},
 })
