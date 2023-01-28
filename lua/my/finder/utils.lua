@@ -3,18 +3,42 @@ local telescope_builtin = require("telescope.builtin")
 local utils = require("my.helpers")
 local M = {}
 
+local last_search_string
+
 M.grep_word = function(opts)
 	opts = utils.extends({
 		word_match = "-w",
 	}, opts)
 	local search = opts.search
 
-	if not search or #search == 0 then
-		search = vim.fn.expand("<cword>")
-	end
+	if opts.continue_last_search then
+		search = last_search_string
+		if not search or #search == 0 then
+			search = vim.fn.expand("<cword>")
+		end
 
-	opts.search = search
-	telescope_builtin.grep_string(opts)
+		last_search_string = search
+
+		opts.search = search
+		telescope_builtin.grep_string(opts)
+	else
+		if not search or #search == 0 then
+			search = vim.fn.expand("<cword>")
+		end
+		vim.ui.input({ prompt = "Grep > ", default = search }, function(input)
+      if input and #input > 0 then
+        opts.search = input
+        last_search_string = input
+        telescope_builtin.grep_string(opts)
+      end
+		end)
+	end
+end
+
+M.grep_last = function(opts)
+	opts = opts or {}
+	opts.continue_last_search = true
+	return M.grep_word(opts)
 end
 
 -- git --
