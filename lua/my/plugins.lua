@@ -91,11 +91,6 @@ return packer.startup({
 		use("rafamadriz/friendly-snippets")
 		use("saadparwaiz1/cmp_luasnip")
 
-		-- nerd tree
-		use("ryanoasis/vim-devicons")
-		--[[ use("preservim/nerdtree") ]]
-		--[[ use("Xuyuanp/nerdtree-git-plugin") ]]
-
 		-- neo tree
 
 		use({
@@ -109,12 +104,12 @@ return packer.startup({
 		})
 
 		-- theme
-		--[[ use("shaunsingh/nord.nvim") ]]
-		--[[ use("marko-cerovac/material.nvim") ]]
-		--[[ use("EdenEast/nightfox.nvim") ]]
+		-- use("shaunsingh/nord.nvim")
+		-- use("marko-cerovac/material.nvim")
+		-- use("EdenEast/nightfox.nvim")
 		use("sainnhe/sonokai")
-		--[[ use("folke/tokyonight.nvim") ]]
-		--[[ use("folke/lsp-colors.nvim") ]]
+		-- use("folke/tokyonight.nvim")
+		-- use("folke/lsp-colors.nvim")
 
 		-- statusline
 		use("nvim-lualine/lualine.nvim")
