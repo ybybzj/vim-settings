@@ -1,8 +1,8 @@
 -- debugger --
 function _G.dump(...)
-  local objects = vim.tbl_map(vim.inspect, { ... })
-  vim.pretty_print(objects)
-  return ...
+	local objects = vim.tbl_map(vim.inspect, { ... })
+	vim.pretty_print(objects)
+	return ...
 end
 
 require("my.opts")

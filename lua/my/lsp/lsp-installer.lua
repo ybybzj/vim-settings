@@ -4,13 +4,14 @@ if not status_ok then
 end
 
 local status_ok, lsp_installer = pcall(require, "mason-lspconfig")
+
 if not status_ok then
 	return
 end
 mason.setup()
 
 lsp_installer.setup({
-	ensure_installed = { "jsonls", "sumneko_lua", "tsserver", "zls", "rescriptls" },
+	ensure_installed = { "jsonls", "lua_ls", "tsserver", "zls", "rescriptls" },
 	automatic_installation = true,
 })
 
@@ -35,7 +36,7 @@ local lspcfg = require("lspconfig")
 
 lspcfg.jsonls.setup(lspcfg_opts("my.lsp.settings.jsonls"))
 
-lspcfg.sumneko_lua.setup(lspcfg_opts("my.lsp.settings.sumneko_lua"))
+lspcfg.lua_ls.setup(lspcfg_opts("my.lsp.settings.sumneko_lua"))
 
 lspcfg.tsserver.setup(lspcfg_opts("my.lsp.settings.tsserver"))
 
