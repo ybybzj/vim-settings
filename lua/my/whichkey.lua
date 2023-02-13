@@ -80,7 +80,7 @@ local opts = {
 
 local mappings = {
 	-- convinient shortcuts
-	o = { "<cmd>AerialToggle left<cr>", "Toogle Lsp Outline" },
+	o = { "<cmd>Lspsaga outline<cr>", "Toogle Lsp Outline" },
 	q = { "<cmd>copen<cr>", "Open quickfix list" },
 	-- session
 	s = {
@@ -175,12 +175,12 @@ local mappings = {
 	-- lsp
 	l = {
 		name = "LSP",
-		r = { "<cmd>lua require('telescope.builtin').lsp_references()<cr>", "find references" },
+		r = { "<cmd>Lspsaga lsp_finder<cr>", "find references" },
 		s = { "<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>", "find symbols in document" },
 		a = { "<cmd>Lspsaga code_action<cr>", "list code actions" },
 		d = { "<cmd>TroubleToggle document_diagnostics<cr>", "list diagnostics" },
 		f = { "<cmd>lua vim.lsp.buf.format()<cr>", "format document" },
-		o = { "<cmd>AerialToggle left<cr>", "toggle outline" },
+		o = { "<cmd>Lspsaga outline<cr>", "toggle outline" },
 	},
 }
 

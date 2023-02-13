@@ -1,4 +1,5 @@
 local fn = vim.fn
+local cmd = vim.cmd
 
 -- Automatically install packer
 local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
@@ -11,17 +12,11 @@ if fn.empty(fn.glob(install_path)) > 0 then
 		"https://github.com/wbthomason/packer.nvim",
 		install_path,
 	})
-	print("Installing packer close and reopen Neovim...")
-	vim.cmd([[packadd packer.nvim]])
-end
 
--- Autocommand that reloads neovim whenever you save the plugins.lua file
-vim.cmd([[
-  augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost plugins.lua source <afile> | PackerSync
-  augroup end
-]])
+	print("Installing packer close and reopen Neovim...")
+
+	cmd("packadd packer.nvim")
+end
 
 -- Use a protected call so we don't error out on first use
 local status_ok, packer = pcall(require, "packer")
@@ -114,10 +109,12 @@ return packer.startup({
 		})
 
 		-- theme
-		use("shaunsingh/nord.nvim")
-		use("marko-cerovac/material.nvim")
-		use("EdenEast/nightfox.nvim")
+		--[[ use("shaunsingh/nord.nvim") ]]
+		--[[ use("marko-cerovac/material.nvim") ]]
+		--[[ use("EdenEast/nightfox.nvim") ]]
 		use("sainnhe/sonokai")
+		--[[ use("folke/tokyonight.nvim") ]]
+		--[[ use("folke/lsp-colors.nvim") ]]
 
 		-- statusline
 		use("nvim-lualine/lualine.nvim")
@@ -171,7 +168,7 @@ return packer.startup({
 		use("ziglang/zig.vim")
 
 		-- finder
-		use({"nvim-telescope/telescope.nvim", branch = '0.1.x'})
+		use({ "nvim-telescope/telescope.nvim", branch = "0.1.x" })
 		use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make" })
 		-- use({ "nvim-telescope/telescope-ui-select.nvim" })
 
