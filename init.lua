@@ -6,9 +6,9 @@ function _G.dump(...)
 end
 
 require("my.opts")
-require("my.plugins")
-require("my.utils")
+require("my.lazy")
 require("my.keys")
+require("my.utils")
 require("my.theme")
 require("my.statusline")
 require("my.dialog")

@@ -2,7 +2,6 @@ local map = require("my.shared").mapkey
 local cmd = vim.cmd
 
 ------------------key mappings -----------------------
-vim.g.mapleader = ","
 map("", "<leader>l", ":Neotree toggle<cr>")
 map("", "<leader>q", ":copen<cr>")
 map("", "<leader>cd", ":cd %:p:h<cr>")

@@ -25,3 +25,5 @@ opt.wildmode = { "list", "longest" } -- Command-line completion mode
 opt.wrap = true -- Disable line wrap
 cmd("set mouse=a")
 cmd("set noswapfile")
+
+vim.g.mapleader = ","
