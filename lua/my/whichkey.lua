@@ -192,3 +192,5 @@ map("", "<C-p>", "<cmd>lua require('telescope.builtin').oldfiles()<cr>")
 map("", "<F8>", "<cmd>lua vim.diagnostic.goto_next({severity = {min = vim.diagnostic.severity.WARN}})<cr>")
 map("", "<F7>", "<cmd>lua vim.diagnostic.goto_next()<cr>")
 map("", "<leader>k", "<cmd>lua vim.diagnostic.open_float()<cr>")
+-- format --
+map("n", "<F5>", "<cmd>lua vim.lsp.buf.format()<cr>")
