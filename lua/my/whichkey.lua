@@ -175,7 +175,7 @@ local mappings = {
 	-- lsp
 	l = {
 		name = "LSP",
-		r = { "<cmd>Lspsaga lsp_finder<cr>", "find references" },
+		r = { "<cmd>lua require('telescope.builtin').lsp_references()<cr>", "find references" },
 		s = { "<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>", "find symbols in document" },
 		a = { "<cmd>Lspsaga code_action<cr>", "list code actions" },
 		d = { "<cmd>TroubleToggle document_diagnostics<cr>", "list diagnostics" },
@@ -192,5 +192,6 @@ map("", "<C-p>", "<cmd>lua require('telescope.builtin').oldfiles()<cr>")
 map("", "<F8>", "<cmd>lua vim.diagnostic.goto_next({severity = {min = vim.diagnostic.severity.WARN}})<cr>")
 map("", "<F7>", "<cmd>lua vim.diagnostic.goto_next()<cr>")
 map("", "<leader>k", "<cmd>lua vim.diagnostic.open_float()<cr>")
+map("", "<M-r>", "<cmd>Lspsaga lsp_finder<cr>")
 -- format --
 map("n", "<F5>", "<cmd>lua vim.lsp.buf.format()<cr>")

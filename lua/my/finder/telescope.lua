@@ -109,6 +109,12 @@ telescope.setup({
 			layout_config = shared_layout,
 			initial_mode = "normal",
 		},
+		lsp_references = {
+			path_display = { "absolute" },
+			theme = "dropdown",
+			layout_config = shared_layout,
+			initial_mode = "normal",
+		},
 		live_grep = {
 			additional_args = function(opts)
 				local args = {}
