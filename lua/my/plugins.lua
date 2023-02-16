@@ -1,4 +1,8 @@
 return {
+	{
+		"folke/lazy.nvim",
+		tag = "stable",
+	},
 	-- utils plugins
 	"tpope/vim-repeat",
 	-- "tpope/vim-surround",
