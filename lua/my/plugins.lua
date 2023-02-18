@@ -73,7 +73,12 @@ return {
 	-- "shaunsingh/nord.nvim",
 	-- "marko-cerovac/material.nvim",
 	-- "EdenEast/nightfox.nvim",
-	"sainnhe/sonokai",
+	{
+		"sainnhe/sonokai",
+
+		lazy = false, -- make sure we load this during startup if it is your main colorscheme
+		priority = 1000,
+	},
 	-- "folke/tokyonight.nvim",
 	-- "folke/lsp-colors.nvim",
 
@@ -85,10 +90,7 @@ return {
 	-- treesitter
 	{
 		"nvim-treesitter/nvim-treesitter",
-		build = function()
-			local ts_update = require("nvim-treesitter.install").update({ with_sync = true })
-			ts_update()
-		end,
+		build = ":TSUpdate",
 	},
 	"nvim-treesitter/nvim-treesitter-textobjects",
 	"JoosepAlviste/nvim-ts-context-commentstring",
@@ -102,6 +104,7 @@ return {
 	"folke/trouble.nvim",
 	{
 		"glepnir/lspsaga.nvim",
+		commit = "6b83881cf7f05b380fff302db08610c943d000fa",
 		branch = "main",
 	},
 

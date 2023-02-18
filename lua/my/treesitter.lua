@@ -2,7 +2,12 @@ local status_ok, ts = pcall(require, "nvim-treesitter.configs")
 if not status_ok then
 	return
 end
+
+local tspath = vim.fn.stdpath("data") .. "/treesitter/parsers"
+vim.opt.rtp:prepend(tspath)
+
 ts.setup({
+	parser_install_dir = tspath,
 	ensure_installed = {
 		"c",
 		"lua",
