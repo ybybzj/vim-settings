@@ -15,6 +15,7 @@ telescope.setup({
 
 		prompt_prefix = " ",
 		selection_caret = " ",
+		dynamic_preview_title = true,
 		path_display = { "smart" },
 		scroll_strategy = "limit",
 
