@@ -93,7 +93,11 @@ local mappings = {
 	-- git
 	g = {
 		name = "Git",
-		s = { "<cmd>DiffviewOpen<cr>", "Git Status" },
+		s = {
+			name = "Git Status",
+			o = { "<cmd>DiffviewOpen<cr>", "Open Git Status" },
+			c = { "<cmd>DiffviewClose<cr>", "Close Git Status" },
+		},
 		g = { "<cmd>lua _git_toggle()<CR>", "GitUI" },
 		j = { "<cmd>lua require 'gitsigns'.next_hunk()<cr>", "Next Hunk" },
 		k = { "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", "Prev Hunk" },
