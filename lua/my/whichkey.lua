@@ -114,6 +114,7 @@ local mappings = {
 				"Undo Stage Hunk",
 			},
 		},
+
 		o = { "<cmd>lua require('my.finder.utils').git_status()<cr>", "Open changed file" },
 		b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
 		c = { "<cmd>Telescope git_commits<cr>", "Checkout commit" },

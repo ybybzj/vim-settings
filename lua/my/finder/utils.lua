@@ -26,15 +26,16 @@ M.grep_word = function(opts)
 			search = vim.fn.expand("<cword>")
 		end
 		vim.ui.input({ prompt = "Grep > ", default = search }, function(input)
-      if input and #input > 0 then
-        opts.search = input
-        last_search_string = input
-        telescope_builtin.grep_string(opts)
-      end
+			if input and #input > 0 then
+				opts.search = input
+				last_search_string = input
+				telescope_builtin.grep_string(opts)
+			end
 		end)
 	end
 end
 
+-- install "git-delta" to use git diff view
 M.grep_last = function(opts)
 	opts = opts or {}
 	opts.continue_last_search = true
@@ -53,9 +54,11 @@ M.git_bcommits = function(opts)
 				"-c",
 				"delta.pager=less -R",
 				"-c",
-				"delta.features=side-by-side",
+				"delta.side-by-side=false",
 				"show",
-				entry.value,
+				entry.value .. "^!",
+				"--",
+				entry.current_file,
 			}
 		end,
 	})
@@ -79,7 +82,7 @@ M.git_status = function(opts)
 				"-c",
 				"delta.pager=less -R",
 				"-c",
-				"delta.features=side-by-side",
+				"delta.side-by-side=false",
 				"diff",
 				entry.value,
 			}
