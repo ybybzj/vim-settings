@@ -80,6 +80,6 @@ M.cd_root = function(prefix, cwd, rooter_pattern)
 	vim.cmd("cd " .. path)
 end
 
-M.find_root = find_root
+M.root_dir = __root_dir
 
 return M

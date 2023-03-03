@@ -1,5 +1,7 @@
 local previewers = require("telescope.previewers")
 local telescope_builtin = require("telescope.builtin")
+local spectre = require("spectre")
+local spectre_utils = require("spectre.utils")
 local utils = require("my.helpers")
 local M = {}
 
@@ -101,6 +103,16 @@ M.git_status = function(opts)
 	}
 
 	telescope_builtin.git_status(opts)
+end
+
+M.search_and_replace = function(opts)
+	opts = opts or {}
+	if opts.select_word then
+		opts.search_text = "\\b" .. vim.fn.expand("<cword>") .. "\\b"
+	else
+		opts.search_text = spectre_utils.get_visual_selection()
+	end
+	spectre.open(opts)
 end
 
 return M

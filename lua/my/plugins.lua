@@ -115,6 +115,7 @@ return {
 	"lukas-reineke/indent-blankline.nvim",
 	"stevearc/aerial.nvim",
 	{ "kevinhwang91/nvim-ufo", dependencies = "kevinhwang91/promise-async" },
+	{ "windwp/nvim-spectre" }, -- on Mac: brew install gnu-sed
 	-- bufferline
 	{ "akinsho/bufferline.nvim", dependencies = "kyazdani42/nvim-web-devicons" },
 

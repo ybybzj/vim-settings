@@ -3,6 +3,9 @@ if not status_ok then
 	return
 end
 
+local live_search_replace_cmd =
+	"<cmd>lua require('my.finder.utils').search_and_replace({select_word=true, cwd=require(\"my.helpers\").root_dir(vim.fn.expand('%:p:h'), vim.fn.getcwd())})<cr>"
+
 local setup = {
 	plugins = {
 		marks = true, -- shows a list of your marks on ' and `
@@ -80,7 +83,7 @@ local opts = {
 
 local mappings = {
 	-- convinient shortcuts
-	o = { "<cmd>Lspsaga outline<cr>", "Toogle Lsp Outline" },
+	o = { "<cmd>AerialToggle<cr>", "Toogle Lsp Outline" },
 	q = { "<cmd>copen<cr>", "Open quickfix list" },
 	-- session
 	s = {
@@ -161,7 +164,8 @@ local mappings = {
 		o = { "<cmd>lua require('telescope.builtin').oldfiles()<cr>", "find recent files" },
 		f = { "<cmd>lua require('telescope.builtin').find_files()<cr>", "find files" },
 		b = { "<cmd>lua require('telescope.builtin').buffers()<cr>", "find buffers" },
-		s = { "<cmd>lua require('telescope.builtin').live_grep({case = 'smart'})<cr>", "live grep" },
+		-- s = { "<cmd>lua require('telescope.builtin').live_grep({case = 'smart'})<cr>", "live grep" },
+		s = { live_search_replace_cmd, "Search and Replace" },
 		S = { "<cmd>lua require('telescope.builtin').live_grep()<cr>", "live grep with case sensitive" },
 		w = {
 			"<cmd>lua require('my.finder.utils').grep_word({case = 'smart'})<cr>",
@@ -182,7 +186,8 @@ local mappings = {
 	l = {
 		name = "LSP",
 		r = { "<cmd>lua require('telescope.builtin').lsp_references()<cr>", "find references" },
-		s = { "<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>", "find symbols in document" },
+		S = { "<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>", "find symbols in document" },
+		s = { "<cmd>Telescope aerial<cr>", "find symbols in document with filter" },
 		a = { "<cmd>Lspsaga code_action<cr>", "list code actions" },
 		d = { "<cmd>TroubleToggle document_diagnostics<cr>", "list diagnostics" },
 		f = { "<cmd>lua vim.lsp.buf.format()<cr>", "format document" },
@@ -197,7 +202,7 @@ map("", "<leader>cp", "<cmd>lua require(\"my.helpers\").cd_root(vim.fn.expand('%
 map("", "<C-p>", "<cmd>lua require('telescope.builtin').oldfiles()<cr>")
 map("", "<F8>", "<cmd>lua vim.diagnostic.goto_next({severity = {min = vim.diagnostic.severity.WARN}})<cr>")
 map("", "<F7>", "<cmd>lua vim.diagnostic.goto_next()<cr>")
-map("", "<leader>k", "<cmd>lua vim.diagnostic.open_float()<cr>")
+map("", "<leader>f", live_search_replace_cmd)
 map("", "<M-r>", "<cmd>Lspsaga lsp_finder<cr>")
 -- format --
 map("n", "<F5>", "<cmd>lua vim.lsp.buf.format()<cr>")
