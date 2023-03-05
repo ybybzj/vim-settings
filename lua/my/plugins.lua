@@ -137,6 +137,7 @@ return {
 	{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 	{ "chip/telescope-software-licenses.nvim" },
 	{ "olacin/telescope-cc.nvim" },
+	{ "paopaol/telescope-git-diffs.nvim" },
 	-- { "nvim-telescope/telescope-ui-select.nvim" },
 
 	-- quickfix
