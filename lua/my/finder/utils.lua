@@ -108,11 +108,20 @@ end
 M.search_and_replace = function(opts)
 	opts = opts or {}
 	if opts.select_word then
-		opts.search_text = "\\b" .. vim.fn.expand("<cword>") .. "\\b"
+		opts.search_text =  vim.fn.expand("<cword>")
 	else
 		opts.search_text = spectre_utils.get_visual_selection()
 	end
 	spectre.open(opts)
+	-- change the write autocmd to 'BufWritePost'
+	local augroup = vim.api.nvim_create_augroup("spectre_panel_write", { clear = true })
+	vim.api.nvim_clear_autocmds({ pattern = "*", group = augroup })
+	vim.api.nvim_create_autocmd("BufWritePost", {
+		group = augroup,
+		pattern = "*",
+		callback = spectre.on_write,
+		desc = "spectre write autocmd",
+	})
 end
 
 return M

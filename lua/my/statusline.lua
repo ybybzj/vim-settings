@@ -63,6 +63,26 @@ local spaces = function()
 	return "spaces: " .. vim.api.nvim_buf_get_option(0, "shiftwidth")
 end
 
+local state = require("spectre.state")
+local spectre = {
+	sections = {
+		lualine_a = {
+			mode,
+		},
+		lualine_b = {
+			function()
+				return state.status_line
+			end,
+		},
+		lualine_z = {
+			function()
+				return "Spectre"
+			end,
+		},
+	},
+	filetypes = { "spectre_panel" },
+}
+
 lualine.setup({
 	options = {
 		icons_enabled = true,
@@ -96,5 +116,5 @@ lualine.setup({
 		lualine_z = {},
 	},
 	tabline = {},
-	extensions = {},
+	extensions = { "aerial", "quickfix", spectre },
 })

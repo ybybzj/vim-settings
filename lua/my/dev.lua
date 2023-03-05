@@ -285,9 +285,55 @@ require("aerial").setup({
 	},
 })
 
-local root_dir = require("my.helpers").root_dir
 require("spectre").setup({
 	live_update = true,
-	is_insert_mode = true,
-	cwd = root_dir(vim.fn.expand("%:p:h"), vim.fn.getcwd()),
+	is_insert_mode = false,
+	find_engine = {
+		["rg"] = {
+			cmd = "rg",
+			-- default args
+			args = {
+				"--color=never",
+				"--no-heading",
+				"--with-filename",
+				"--line-number",
+				"--column",
+			},
+			options = {
+				["ignore-case"] = {
+					value = "--ignore-case",
+					icon = "[I]",
+					desc = "ignore case",
+				},
+				["hidden"] = {
+					value = "--hidden",
+					desc = "hidden file",
+					icon = "[H]",
+				},
+				["line"] = {
+					value = "-x",
+					icon = "[L]",
+					desc = "match in line",
+				},
+				["word"] = {
+					value = "-w",
+					icon = "[W]",
+					desc = "match in word",
+				},
+				-- you can put any rg search option you want here it can toggle with
+				-- show_option function
+			},
+		},
+	},
+	default = {
+		find = {
+			--pick one of item in find_engine
+			cmd = "rg",
+			options = { "word", "hidden" },
+		},
+		replace = {
+			--pick one of item in replace_engine
+			cmd = "sed",
+		},
+	},
 })

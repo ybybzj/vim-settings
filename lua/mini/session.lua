@@ -281,8 +281,8 @@ MiniSessions.write = function(session_name, opts)
 	H.possibly_execute(opts.hooks.pre, data)
 
 	-- Make session file
-	local cmd = ("mksession%s"):format(opts.force and "!" or "")
-	cmd(("%s %s"):format(cmd, vim.fn.fnameescape(session_path)))
+	local _cmd = ("mksession%s"):format(opts.force and "!" or "")
+	vim.cmd(("%s %s"):format(_cmd, vim.fn.fnameescape(session_path)))
 	data.modify_time = vim.fn.getftime(session_path)
 
 	-- Update detected sessions
