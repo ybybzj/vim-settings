@@ -122,10 +122,12 @@ local mappings = {
 		o = { "<cmd>lua require('my.finder.utils').git_status()<cr>", "Open changed file" },
 		b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
 		c = {
-      Name = "Commit",
-      c = {"<cmd>Telescope git_diffs git_commits<cr>", "Checkout commit"},
-      i = {"<cmd>Telescope conventional_commits<cr>", "Conventional Commit message"}
-    },
+			Name = "Commit",
+			l = { "<cmd>DiffviewFileHistory<cr>", "Browse Commits" },
+			c = { "<cmd>Telescope git_commits<cr>", "Checkout commit" },
+			d = { "<cmd>Telescope git_diffs diff_commits<cr>", "Diff Commit" },
+			i = { "<cmd>Telescope conventional_commits<cr>", "Conventional Commit message" },
+		},
 		f = { "<cmd>lua require('my.finder.utils').git_bcommits()<cr>", "Checkout commit for file" },
 		d = {
 			"<cmd>Gitsigns diffthis HEAD<cr>",
