@@ -135,6 +135,8 @@ return {
 	-- finder
 	{ "nvim-telescope/telescope.nvim", branch = "0.1.x" },
 	{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+	{ "chip/telescope-software-licenses.nvim" },
+	{ "olacin/telescope-cc.nvim" },
 	-- { "nvim-telescope/telescope-ui-select.nvim" },
 
 	-- quickfix

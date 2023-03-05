@@ -6,19 +6,24 @@ end
 local actions = require("telescope.actions")
 
 local shared_layout = {
-	width = 0.8,
+	width = 0.9,
 	scroll_speed = 1,
+	prompt_position = "top",
+	preview_cutoff = 20,
+	preview_height = 0.3,
+	anchor = "N",
 }
 
 telescope.setup({
 	defaults = {
-
 		prompt_prefix = " ",
 		selection_caret = " ",
 		dynamic_preview_title = true,
 		path_display = { "smart" },
 		scroll_strategy = "limit",
-
+		layout_strategy = "vertical",
+		sorting_strategy = "ascending",
+		layout_config = shared_layout,
 		mappings = {
 			i = {
 				["<C-n>"] = actions.cycle_history_next,
@@ -102,18 +107,15 @@ telescope.setup({
 		find_files = {
 			path_display = { "absolute" },
 			theme = "dropdown",
-			layout_config = shared_layout,
 		},
 		oldfiles = {
 			path_display = { "absolute" },
 			theme = "dropdown",
-			layout_config = shared_layout,
 			initial_mode = "normal",
 		},
 		lsp_references = {
 			path_display = { "absolute" },
 			theme = "dropdown",
-			layout_config = shared_layout,
 			initial_mode = "normal",
 		},
 		live_grep = {
@@ -129,12 +131,8 @@ telescope.setup({
 				end
 				return args
 			end,
-
-			layout_config = shared_layout,
 		},
 		grep_string = {
-			layout_strategy = "horizontal",
-			layout_config = shared_layout,
 			additional_args = function(opts)
 				local args = {}
 				local case = opts.case
@@ -183,3 +181,5 @@ telescope.setup({
 
 telescope.load_extension("fzf")
 telescope.load_extension("aerial")
+telescope.load_extension("software-licenses")
+telescope.load_extension("conventional_commits")

@@ -85,6 +85,7 @@ local mappings = {
 	-- convinient shortcuts
 	o = { "<cmd>AerialToggle<cr>", "Toogle Lsp Outline" },
 	q = { "<cmd>copen<cr>", "Open quickfix list" },
+	b = { "<cmd>lua require('telescope.builtin').builtin()<cr>", "Open telescope builtin picker list" },
 	-- session
 	s = {
 		name = "Session",
