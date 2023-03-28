@@ -106,16 +106,13 @@ telescope.setup({
 		-- Default configuration for builtin pickers goes here:
 		find_files = {
 			path_display = { "absolute" },
-			theme = "dropdown",
 		},
 		oldfiles = {
 			path_display = { "absolute" },
-			theme = "dropdown",
 			initial_mode = "normal",
 		},
 		lsp_references = {
 			path_display = { "absolute" },
-			theme = "dropdown",
 			initial_mode = "normal",
 		},
 		live_grep = {

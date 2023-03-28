@@ -11,7 +11,13 @@ end
 mason.setup()
 
 lsp_installer.setup({
-	ensure_installed = { "jsonls", "lua_ls", "tsserver", "zls", "rescriptls" },
+	ensure_installed = {
+		"jsonls",
+		"lua_ls",
+		"tsserver",
+		"zls",
+		"rescriptls", --[[ "rnix" ]]
+	},
 	automatic_installation = true,
 })
 
@@ -44,12 +50,10 @@ lspcfg.rescriptls.setup(lspcfg_opts("my.lsp.settings.rescript"))
 
 lspcfg.zls.setup(lspcfg_opts("my.lsp.settings.zls"))
 
--- ocaml/reasonml --
---[[ require("lspconfig").ocamllsp.setup({ ]]
---[[ 	cmd = { "ocamllsp" }, ]]
---[[ 	on_attach = handlers.on_attach, ]]
---[[ 	capabilities = handlers.capabilities, ]]
---[[ }) ]]
+lspcfg.ocamllsp.setup(lspcfg_opts())
+
+-- lspcfg.rnix.setup(lspcfg_opts())
+
 --- rust ---
 -- curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 -- git  clone git@github.com:rust-analyzer/rust-analyzer.git
