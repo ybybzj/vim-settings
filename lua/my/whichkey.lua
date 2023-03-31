@@ -6,6 +6,8 @@ end
 local live_search_replace_cmd =
 	"<cmd>lua require('my.finder.utils').search_and_replace({select_word=true, cwd=require(\"my.helpers\").root_dir(vim.fn.expand('%:p:h'), vim.fn.getcwd())})<cr>"
 
+local toggle_virtlines =  require("my.lsp.handlers").toggle_virtlines
+
 local setup = {
 	plugins = {
 		marks = true, -- shows a list of your marks on ' and `
@@ -199,6 +201,7 @@ local mappings = {
 		d = { "<cmd>TroubleToggle document_diagnostics<cr>", "list diagnostics" },
 		f = { "<cmd>lua vim.lsp.buf.format()<cr>", "format document" },
 		o = { "<cmd>Lspsaga outline<cr>", "toggle outline" },
+		t = { toggle_virtlines, "toggle type hint" },
 	},
 }
 
@@ -213,3 +216,4 @@ map("", "<leader>f", live_search_replace_cmd)
 map("", "<M-r>", "<cmd>Lspsaga lsp_finder<cr>")
 -- format --
 map("n", "<F5>", "<cmd>lua vim.lsp.buf.format()<cr>")
+
