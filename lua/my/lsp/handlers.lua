@@ -95,9 +95,87 @@ local function lsp_keymaps(client, bufnr)
 	end
 end
 
+-- codelens support
+
+local autocmd_clear = vim.api.nvim_clear_autocmds
+local augroup_codelens = vim.api.nvim_create_augroup("custom-lsp-codelens", { clear = true })
+local autocmd = function(args)
+	local event = args[1]
+	local group = args[2]
+	local callback = args[3]
+
+	vim.api.nvim_create_autocmd(event, {
+		group = group,
+		buffer = args[4],
+		callback = function()
+			callback()
+		end,
+		once = args.once,
+	})
+end
+
+-- line type hint
+-- default: turn off
+local virtlines_enabled = false
+
+local refresh_virtlines = function()
+	local params = { textDocument = vim.lsp.util.make_text_document_params() }
+	vim.lsp.buf_request(0, "textDocument/codeLens", params, function(err, result, ctx, _)
+		-- _G.dump(result)
+		if err then
+			return
+		end
+
+		if not result then
+			return
+		end
+
+		local ns = vim.api.nvim_create_namespace("custom-lsp-codelens")
+		vim.api.nvim_buf_clear_namespace(0, ns, 0, -1)
+
+		if not virtlines_enabled then
+			return
+		end
+
+		for _, lens in ipairs(result) do
+			local title = lens.command.title
+			local range = lens.range
+			local text = string.rep(" ", lens.range.start.character) .. title
+
+			local line_num = range.start.line - 1
+			-- _G.dump(line_num)
+			if line_num >= 0 then
+				vim.api.nvim_buf_set_extmark(0, ns, line_num, 0, {
+					virt_lines = {
+						{ { text, "VirtualTextHint" } },
+					},
+				})
+			end
+		end
+	end)
+end
+
+M.toggle_virtlines = function()
+	virtlines_enabled = not virtlines_enabled
+	refresh_virtlines()
+end
+
 M.on_attach = function(client, bufnr)
 	lsp_keymaps(client, bufnr)
 	lsp_highlight_document(client, bufnr)
+
+	-- Display type information
+	autocmd_clear({ group = augroup_codelens, buffer = 0 })
+	autocmd({
+		{
+			-- "BufEnter",
+			"BufWritePost",
+			"CursorHold",
+		},
+		augroup_codelens,
+		refresh_virtlines,
+		0,
+	})
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
