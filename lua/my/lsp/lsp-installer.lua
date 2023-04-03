@@ -50,7 +50,7 @@ lspcfg.rescriptls.setup(lspcfg_opts("my.lsp.settings.rescript"))
 
 lspcfg.zls.setup(lspcfg_opts("my.lsp.settings.zls"))
 
-lspcfg.ocamllsp.setup(lspcfg_opts())
+lspcfg.ocamllsp.setup(lspcfg_opts("my.lsp.settings.ocamllsp"))
 
 -- lspcfg.rnix.setup(lspcfg_opts())
 

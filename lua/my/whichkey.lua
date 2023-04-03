@@ -6,7 +6,7 @@ end
 local live_search_replace_cmd =
 	"<cmd>lua require('my.finder.utils').search_and_replace({select_word=true, cwd=require(\"my.helpers\").root_dir(vim.fn.expand('%:p:h'), vim.fn.getcwd())})<cr>"
 
-local toggle_virtlines =  require("my.lsp.handlers").toggle_virtlines
+local toggle_virtlines = "<cmd>lua require('my.lsp.handlers').toggle_virtlines()<cr>"
 
 local setup = {
 	plugins = {
@@ -216,4 +216,4 @@ map("", "<leader>f", live_search_replace_cmd)
 map("", "<M-r>", "<cmd>Lspsaga lsp_finder<cr>")
 -- format --
 map("n", "<F5>", "<cmd>lua vim.lsp.buf.format()<cr>")
-
+map("n", "<F4>", toggle_virtlines)

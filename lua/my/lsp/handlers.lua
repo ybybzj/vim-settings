@@ -142,29 +142,35 @@ local refresh_virtlines = function()
 			local range = lens.range
 			local text = string.rep(" ", lens.range.start.character) .. title
 
-			local line_num = range.start.line - 1
-			-- _G.dump(line_num)
-			if line_num >= 0 then
+			local line_num = range.start.line
+			if line_num <= 0 then
+				vim.api.nvim_buf_set_extmark(0, ns, 0, 0, {
+					virt_text = { { text, "VirtualTextHint" } },
+					virt_text_pos = "eol",
+				})
+			else
+				-- _G.dump(line_num)
 				vim.api.nvim_buf_set_extmark(0, ns, line_num, 0, {
 					virt_lines = {
 						{ { text, "VirtualTextHint" } },
 					},
+					virt_lines_above = true,
 				})
 			end
 		end
 	end)
 end
 
-M.toggle_virtlines = function()
-	virtlines_enabled = not virtlines_enabled
+M.toggle_virtlines = function(force)
+	if force then
+		virtlines_enabled = true
+	else
+		virtlines_enabled = not virtlines_enabled
+	end
 	refresh_virtlines()
 end
 
-M.on_attach = function(client, bufnr)
-	lsp_keymaps(client, bufnr)
-	lsp_highlight_document(client, bufnr)
-
-	-- Display type information
+local lsp_codelens = function()
 	autocmd_clear({ group = augroup_codelens, buffer = 0 })
 	autocmd({
 		{
@@ -176,6 +182,14 @@ M.on_attach = function(client, bufnr)
 		refresh_virtlines,
 		0,
 	})
+end
+
+M.on_attach = function(client, bufnr)
+	lsp_keymaps(client, bufnr)
+	lsp_highlight_document(client, bufnr)
+
+	-- Display type information
+	-- lsp_codelens()
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -193,4 +207,5 @@ end
 M.capabilities = capabilities
 
 M.lsp_keymaps = lsp_keymaps
+M.lsp_codelens = lsp_codelens
 return M
