@@ -117,7 +117,7 @@ return {
 	{ "kevinhwang91/nvim-ufo", dependencies = "kevinhwang91/promise-async" },
 	{ "windwp/nvim-spectre" }, -- on Mac: brew install gnu-sed
 	-- bufferline
-	{ "akinsho/bufferline.nvim", dependencies = "kyazdani42/nvim-web-devicons" },
+	{ "akinsho/bufferline.nvim", version = "v3.*", dependencies = "kyazdani42/nvim-web-devicons" },
 
 	-- git
 	"lewis6991/gitsigns.nvim",
@@ -135,7 +135,7 @@ return {
 	-- finder
 	{ "nvim-telescope/telescope.nvim", branch = "0.1.x" },
 	{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
-	{ "chip/telescope-software-licenses.nvim" },
+	-- { "chip/telescope-software-licenses.nvim" },
 	{ "olacin/telescope-cc.nvim" },
 	{ "paopaol/telescope-git-diffs.nvim" },
 	-- { "nvim-telescope/telescope-ui-select.nvim" },

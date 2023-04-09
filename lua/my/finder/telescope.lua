@@ -178,6 +178,6 @@ telescope.setup({
 
 telescope.load_extension("fzf")
 telescope.load_extension("aerial")
-telescope.load_extension("software-licenses")
+-- telescope.load_extension("software-licenses")
 telescope.load_extension("conventional_commits")
 telescope.load_extension("git_diffs")
