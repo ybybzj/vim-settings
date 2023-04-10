@@ -10,7 +10,7 @@ local shared_layout = {
 	scroll_speed = 1,
 	prompt_position = "top",
 	preview_cutoff = 20,
-	preview_height = 0.3,
+	-- preview_height = 0.3,
 	anchor = "N",
 }
 

@@ -126,7 +126,8 @@ return {
 	"akinsho/git-conflict.nvim",
 
 	-- programming languages
-	"rescript-lang/vim-rescript",
+	"nkrkv/nvim-treesitter-rescript",
+
 	"reasonml-editor/vim-reason-plus",
 	"jose-elias-alvarez/nvim-lsp-ts-utils",
 	"simrat39/rust-tools.nvim",
