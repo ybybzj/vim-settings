@@ -127,6 +127,7 @@ return {
 
 	-- programming languages
 	"nkrkv/nvim-treesitter-rescript",
+	"aspeddro/rescript-tools.nvim",
 
 	"reasonml-editor/vim-reason-plus",
 	"jose-elias-alvarez/nvim-lsp-ts-utils",
