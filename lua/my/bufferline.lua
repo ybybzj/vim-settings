@@ -21,9 +21,9 @@ bufferline.setup({
 		-- NOTE: this plugin is designed with this icon in mind,
 		-- and so changing this is NOT recommended, this is intended
 		-- as an escape hatch for people who cannot bear it for whatever reason
-		indicator = { icon = "▎" },
-		buffer_close_icon = "",
-		-- buffer_close_icon = '',
+		indicator = { icon = "▎", style = 'underline' },
+		buffer_close_icon = "",
+		-- buffer_close_icon = "",
 		modified_icon = "●",
 		close_icon = "",
 		-- close_icon = '',
@@ -62,7 +62,7 @@ bufferline.setup({
 		--     return true
 		--   end
 		-- end,
-		offsets = { { filetype = "nerdtree", text = "File Explorer" } },
+		offsets = { { filetype = "neo-tree", text = "File Explorer" } },
 		show_buffer_icons = true,
 		show_buffer_close_icons = true,
 		show_close_icon = true,
