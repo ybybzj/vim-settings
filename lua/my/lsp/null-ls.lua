@@ -3,10 +3,29 @@ if not null_ls_status_ok then
 	return
 end
 
+local h = require("null-ls.helpers")
+local methods = require("null-ls.methods")
+
 -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
 local formatting = null_ls.builtins.formatting
 -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
 local diagnostics = null_ls.builtins.diagnostics
+
+local dune_fmt = h.make_builtin({
+	name = "dunefmt",
+	meta = {
+		url = "https://github.com/ocaml/dune",
+		description = "Format dune config file into canonical form.",
+	},
+	method = methods.internal.FORMATTING,
+	filetypes = { "dune" },
+	generator_opts = {
+		command = "dune",
+		args = { "format-dune-file" },
+		to_stdin = true,
+	},
+	factory = h.formatter_factory,
+})
 
 null_ls.setup({
 	debug = false,
@@ -14,7 +33,8 @@ null_ls.setup({
 		formatting.prettierd,
 		formatting.stylua,
 		formatting.zigfmt,
-		diagnostics.eslint_d,
+		dune_fmt,
+		diagnostics.eslint,
 	},
 	on_attach = function(client, bufnr)
 		if client.server_capabilities.documentFormattingProvider then
