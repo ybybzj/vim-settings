@@ -33,6 +33,7 @@ null_ls.setup({
 		formatting.prettierd,
 		formatting.stylua,
 		formatting.zigfmt,
+		formatting.ocamlformat,
 		dune_fmt,
 		diagnostics.eslint,
 	},
