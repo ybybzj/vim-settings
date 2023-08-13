@@ -15,10 +15,10 @@ lsp_installer.setup({
 		"jsonls",
 		"lua_ls",
 		"tsserver",
-		"zls",
+		-- "zls",
 		"rescriptls", --[[ "rnix" ]]
 	},
-	automatic_installation = true,
+	automatic_installation = false,
 })
 
 local handlers = require("my.lsp.handlers")
