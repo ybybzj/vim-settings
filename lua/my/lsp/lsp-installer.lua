@@ -37,8 +37,39 @@ local lspcfg_opts = function(opts_path)
 		return opts
 	end
 end
+local status_ok, mason = pcall(require, "mason")
+if not status_ok then
+	return
+end
 
 local lspcfg = require("lspconfig")
+-- zig --
+-- download and install zig nighlty: https://ziglang.org/download/
+-- install zls: https://github.com/zigtools/zls#installation
+-- $ git clone https://github.com/zigtools/zls
+-- $ cd zls
+-- $ zig build gen -- --generate-version-data master
+-- $ zig build -Doptimize=ReleaseSafe
+lspcfg.zls.setup(lspcfg_opts("my.lsp.settings.zls"))
+
+local status_ok, lsp_installer = pcall(require, "mason-lspconfig")
+
+if not status_ok then
+	return
+end
+mason.setup()
+
+lsp_installer.setup({
+	ensure_installed = {
+		"jsonls",
+		"lua_ls",
+		"tsserver",
+		-- "zls",
+		-- "ocamllsp",
+		"rescriptls", --[[ "rnix" ]]
+	},
+	automatic_installation = true,
+})
 
 lspcfg.jsonls.setup(lspcfg_opts("my.lsp.settings.jsonls"))
 
@@ -48,8 +79,7 @@ lspcfg.tsserver.setup(lspcfg_opts("my.lsp.settings.tsserver"))
 
 lspcfg.rescriptls.setup(lspcfg_opts("my.lsp.settings.rescript"))
 
-lspcfg.zls.setup(lspcfg_opts("my.lsp.settings.zls"))
-
+-- ocaml --
 lspcfg.ocamllsp.setup(lspcfg_opts("my.lsp.settings.ocamllsp"))
 
 -- lspcfg.rnix.setup(lspcfg_opts())

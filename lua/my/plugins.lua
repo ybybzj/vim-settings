@@ -53,9 +53,13 @@ return {
 	"hrsh7th/cmp-nvim-lua",
 	"hrsh7th/cmp-emoji",
 	-- snippet
-	"L3MON4D3/LuaSnip",
-	"rafamadriz/friendly-snippets",
+	{ "L3MON4D3/LuaSnip", dependencies = { "rafamadriz/friendly-snippets" } },
 	"saadparwaiz1/cmp_luasnip",
+
+	-- nvim and plugins api completion
+	{ "folke/neodev.nvim", opts = {
+		library = { plugins = { "nvim-dap-ui" }, types = true },
+	} },
 
 	-- neo tree
 
@@ -107,6 +111,17 @@ return {
 		commit = "6b83881cf7f05b380fff302db08610c943d000fa",
 		branch = "main",
 	},
+
+	-- DAP
+	"mfussenegger/nvim-dap",
+	{
+		"theHamsta/nvim-dap-virtual-text",
+		dependencies = {
+			"mfussenegger/nvim-dap",
+			"nvim-treesitter/nvim-treesitter",
+		},
+	},
+	"rcarriga/nvim-dap-ui",
 
 	-- dev
 	"wfxr/minimap.vim",
