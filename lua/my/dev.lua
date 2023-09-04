@@ -337,3 +337,15 @@ require("spectre").setup({
 		},
 	},
 })
+
+local minimap = require("mini.map")
+minimap.setup({
+	integrations = {
+		minimap.gen_integration.builtin_search(),
+		minimap.gen_integration.gitsigns(),
+		minimap.gen_integration.diagnostic(),
+	},
+	symbols = {
+		encode = minimap.gen_encode_symbols.dot("3x2"),
+	},
+})

@@ -45,7 +45,7 @@ map("n", "$", ":HopWord<cr>")
 map("n", "<leader>hL", ":HopLine<cr>")
 map("n", "<leader>hl", ":HopChar1<cr>")
 -- minimap --
-map("n", "<leader>m", ":MinimapToggle<cr>")
+map("n", "<leader>m", "<cmd>lua MiniMap.toggle()<cr>")
 
 -- lazygit --
 map("n", "<leader>gg", "<cmd>lua _git_toggle()<CR>", { silent = true })

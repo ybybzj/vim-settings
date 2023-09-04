@@ -21,8 +21,6 @@ require("dressing").setup({
 		-- When true, input will start in insert mode.
 		start_in_insert = true,
 
-		-- These are passed to nvim_open_win
-		-- anchor = "SW",
 		border = "rounded",
 		-- 'editor' and 'win' will default to being centered
 		relative = "cursor",
@@ -60,6 +58,9 @@ require("dressing").setup({
 		override = function(conf)
 			-- This is the config that will be passed to nvim_open_win.
 			-- Change values here to customize the layout
+			--
+			-- These are passed to nvim_open_win
+			conf.anchor = "SW"
 			return conf
 		end,
 
@@ -120,8 +121,7 @@ require("dressing").setup({
 
 		-- Options for built-in selector
 		builtin = {
-			-- These are passed to nvim_open_win
-			-- anchor = "NW",
+
 			border = "rounded",
 			-- 'editor' and 'win' will default to being centered
 			relative = "editor",
@@ -152,6 +152,8 @@ require("dressing").setup({
 			override = function(conf)
 				-- This is the config that will be passed to nvim_open_win.
 				-- Change values here to customize the layout
+				-- These are passed to nvim_open_win
+				conf.anchor = "NW"
 				return conf
 			end,
 		},

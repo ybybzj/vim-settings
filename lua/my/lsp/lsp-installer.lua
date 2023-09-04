@@ -68,7 +68,7 @@ lsp_installer.setup({
 		-- "ocamllsp",
 		"rescriptls", --[[ "rnix" ]]
 	},
-	automatic_installation = true,
+	automatic_installation = false,
 })
 
 lspcfg.jsonls.setup(lspcfg_opts("my.lsp.settings.jsonls"))

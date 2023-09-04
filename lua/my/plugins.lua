@@ -77,12 +77,12 @@ return {
 	-- "shaunsingh/nord.nvim",
 	-- "marko-cerovac/material.nvim",
 	-- "EdenEast/nightfox.nvim",
-	{
-		"sainnhe/sonokai",
+	-- {
+	"sainnhe/sonokai",
 
-		lazy = false, -- make sure we load this during startup if it is your main colorscheme
-		priority = 1000,
-	},
+	-- 	lazy = false, -- make sure we load this during startup if it is your main colorscheme
+	-- 	priority = 1000,
+	-- },
 	-- "folke/tokyonight.nvim",
 	-- "folke/lsp-colors.nvim",
 
@@ -124,7 +124,8 @@ return {
 	"rcarriga/nvim-dap-ui",
 
 	-- dev
-	"wfxr/minimap.vim",
+	{ "echasnovski/mini.map", version = false },
+	-- "wfxr/minimap.vim",
 	"windwp/nvim-autopairs",
 	"numToStr/Comment.nvim",
 	"lukas-reineke/indent-blankline.nvim",
