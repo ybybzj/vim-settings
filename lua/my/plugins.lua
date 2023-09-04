@@ -32,6 +32,8 @@ return {
 	"karb94/neoscroll.nvim",
 	"phaazon/hop.nvim",
 
+	-- session
+	{ "echasnovski/mini.sessions", version = false },
 	-- "antoinemadec/FixCursorHold.nvim", -- This is needed to fix lsp doc highlight
 	"folke/which-key.nvim",
 

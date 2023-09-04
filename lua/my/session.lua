@@ -1,6 +1,6 @@
-local session = require("mini.session")
+local sessions = require("mini.sessions")
 local path_seq = package.config:sub(1, 1)
-session.setup({
+sessions.setup({
 
 	-- Whether to read latest session if Neovim opened without file arguments
 	autoread = false,
