@@ -19,9 +19,7 @@ if status_ok then
 end
 
 -- blank indent line
-require("indent_blankline").setup({
-	show_end_of_line = true,
-})
+require("ibl").setup({})
 
 -- aerial
 require("aerial").setup({
