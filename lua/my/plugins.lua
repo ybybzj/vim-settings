@@ -150,7 +150,12 @@ return {
 	"reasonml-editor/vim-reason-plus",
 	"jose-elias-alvarez/nvim-lsp-ts-utils",
 	"simrat39/rust-tools.nvim",
-	"ziglang/zig.vim",
+	{
+		"ziglang/zig.vim",
+		config = function()
+			vim.g.zig_std_dir = "/Users/jackzj/.zig/zig-current/lib/std"
+		end,
+	},
 
 	-- finder
 	{ "nvim-telescope/telescope.nvim", branch = "0.1.x" },
