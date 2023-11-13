@@ -149,6 +149,7 @@ return {
 
 	"reasonml-editor/vim-reason-plus",
 	"jose-elias-alvarez/nvim-lsp-ts-utils",
+	"dmmulroy/tsc.nvim",
 	"simrat39/rust-tools.nvim",
 	{
 		"ziglang/zig.vim",
