@@ -86,9 +86,6 @@ ts.setup({
 			},
 		},
 	},
-	context_commentstring = {
-		enable = true,
-	},
 })
 
 -- folding
