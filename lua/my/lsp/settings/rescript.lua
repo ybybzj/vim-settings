@@ -2,7 +2,7 @@ local handlers = require("my.lsp.handlers")
 
 return {
 	-- Using mason.nvim plugin
-	cmd = { "rescript-lsp", "--stdio" },
+	cmd = { "rescript-language-server", "--stdio" },
 	on_attach = function(client, bufnr)
 		-- client.server_capabilities.semanticTokensProvider = false
 		handlers.lsp_keymaps(client, bufnr)
