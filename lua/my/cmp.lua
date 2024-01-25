@@ -97,6 +97,7 @@ cmp.setup({
 			-- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
 			vim_item.menu = ({
 				nvim_lsp = "[LSP]",
+				copilot = "[Copilot]",
 				luasnip = "[Snippet]",
 				buffer = "[Buffer]",
 				path = "[Path]",
@@ -107,6 +108,7 @@ cmp.setup({
 	sources = cmp.config.sources({
 		{ name = "nvim_lsp", priority = 8, max_item_count = 25 },
 
+		{ name = "copilot", priority = 7 },
 		{ name = "nvim_lua", priority = 7 },
 		{ name = "buffer", priority = 7, keyword_length = 3 },
 		{ name = "luasnip", priority = 6 }, -- For luasnip users.

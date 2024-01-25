@@ -54,6 +54,12 @@ return {
 	"hrsh7th/cmp-cmdline",
 	"hrsh7th/cmp-nvim-lua",
 	"hrsh7th/cmp-emoji",
+	{
+		"zbirenbaum/copilot-cmp",
+		config = function()
+			require("copilot_cmp").setup()
+		end,
+	},
 	-- snippet
 	{ "L3MON4D3/LuaSnip", dependencies = { "rafamadriz/friendly-snippets" } },
 	"saadparwaiz1/cmp_luasnip",
@@ -172,6 +178,23 @@ return {
 		"junegunn/fzf",
 		build = function()
 			vim.fn["fzf#install"]()
+		end,
+	},
+	-- ai
+	{
+		"zbirenbaum/copilot.lua",
+		cmd = "Copilot",
+		event = "InsertEnter",
+		config = function()
+			require("copilot").setup({
+				filetypes = {
+					javascript = true, -- allow specific filetype
+					typescript = true, -- allow specific filetype
+					["*"] = false, -- disable for all other filetypes and ignore default `filetypes`
+				},
+				suggestion = { enabled = false },
+				panel = { enabled = false },
+			})
 		end,
 	},
 }
