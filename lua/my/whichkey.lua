@@ -215,5 +215,5 @@ map("", "<F7>", "<cmd>lua vim.diagnostic.goto_next()<cr>")
 map("", "<leader>f", live_search_replace_cmd)
 map("", "<M-r>", "<cmd>Lspsaga lsp_finder<cr>")
 -- format --
-map("n", "<F5>", "<cmd>lua vim.lsp.buf.format()<cr>")
+map("n", "<F5>", "<cmd>lua require('conform').format({lsp_fallback=true})<cr>")
 map("n", "<F4>", toggle_virtlines)

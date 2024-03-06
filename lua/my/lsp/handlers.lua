@@ -82,16 +82,17 @@ local function lsp_keymaps(client, bufnr)
 	buf_set_keymap("n", "ge", "<cmd>Lspsaga show_line_diagnostics<CR>", opts)
 
 	if client.server_capabilities.documentFormattingProvider then
-		local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
-		vim.api.nvim_create_user_command("Format", "lua vim.lsp.buf.format()", {})
-		vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
-		vim.api.nvim_create_autocmd("BufWritePre", {
-			group = augroup,
-			buffer = bufnr,
-			callback = function()
-				vim.lsp.buf.format({ bufnr = bufnr })
-			end,
-		})
+		vim.api.nvim_buf_set_option(bufnr, "formatexpr", "v:lua.require'conform'.formatexpr()")
+		vim.api.nvim_create_user_command("Format", "lua require('conform').format({lsp_fallback = true})", {})
+		-- local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+		-- vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+		-- vim.api.nvim_create_autocmd("BufWritePre", {
+		-- 	group = augroup,
+		-- 	buffer = bufnr,
+		-- 	callback = function()
+		-- 		vim.lsp.buf.format({ bufnr = bufnr })
+		-- 	end,
+		-- })
 	end
 end
 

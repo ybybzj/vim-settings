@@ -5,7 +5,8 @@ end
 
 require("my.lsp.lsp-installer")
 require("my.lsp.handlers").setup()
-require("my.lsp.null-ls")
+require("my.lsp.formatting")
+require("my.lsp.diagnostics")
 
 local saga = require("lspsaga")
 -- change the lsp symbol kind

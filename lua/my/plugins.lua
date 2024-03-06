@@ -112,7 +112,12 @@ return {
 	"williamboman/mason-lspconfig.nvim",
 	"neovim/nvim-lspconfig", -- enable LSP
 	"tamago324/nlsp-settings.nvim", -- language server settings defined in json for
-	"jose-elias-alvarez/null-ls.nvim", -- for formatters and linters
+	-- "jose-elias-alvarez/null-ls.nvim", -- for formatters and linters
+	-- formatter
+	"stevearc/conform.nvim",
+	-- linter
+	"mfussenegger/nvim-lint",
+
 	"folke/trouble.nvim",
 	{
 		"glepnir/lspsaga.nvim",
