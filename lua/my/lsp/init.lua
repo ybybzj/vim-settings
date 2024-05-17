@@ -30,16 +30,21 @@ saga.setup({
 	-- { bufnr, code, col, end_col, end_lnum, lnum, message, severity, source }
 	diagnostic_header = { " ", " ", " ", "ﴞ " },
 	-- use emoji lightbulb in default
-	code_action_icon = "💡",
-	-- if true can press number to execute the codeaction in codeaction window
-	code_action_num_shortcut = true,
+	ui = {
+		-- code_action = "💡",
+	},
+
+	-- code_action = {
 	-- same as nvim-lightbulb but async
-	code_action_lightbulb = {
+	lightbulb = {
 		enable = true,
-		sign = true,
+		sign = false,
+		debounce = 400,
 		sign_priority = 20,
 		virtual_text = true,
 	},
+	-- },
+
 	-- separator in finder
 	-- finder_separator = "  ",
 	-- preview lines of lsp_finder and definition preview

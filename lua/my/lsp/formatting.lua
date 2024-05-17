@@ -6,10 +6,18 @@ require("conform").setup({
 		-- Use a sub-list to run only the first available formatter
 		javascript = { { "prettierd", "prettier" } },
 		typescript = { { "prettierd", "prettier" } },
+		javascriptreact = { "prettier" },
+		typescriptreact = { "prettier" },
+		json = { "prettier" },
+		svelte = { "prettier" },
+		css = { "prettier" },
+		html = { "prettier" },
+		yaml = { "prettier" },
+		markdown = { "prettier" },
+		graphql = { "prettier" },
 		zig = { "zigfmt" },
 		ocaml = { "ocamlformat" },
 		dune = { "dunefmt" },
-		json = { "jq" },
 	},
 	format_on_save = {
 		-- I recommend these options. See :help conform.format for details.

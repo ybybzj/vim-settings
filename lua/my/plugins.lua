@@ -114,22 +114,25 @@ return {
 	"tamago324/nlsp-settings.nvim", -- language server settings defined in json for
 	-- "jose-elias-alvarez/null-ls.nvim", -- for formatters and linters
 	-- formatter
-	"stevearc/conform.nvim",
-	-- linter
-	"mfussenegger/nvim-lint",
-
-	"folke/trouble.nvim",
 	{
-		"glepnir/lspsaga.nvim",
-		commit = "6b83881cf7f05b380fff302db08610c943d000fa",
-		branch = "main",
+		"stevearc/conform.nvim",
+		event = { "BufReadPre", "BufNewFile" },
 	},
+	-- linter
+	{
+		"mfussenegger/nvim-lint",
+		event = { "BufReadPre", "BufNewFile" },
+	},
+	"folke/trouble.nvim",
+
+	"glepnir/lspsaga.nvim",
 
 	-- DAP
 	"mfussenegger/nvim-dap",
 	{
 		"theHamsta/nvim-dap-virtual-text",
 		dependencies = {
+			"nvim-neotest/nvim-nio",
 			"mfussenegger/nvim-dap",
 			"nvim-treesitter/nvim-treesitter",
 		},
@@ -146,7 +149,7 @@ return {
 	{ "kevinhwang91/nvim-ufo", dependencies = "kevinhwang91/promise-async" },
 	{ "windwp/nvim-spectre" }, -- on Mac: brew install gnu-sed
 	-- bufferline
-	{ "akinsho/bufferline.nvim", version = "v3.*", dependencies = "kyazdani42/nvim-web-devicons" },
+	{ "akinsho/bufferline.nvim", dependencies = "kyazdani42/nvim-web-devicons" },
 
 	-- git
 	"lewis6991/gitsigns.nvim",

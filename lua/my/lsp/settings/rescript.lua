@@ -21,6 +21,14 @@ return {
 			description = "Switch Implementation/Interface",
 		},
 	},
+	init_options = {
+		extensionConfiguration = {
+			-- need @rescript/language-server >=1.44.0
+			incrementalTypechecking = {
+				enabled = true,
+			},
+		},
+	},
 }
 
 -- need to edit: server/out/server.js
