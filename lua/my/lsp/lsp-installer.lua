@@ -42,16 +42,6 @@ if not status_ok then
 	return
 end
 
-local lspcfg = require("lspconfig")
--- zig --
--- download and install zig nighlty: https://ziglang.org/download/
--- install zls: https://github.com/zigtools/zls#installation
--- $ git clone https://github.com/zigtools/zls
--- $ cd zls
--- $ zig build gen -- --generate-version-data master
--- $ zig build -Doptimize=ReleaseSafe
-lspcfg.zls.setup(lspcfg_opts("my.lsp.settings.zls"))
-
 local status_ok, lsp_installer = pcall(require, "mason-lspconfig")
 
 if not status_ok then
@@ -71,6 +61,16 @@ lsp_installer.setup({
 	automatic_installation = false,
 })
 
+local lspcfg = require("lspconfig")
+-- zig --
+-- download and install zig nighlty: https://ziglang.org/download/
+-- install zls: https://github.com/zigtools/zls#installation
+-- $ git clone https://github.com/zigtools/zls
+-- $ cd zls
+-- $ zig build gen -- --generate-version-data master
+-- $ zig build -Doptimize=ReleaseSafe
+lspcfg.zls.setup(lspcfg_opts("my.lsp.settings.zls"))
+
 lspcfg.jsonls.setup(lspcfg_opts("my.lsp.settings.jsonls"))
 
 lspcfg.lua_ls.setup(lspcfg_opts("my.lsp.settings.sumneko_lua"))
@@ -81,6 +81,7 @@ lspcfg.rescriptls.setup(lspcfg_opts("my.lsp.settings.rescript"))
 
 -- ocaml --
 lspcfg.ocamllsp.setup(lspcfg_opts("my.lsp.settings.ocamllsp"))
+lspcfg.ruff_lsp.setup(lspcfg_opts("my.lsp.settings.python"))
 
 -- lspcfg.rnix.setup(lspcfg_opts())
 

@@ -18,6 +18,14 @@ require("conform").setup({
 		zig = { "zigfmt" },
 		ocaml = { "ocamlformat" },
 		dune = { "dunefmt" },
+		rescript = { "rescript-format" },
+		python = function(bufnr)
+			if require("conform").get_formatter_info("ruff_format", bufnr).available then
+				return { "ruff_format" }
+			else
+				return { "black" }
+			end
+		end,
 	},
 	format_on_save = {
 		-- I recommend these options. See :help conform.format for details.

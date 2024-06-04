@@ -4,7 +4,7 @@ return {
 	-- Using mason.nvim plugin
 	cmd = { "rescript-language-server", "--stdio" },
 	on_attach = function(client, bufnr)
-		-- client.server_capabilities.semanticTokensProvider = false
+		client.server_capabilities.semanticTokensProvider = false
 		handlers.lsp_keymaps(client, bufnr)
 	end,
 	commands = {
