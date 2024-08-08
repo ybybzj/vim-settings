@@ -9,6 +9,7 @@ local live_search_replace_cmd =
 local toggle_virtlines = "<cmd>lua require('my.lsp.handlers').toggle_virtlines()<cr>"
 
 local setup = {
+	preset = "helix",
 	plugins = {
 		marks = true, -- shows a list of your marks on ' and `
 		registers = true, -- shows your registers on " in NORMAL or <C-r> in INSERT mode
@@ -19,7 +20,7 @@ local setup = {
 		-- the presets plugin, adds help for a bunch of default keybindings in Neovim
 		-- No actual key bindings are created
 		presets = {
-			operators = false, -- adds help for operators like d, y, ... and registers them for motion / text object completion
+			operators = true, -- adds help for operators like d, y, ... and registers them for motion / text object completion
 			motions = true, -- adds help for motions
 			text_objects = true, -- help for text objects triggered after entering an operator
 			windows = true, -- default bindings on <c-w>
@@ -30,48 +31,56 @@ local setup = {
 	},
 	-- add operators that will trigger motion and text object completion
 	-- to enable all native operators, set the preset / operators plugin above
-	-- operators = { gc = "Comments" },
-	key_labels = {
-		-- override the label used to display some keys. It doesn't effect WK in any other way.
-		-- For example:
-		-- ["<space>"] = "SPC",
-		-- ["<cr>"] = "RET",
-		-- ["<tab>"] = "TAB",
-	},
 	icons = {
 		breadcrumb = "»", -- symbol used in the command line area that shows your active key combo
 		separator = "➜", -- symbol used between a key and it's label
 		group = "+", -- symbol prepended to a group
 	},
-	popup_mappings = {
-		scroll_down = "<c-d>", -- binding to scroll down inside the popup
-		scroll_up = "<c-u>", -- binding to scroll up inside the popup
-	},
-	window = {
-		border = "rounded", -- none, single, double, shadow
-		position = "bottom", -- bottom, top
-		margin = { 1, 0, 1, 0 }, -- extra window margin [top, right, bottom, left]
-		padding = { 2, 2, 2, 2 }, -- extra window padding [top, right, bottom, left]
-		winblend = 0,
+	win = {
+		-- don't allow the popup to overlap with the cursor
+		no_overlap = true,
+		-- width = 1,
+		-- height = { min = 4, max = 25 },
+		-- col = 0,
+		-- row = math.huge,
+		-- border = "none",
+		padding = { 1, 2 }, -- extra window padding [top/bottom, right/left]
+		title = true,
+		title_pos = "center",
+		zindex = 1000,
+		-- Additional vim.wo and vim.bo options
+		bo = {},
+		wo = {
+			-- winblend = 10, -- value between 0-100 0 for fully opaque and 100 for fully transparent
+		},
 	},
 	layout = {
-		height = { min = 4, max = 25 }, -- min and max height of the columns
-		width = { min = 20, max = 50 }, -- min and max width of the columns
+		height = { min = 4 }, -- min and max height of the columns
+		width = { min = 20 }, -- min and max width of the columns
 		spacing = 3, -- spacing between columns
 		align = "left", -- align columns left, center or right
 	},
-	ignore_missing = true, -- enable this to hide mappings for which you didn't specify a label
-	hidden = { "<silent>", "<cmd>", "<Cmd>", "<CR>", "call", "lua", "^:", "^ " }, -- hide mapping boilerplate
 	show_help = true, -- show help message on the command line when the popup is visible
-	triggers = "auto", -- automatically setup triggers
-	-- triggers = {"<leader>"} -- or specify a list manually
-	triggers_blacklist = {
-		-- list of mode / prefixes that should never be hooked by WhichKey
-		-- this is mostly relevant for key maps that start with a native binding
-		-- most people should not need to change this
-		i = { "j", "k" },
-		v = { "j", "k" },
+	triggers = {
+		{ "<auto>", mode = "nxsot" },
+	}, -- automatically setup triggers
+	--- Mappings are sorted using configured sorters and natural sort of the keys
+	--- Available sorters:
+	--- * local: buffer-local mappings first
+	--- * order: order of the items (Used by plugins like marks / registers)
+	--- * group: groups last
+	--- * alphanum: alpha-numerical first
+	--- * mod: special modifier keys last
+	--- * manual: the order the mappings were added
+	--- * case: lower-case first
+	sort = { "local", "order", "group", "alphanum", "mod" },
+	show_keys = true, -- show the currently pressed key and its label as a message in the command line
+	-- disable WhichKey for certain buf types and file types.
+	disable = {
+		ft = {},
+		bt = {},
 	},
+	debug = false, -- enable wk.log in the current directory
 }
 
 local opts = {
@@ -85,128 +94,226 @@ local opts = {
 
 local mappings = {
 	-- convinient shortcuts
-	o = { "<cmd>AerialToggle<cr>", "Toogle Lsp Outline" },
-	q = { "<cmd>copen<cr>", "Open quickfix list" },
-	b = { "<cmd>lua require('telescope.builtin').builtin()<cr>", "Open telescope builtin picker list" },
+	-- o = { "<cmd>AerialToggle<cr>", "Toogle Lsp Outline" },
+	-- q = { "<cmd>copen<cr>", "Open quickfix list" },
+	-- b = { "<cmd>lua require('telescope.builtin').builtin()<cr>", "Open telescope builtin picker list" },
 	-- session
-	s = {
-		name = "Session",
-		r = { "<cmd>lua MiniSessions.read()<cr>", "Read Session" },
-		s = { "<cmd>lua MiniSessions.select()<cr>", "Select Session" },
-		w = { "<cmd>lua MiniSessions.write('Session.vim')<cr>", "Write Local Session" },
-		W = { "<cmd>lua MiniSessions.write('GlobalSession.vim')<cr>", "Write Global Session" },
-	},
+	-- s = {
+	-- 	name = "Session",
+	-- 	r = { "<cmd>lua MiniSessions.read()<cr>", "Read Session" },
+	-- 	s = { "<cmd>lua MiniSessions.select()<cr>", "Select Session" },
+	-- 	w = { "<cmd>lua MiniSessions.write('Session.vim')<cr>", "Write Local Session" },
+	-- 	W = { "<cmd>lua MiniSessions.write('GlobalSession.vim')<cr>", "Write Global Session" },
+	-- },
 	-- git
-	g = {
-		name = "Git",
-		s = {
-			name = "Git Status",
-			o = { "<cmd>DiffviewOpen<cr>", "Open Git Status" },
-			c = { "<cmd>DiffviewClose<cr>", "Close Git Status" },
-			f = { "<cmd>DiffviewFileHistory %<cr>", "Open Current File History" },
-		},
-		g = { "<cmd>lua _git_toggle()<CR>", "GitUI" },
-		l = { "<cmd>lua require 'gitsigns'.blame_line({full=true})<cr>", "Blame" },
-		h = {
-			name = "Hunk",
-			j = { "<cmd>lua require 'gitsigns'.next_hunk()<cr>", "Next Hunk" },
-			k = { "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", "Prev Hunk" },
-			p = { "<cmd>lua require 'gitsigns'.preview_hunk()<cr>", "Preview Hunk" },
-			r = { "<cmd>lua require 'gitsigns'.reset_hunk()<cr>", "Reset Hunk" },
-			R = { "<cmd>lua require 'gitsigns'.reset_buffer()<cr>", "Reset Buffer" },
-			s = { "<cmd>lua require 'gitsigns'.stage_hunk()<cr>", "Stage Hunk" },
-			u = {
-				"<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>",
-				"Undo Stage Hunk",
-			},
-		},
-
-		o = { "<cmd>lua require('my.finder.utils').git_status()<cr>", "Open changed file" },
-		b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
-		c = {
-			Name = "Commit",
-			l = { "<cmd>DiffviewFileHistory<cr>", "Browse Commits" },
-			c = { "<cmd>Telescope git_commits<cr>", "Checkout commit" },
-			d = { "<cmd>Telescope git_diffs diff_commits<cr>", "Diff Commit" },
-			i = { "<cmd>Telescope conventional_commits<cr>", "Conventional Commit message" },
-		},
-		f = { "<cmd>lua require('my.finder.utils').git_bcommits()<cr>", "Checkout commit for file" },
-		d = {
-			"<cmd>Gitsigns diffthis HEAD<cr>",
-			"Diff",
-		},
-		m = {
-			name = "Merge conflict",
-			o = {
-				"<cmd>GitConflictChooseOurs<cr>",
-				"Select the current changes",
-			},
-			t = {
-				"<cmd>GitConflictChooseTheirs<cr>",
-				"Select the incoming changes",
-			},
-			b = {
-				"<cmd>GitConflictChooseBoth<cr>",
-				"Select both changes",
-			},
-			n = {
-				"<cmd>GitConflictChooseNone<cr>",
-				"Select both none of the changes",
-			},
-			l = {
-				"<cmd>GitConflictNextConflict<cr>",
-				"Move to the next conflict.",
-			},
-			h = {
-				"<cmd>GitConflictPrevConflict<cr>",
-				"Move to the previous conflict",
-			},
-			q = {
-				"<cmd>GitConflictListQf<cr>",
-				"Get all conflict to quickfix",
-			},
-		},
-	},
+	-- g = {
+	-- 	name = "Git",
+	-- 	s = {
+	-- 		name = "Git Status",
+	-- 		o = { "<cmd>DiffviewOpen<cr>", "Open Git Status" },
+	-- 		c = { "<cmd>DiffviewClose<cr>", "Close Git Status" },
+	-- 		f = { "<cmd>DiffviewFileHistory %<cr>", "Open Current File History" },
+	-- 	},
+	-- 	g = { "<cmd>lua _git_toggle()<CR>", "GitUI" },
+	-- 	l = { "<cmd>lua require 'gitsigns'.blame_line({full=true})<cr>", "Blame" },
+	-- 	h = {
+	-- 		name = "Hunk",
+	-- 		j = { "<cmd>lua require 'gitsigns'.next_hunk()<cr>", "Next Hunk" },
+	-- 		k = { "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", "Prev Hunk" },
+	-- 		p = { "<cmd>lua require 'gitsigns'.preview_hunk()<cr>", "Preview Hunk" },
+	-- 		r = { "<cmd>lua require 'gitsigns'.reset_hunk()<cr>", "Reset Hunk" },
+	-- 		R = { "<cmd>lua require 'gitsigns'.reset_buffer()<cr>", "Reset Buffer" },
+	-- 		s = { "<cmd>lua require 'gitsigns'.stage_hunk()<cr>", "Stage Hunk" },
+	-- 		u = {
+	-- 			"<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>",
+	-- 			"Undo Stage Hunk",
+	-- 		},
+	-- 	},
+	--
+	-- 	o = { "<cmd>lua require('my.finder.utils').git_status()<cr>", "Open changed file" },
+	-- 	b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
+	-- 	c = {
+	-- 		Name = "Commit",
+	-- 		l = { "<cmd>DiffviewFileHistory<cr>", "Browse Commits" },
+	-- 		c = { "<cmd>Telescope git_commits<cr>", "Checkout commit" },
+	-- 		d = { "<cmd>Telescope git_diffs diff_commits<cr>", "Diff Commit" },
+	-- 		i = { "<cmd>Telescope conventional_commits<cr>", "Conventional Commit message" },
+	-- 	},
+	-- 	f = { "<cmd>lua require('my.finder.utils').git_bcommits()<cr>", "Checkout commit for file" },
+	-- 	d = {
+	-- 		"<cmd>Gitsigns diffthis HEAD<cr>",
+	-- 		"Diff",
+	-- 	},
+	-- 	m = {
+	-- 		name = "Merge conflict",
+	-- 		o = {
+	-- 			"<cmd>GitConflictChooseOurs<cr>",
+	-- 			"Select the current changes",
+	-- 		},
+	-- 		t = {
+	-- 			"<cmd>GitConflictChooseTheirs<cr>",
+	-- 			"Select the incoming changes",
+	-- 		},
+	-- 		b = {
+	-- 			"<cmd>GitConflictChooseBoth<cr>",
+	-- 			"Select both changes",
+	-- 		},
+	-- 		n = {
+	-- 			"<cmd>GitConflictChooseNone<cr>",
+	-- 			"Select both none of the changes",
+	-- 		},
+	-- 		l = {
+	-- 			"<cmd>GitConflictNextConflict<cr>",
+	-- 			"Move to the next conflict.",
+	-- 		},
+	-- 		h = {
+	-- 			"<cmd>GitConflictPrevConflict<cr>",
+	-- 			"Move to the previous conflict",
+	-- 		},
+	-- 		q = {
+	-- 			"<cmd>GitConflictListQf<cr>",
+	-- 			"Get all conflict to quickfix",
+	-- 		},
+	-- 	},
+	-- },
 	-- finder
-	f = {
-		name = "Finder",
-		o = { "<cmd>lua require('telescope.builtin').oldfiles()<cr>", "find recent files" },
-		f = { "<cmd>lua require('telescope.builtin').find_files()<cr>", "find files" },
-		b = { "<cmd>lua require('telescope.builtin').buffers()<cr>", "find buffers" },
-		-- s = { "<cmd>lua require('telescope.builtin').live_grep({case = 'smart'})<cr>", "live grep" },
-		s = { live_search_replace_cmd, "Search and Replace" },
-		S = { "<cmd>lua require('telescope.builtin').live_grep()<cr>", "live grep with case sensitive" },
-		w = {
-			"<cmd>lua require('my.finder.utils').grep_word({case = 'smart'})<cr>",
-			"find word in project",
-		},
-		W = {
-			"<cmd>lua require('my.finder.utils').grep_word()<cr>",
-			"find word in project with case sensitive",
-		},
-
-		r = {
-			"<cmd>lua require('my.finder.utils').grep_last()<cr>",
-			"repeat last search",
-		},
-	},
+	-- f = {
+	-- 	name = "Finder",
+	-- 	o = { "<cmd>lua require('telescope.builtin').oldfiles()<cr>", "find recent files" },
+	-- 	f = { "<cmd>lua require('telescope.builtin').find_files()<cr>", "find files" },
+	-- 	b = { "<cmd>lua require('telescope.builtin').buffers()<cr>", "find buffers" },
+	-- 	-- s = { "<cmd>lua require('telescope.builtin').live_grep({case = 'smart'})<cr>", "live grep" },
+	-- 	s = { live_search_replace_cmd, "Search and Replace" },
+	-- 	S = { "<cmd>lua require('telescope.builtin').live_grep()<cr>", "live grep with case sensitive" },
+	-- 	w = {
+	-- 		"<cmd>lua require('my.finder.utils').grep_word({case = 'smart'})<cr>",
+	-- 		"find word in project",
+	-- 	},
+	-- 	W = {
+	-- 		"<cmd>lua require('my.finder.utils').grep_word()<cr>",
+	-- 		"find word in project with case sensitive",
+	-- 	},
+	--
+	-- 	r = {
+	-- 		"<cmd>lua require('my.finder.utils').grep_last()<cr>",
+	-- 		"repeat last search",
+	-- 	},
+	-- },
 
 	-- lsp
-	l = {
-		name = "LSP",
-		r = { "<cmd>lua require('telescope.builtin').lsp_references()<cr>", "find references" },
-		S = { "<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>", "find symbols in document" },
-		s = { "<cmd>Telescope aerial<cr>", "find symbols in document with filter" },
-		a = { "<cmd>Lspsaga code_action<cr>", "list code actions" },
-		d = { "<cmd>TroubleToggle document_diagnostics<cr>", "list diagnostics" },
-		f = { "<cmd>lua vim.lsp.buf.format()<cr>", "format document" },
-		o = { "<cmd>Lspsaga outline<cr>", "toggle outline" },
-		t = { toggle_virtlines, "toggle type hint" },
-	},
+	-- l = {
+	-- 	name = "LSP",
+	-- 	r = { "<cmd>lua require('telescope.builtin').lsp_references()<cr>", "find references" },
+	-- 	S = { "<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>", "find symbols in document" },
+	-- 	s = { "<cmd>Telescope aerial<cr>", "find symbols in document with filter" },
+	-- 	a = { "<cmd>Lspsaga code_action<cr>", "list code actions" },
+	-- 	d = { "<cmd>TroubleToggle document_diagnostics<cr>", "list diagnostics" },
+	-- 	f = { "<cmd>lua vim.lsp.buf.format()<cr>", "format document" },
+	-- 	o = { "<cmd>Lspsaga outline<cr>", "toggle outline" },
+	-- 	t = { toggle_virtlines, "toggle type hint" },
+	-- },
 }
 
 which_key.setup(setup)
-which_key.register(mappings, opts)
+-- which_key.register(mappings, opts)
+
+which_key.add({
+	{ "<space>o", "<cmd>AerialToggle<cr>", desc = "Toogle Lsp Outline" },
+	{ "space>q", "<cmd>copen<cr>", desc = "Open quickfix list" },
+	{ "<space>b", "<cmd>lua require('telescope.builtin').builtin()<cr>", desc = "Open telescope builtin picker list" },
+})
+
+-- session
+which_key.add({
+	{ "<space>s", group = "Session" },
+	{ "<space>sr", "<cmd>lua MiniSessions.read()<cr>", desc = "Read Session" },
+	{ "<space>ss", "<cmd>lua MiniSessions.select()<cr>", desc = "Select Session" },
+	{ "<space>sw", "<cmd>lua MiniSessions.write('Session.vim')<cr>", desc = "Write Local Session" },
+	{ "<space>sW", "<cmd>lua MiniSessions.write('GlobalSession.vim')<cr>", desc = "Write Global Session" },
+})
+
+-- git
+which_key.add({
+	{ "<space>g", group = "Git" },
+	{ "<space>gs", group = "Git Status" },
+	{ "<space>gso", "<cmd>DiffviewOpen<cr>", desc = "Open Git Status" },
+	{ "<space>gsc", "<cmd>DiffviewClose<cr>", desc = "Close Git Status" },
+	{ "<space>gsf", "<cmd>DiffviewFileHistory %<cr>", desc = "Open Current File History" },
+
+	{ "<space>gg", "<cmd>lua _git_toggle()<CR>", desc = "GitUI" },
+	{ "<space>gl", "<cmd>lua require 'gitsigns'.blame_line({full=true})<cr>", desc = "Blame" },
+
+	{ "<space>gh", group = "Hunk" },
+	{ "<space>ghj", "<cmd>lua require 'gitsigns'.next_hunk()<cr>", desc = "Next Hunk" },
+	{ "<space>ghk", "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", desc = "Prev Hunk" },
+	{ "<space>ghp", "<cmd>lua require 'gitsigns'.preview_hunk()<cr>", desc = "Preview Hunk" },
+	{ "<space>ghr", "<cmd>lua require 'gitsigns'.reset_hunk()<cr>", desc = "Reset Hunk" },
+	{ "<space>ghR", "<cmd>lua require 'gitsigns'.reset_buffer()<cr>", desc = "Reset Buffer" },
+	{ "<space>ghs", "<cmd>lua require 'gitsigns'.stage_hunk()<cr>", desc = "Stage Hunk" },
+	{ "<space>ghu", "<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>", desc = "Undo Stage Hunk" },
+
+	{ "<space>go", "<cmd>lua require('my.finder.utils').git_status()<cr>", desc = "Open changed file" },
+	{ "<space>gb", "<cmd>Telescope git_branches<cr>", desc = "Checkout branch" },
+
+	{ "<space>gc", group = "Commit" },
+	{ "<space>gcl", "<cmd>DiffviewFileHistory<cr>", desc = "Browse Commits" },
+	{ "<space>gcc", "<cmd>Telescope git_commits<cr>", desc = "Checkout commit" },
+	{ "<space>gcd", "<cmd>Telescope git_diffs diff_commits<cr>", desc = "Diff Commit" },
+	{ "<space>gci", "<cmd>Telescope conventional_commits<cr>", desc = "Conventional Commit message" },
+	{ "<space>gcf", "<cmd>lua require('my.finder.utils').git_bcommits()<cr>", desc = "Checkout commit for file" },
+
+	{ "<space>gd", "<cmd>Gitsigns diffthis HEAD<cr>", desc = "Diff" },
+
+	{ "<space>gm", group = "Merge conflict" },
+	{ "<space>gmo", "<cmd>GitConflictChooseOurs<cr>", desc = "Select the current changes" },
+	{ "<space>gmt", "<cmd>GitConflictChooseTheirs<cr>", desc = "Select the incoming changes" },
+	{ "<space>gmb", "<cmd>GitConflictChooseBoth<cr>", desc = "Select both changes" },
+	{ "<space>gmn", "<cmd>GitConflictChooseNone<cr>", desc = "Select both none of the changes" },
+	{ "<space>gml", "<cmd>GitConflictNextConflict<cr>", desc = "Move to the next conflict." },
+	{ "<space>gmh", "<cmd>GitConflictPrevConflict<cr>", desc = "Move to the previous conflict" },
+	{ "<space>gmq", "<cmd>GitConflictListQf<cr>", desc = "Get all conflict to quickfix" },
+})
+
+-- finder
+which_key.add({
+	{ "<space>f", group = "Finder" },
+	{ "<space>fo", "<cmd>lua require('telescope.builtin').oldfiles()<cr>", desc = "find recent files" },
+	{ "<space>ff", "<cmd>lua require('telescope.builtin').find_files()<cr>", desc = "find files" },
+	{ "<space>fb", "<cmd>lua require('telescope.builtin').buffers()<cr>", desc = "find buffers" },
+	-- { "<space>fs", "<cmd>lua require('telescope.builtin').live_grep({case = 'smart'})<cr>", "live grep" },
+	{ "<space>fs", live_search_replace_cmd, desc = "Search and Replace" },
+	{ "<space>fS", "<cmd>lua require('telescope.builtin').live_grep()<cr>", desc = "live grep with case sensitive" },
+	{
+		"<space>fw",
+		"<cmd>lua require('my.finder.utils').grep_word({case = 'smart'})<cr>",
+		desc = "find word in project",
+	},
+	{
+		"<space>fW",
+		"<cmd>lua require('my.finder.utils').grep_word()<cr>",
+		desc = "find word in project with case sensitive",
+	},
+
+	{ "<space>fr", "<cmd>lua require('my.finder.utils').grep_last()<cr>", desc = "repeat last search" },
+})
+
+-- lsp
+which_key.add({
+	{ "<space>l", group = "LSP" },
+	{ "<space>lr", "<cmd>lua require('telescope.builtin').lsp_references()<cr>", desc = "find references" },
+	{
+		"<space>lS",
+		"<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>",
+		desc = "find symbols in document",
+	},
+	{ "<space>ls", "<cmd>Telescope aerial<cr>", desc = "find symbols in document with filter" },
+	{ "<space>la", "<cmd>Lspsaga code_action<cr>", desc = "list code actions" },
+	{ "<space>ld", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "list diagnostics" },
+	{ "<space>lf", "<cmd>lua vim.lsp.buf.format()<cr>", desc = "format document" },
+	{ "<space>lo", "<cmd>Lspsaga outline<cr>", desc = "toggle outline" },
+	{ "<space>lt", toggle_virtlines, desc = "toggle type hint" },
+})
+
 local map = require("my.shared").mapkey
 map("", "<leader>cp", "<cmd>lua require(\"my.helpers\").cd_root(vim.fn.expand('%:p:h'), vim.fn.getcwd())<cr>")
 map("", "<C-p>", "<cmd>lua require('telescope.builtin').oldfiles()<cr>")
