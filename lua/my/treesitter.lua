@@ -23,7 +23,7 @@ ts.setup({
 		"yaml",
 		"markdown",
 		"markdown_inline",
-		"rescript",
+		-- "rescript",
 	},
 	sync_install = false, -- install languages synchronously (only applied to `ensure_installed`)
 	highlight = { enable = true },

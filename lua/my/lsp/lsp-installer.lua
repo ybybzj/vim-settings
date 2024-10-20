@@ -14,7 +14,7 @@ lsp_installer.setup({
 	ensure_installed = {
 		"jsonls",
 		"lua_ls",
-		"tsserver",
+		"ts_ls",
 		-- "zls",
 		"rescriptls", --[[ "rnix" ]]
 	},
@@ -49,18 +49,6 @@ if not status_ok then
 end
 mason.setup()
 
-lsp_installer.setup({
-	ensure_installed = {
-		"jsonls",
-		"lua_ls",
-		"tsserver",
-		-- "zls",
-		-- "ocamllsp",
-		"rescriptls", --[[ "rnix" ]]
-	},
-	automatic_installation = false,
-})
-
 local lspcfg = require("lspconfig")
 -- zig --
 -- download and install zig nighlty: https://ziglang.org/download/
@@ -75,7 +63,7 @@ lspcfg.jsonls.setup(lspcfg_opts("my.lsp.settings.jsonls"))
 
 lspcfg.lua_ls.setup(lspcfg_opts("my.lsp.settings.sumneko_lua"))
 
-lspcfg.tsserver.setup(lspcfg_opts("my.lsp.settings.tsserver"))
+lspcfg.ts_ls.setup(lspcfg_opts("my.lsp.settings.tsserver"))
 
 lspcfg.rescriptls.setup(lspcfg_opts("my.lsp.settings.rescript"))
 
