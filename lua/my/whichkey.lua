@@ -324,3 +324,4 @@ map("", "<M-r>", "<cmd>Lspsaga lsp_finder<cr>")
 -- format --
 map("n", "<F5>", "<cmd>lua require('conform').format({lsp_fallback=true})<cr>")
 map("n", "<F4>", toggle_virtlines)
+map("i", "<C-CR>", "<cmd>Copilot suggestion<cr>")

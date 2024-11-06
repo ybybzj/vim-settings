@@ -189,21 +189,28 @@ return {
 		end,
 	},
 	-- ai
-	-- {
-	-- 	"zbirenbaum/copilot.lua",
-	-- 	cmd = "Copilot",
-	-- 	event = "InsertEnter",
-	-- 	config = function()
-	-- 		require("copilot").setup({
-	-- 			filetypes = {
-	-- 				javascript = true, -- allow specific filetype
-	-- 				typescript = true, -- allow specific filetype
-	-- 				zig = true,
-	-- 				["*"] = false, -- disable for all other filetypes and ignore default `filetypes`
-	-- 			},
-	-- 			suggestion = { enabled = false },
-	-- 			panel = { enabled = false },
-	-- 		})
-	-- 	end,
-	-- },
+	{
+		"zbirenbaum/copilot-cmp",
+		event = "InsertEnter",
+		config = function()
+			require("copilot_cmp").setup()
+		end,
+		dependencies = {
+			"zbirenbaum/copilot.lua",
+			cmd = "Copilot",
+			config = function()
+				require("copilot").setup({
+					suggestion = { enabled = false },
+					panel = { enabled = false },
+					filetypes = {
+						javascript = true, -- allow specific filetype
+						typescript = true, -- allow specific filetype
+						zig = true,
+						rescript = true,
+						-- ["*"] = false, -- disable for all other filetypes and ignore default `filetypes`
+					},
+				})
+			end,
+		},
+	},
 }
