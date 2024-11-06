@@ -59,6 +59,7 @@ neoTree.setup({
 			hide_by_name = {
 				".DS_Store",
 				"thumbs.db",
+				".git",
 				--"node_modules",
 			},
 			hide_by_pattern = { -- uses glob style patterns
@@ -120,6 +121,47 @@ neoTree.setup({
 			["?"] = "show_help",
 			["<"] = "prev_source",
 			[">"] = "next_source",
+			["Y"] = "copy_selector",
 		},
+	},
+	commands = {
+		-- for copy paths
+		copy_selector = function(state)
+			local node = state.tree:get_node()
+			local filepath = node:get_id()
+			local filename = node.name
+			local modify = vim.fn.fnamemodify
+
+			local vals = {
+				["1.RelPATH"] = modify(filepath, ":."),
+				-- ["BASENAME"] = modify(filename, ":r"),
+				-- ["EXTENSION"] = modify(filename, ":e"),
+				["3.FILENAME"] = filename,
+				-- ["PATH (HOME)"] = modify(filepath, ":~"),
+				["2.AbsPATH"] = filepath,
+				-- ["URI"] = vim.uri_from_fname(filepath),
+			}
+
+			local options = vim.tbl_filter(function(val)
+				return vals[val] ~= ""
+			end, vim.tbl_keys(vals))
+			if vim.tbl_isempty(options) then
+				vim.notify("No values to copy", vim.log.levels.WARN)
+				return
+			end
+			table.sort(options)
+			vim.ui.select(options, {
+				prompt = "Choose to copy to clipboard:",
+				format_item = function(item)
+					return ("%s: %s"):format(item, vals[item])
+				end,
+			}, function(choice)
+				local result = vals[choice]
+				if result then
+					vim.notify(("Copied: `%s`"):format(result))
+					vim.fn.setreg("+", result)
+				end
+			end)
+		end,
 	},
 })

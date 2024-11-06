@@ -63,13 +63,15 @@ lspcfg.jsonls.setup(lspcfg_opts("my.lsp.settings.jsonls"))
 
 lspcfg.lua_ls.setup(lspcfg_opts("my.lsp.settings.sumneko_lua"))
 
-lspcfg.ts_ls.setup(lspcfg_opts("my.lsp.settings.tsserver"))
+-- use typescript-tool.nvim instead
+-- lspcfg.ts_ls.setup(lspcfg_opts("my.lsp.settings.tsserver"))
+require("typescript-tools").setup(lspcfg_opts("my.lsp.settings.tsserver"))
 
 lspcfg.rescriptls.setup(lspcfg_opts("my.lsp.settings.rescript"))
 
 -- ocaml --
 lspcfg.ocamllsp.setup(lspcfg_opts("my.lsp.settings.ocamllsp"))
-lspcfg.ruff_lsp.setup(lspcfg_opts("my.lsp.settings.python"))
+lspcfg.ruff.setup(lspcfg_opts("my.lsp.settings.python"))
 
 -- lspcfg.rnix.setup(lspcfg_opts())
 

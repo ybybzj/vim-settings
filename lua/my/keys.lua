@@ -43,3 +43,6 @@ map("n", "<leader>m", "<cmd>lua MiniMap.toggle()<cr>")
 
 -- lazygit --
 map("n", "<leader>gg", "<cmd>lua _git_toggle()<CR>", { silent = true })
+
+-- clear notifications --
+map("n", "<leader>cc", "<cmd>lua require('notify').dismiss()<CR>", { silent = true })

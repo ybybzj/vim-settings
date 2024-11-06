@@ -3,7 +3,9 @@ if not status_ok then
 	return
 end
 
-local live_search_replace_cmd =
+local search_replace_cmd =
+	"<cmd>lua require('my.finder.utils').search_and_replace({select_word=true, cwd=require(\"my.helpers\").root_dir(vim.fn.expand('%:p:h'), vim.fn.getcwd()), continue_last_path = true})<cr>"
+local search_replace_in_path_cmd =
 	"<cmd>lua require('my.finder.utils').search_and_replace({select_word=true, cwd=require(\"my.helpers\").root_dir(vim.fn.expand('%:p:h'), vim.fn.getcwd())})<cr>"
 
 local toggle_virtlines = "<cmd>lua require('my.lsp.handlers').toggle_virtlines()<cr>"
@@ -92,130 +94,7 @@ local opts = {
 	nowait = true, -- use `nowait` when creating keymaps
 }
 
-local mappings = {
-	-- convinient shortcuts
-	-- o = { "<cmd>AerialToggle<cr>", "Toogle Lsp Outline" },
-	-- q = { "<cmd>copen<cr>", "Open quickfix list" },
-	-- b = { "<cmd>lua require('telescope.builtin').builtin()<cr>", "Open telescope builtin picker list" },
-	-- session
-	-- s = {
-	-- 	name = "Session",
-	-- 	r = { "<cmd>lua MiniSessions.read()<cr>", "Read Session" },
-	-- 	s = { "<cmd>lua MiniSessions.select()<cr>", "Select Session" },
-	-- 	w = { "<cmd>lua MiniSessions.write('Session.vim')<cr>", "Write Local Session" },
-	-- 	W = { "<cmd>lua MiniSessions.write('GlobalSession.vim')<cr>", "Write Global Session" },
-	-- },
-	-- git
-	-- g = {
-	-- 	name = "Git",
-	-- 	s = {
-	-- 		name = "Git Status",
-	-- 		o = { "<cmd>DiffviewOpen<cr>", "Open Git Status" },
-	-- 		c = { "<cmd>DiffviewClose<cr>", "Close Git Status" },
-	-- 		f = { "<cmd>DiffviewFileHistory %<cr>", "Open Current File History" },
-	-- 	},
-	-- 	g = { "<cmd>lua _git_toggle()<CR>", "GitUI" },
-	-- 	l = { "<cmd>lua require 'gitsigns'.blame_line({full=true})<cr>", "Blame" },
-	-- 	h = {
-	-- 		name = "Hunk",
-	-- 		j = { "<cmd>lua require 'gitsigns'.next_hunk()<cr>", "Next Hunk" },
-	-- 		k = { "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", "Prev Hunk" },
-	-- 		p = { "<cmd>lua require 'gitsigns'.preview_hunk()<cr>", "Preview Hunk" },
-	-- 		r = { "<cmd>lua require 'gitsigns'.reset_hunk()<cr>", "Reset Hunk" },
-	-- 		R = { "<cmd>lua require 'gitsigns'.reset_buffer()<cr>", "Reset Buffer" },
-	-- 		s = { "<cmd>lua require 'gitsigns'.stage_hunk()<cr>", "Stage Hunk" },
-	-- 		u = {
-	-- 			"<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>",
-	-- 			"Undo Stage Hunk",
-	-- 		},
-	-- 	},
-	--
-	-- 	o = { "<cmd>lua require('my.finder.utils').git_status()<cr>", "Open changed file" },
-	-- 	b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
-	-- 	c = {
-	-- 		Name = "Commit",
-	-- 		l = { "<cmd>DiffviewFileHistory<cr>", "Browse Commits" },
-	-- 		c = { "<cmd>Telescope git_commits<cr>", "Checkout commit" },
-	-- 		d = { "<cmd>Telescope git_diffs diff_commits<cr>", "Diff Commit" },
-	-- 		i = { "<cmd>Telescope conventional_commits<cr>", "Conventional Commit message" },
-	-- 	},
-	-- 	f = { "<cmd>lua require('my.finder.utils').git_bcommits()<cr>", "Checkout commit for file" },
-	-- 	d = {
-	-- 		"<cmd>Gitsigns diffthis HEAD<cr>",
-	-- 		"Diff",
-	-- 	},
-	-- 	m = {
-	-- 		name = "Merge conflict",
-	-- 		o = {
-	-- 			"<cmd>GitConflictChooseOurs<cr>",
-	-- 			"Select the current changes",
-	-- 		},
-	-- 		t = {
-	-- 			"<cmd>GitConflictChooseTheirs<cr>",
-	-- 			"Select the incoming changes",
-	-- 		},
-	-- 		b = {
-	-- 			"<cmd>GitConflictChooseBoth<cr>",
-	-- 			"Select both changes",
-	-- 		},
-	-- 		n = {
-	-- 			"<cmd>GitConflictChooseNone<cr>",
-	-- 			"Select both none of the changes",
-	-- 		},
-	-- 		l = {
-	-- 			"<cmd>GitConflictNextConflict<cr>",
-	-- 			"Move to the next conflict.",
-	-- 		},
-	-- 		h = {
-	-- 			"<cmd>GitConflictPrevConflict<cr>",
-	-- 			"Move to the previous conflict",
-	-- 		},
-	-- 		q = {
-	-- 			"<cmd>GitConflictListQf<cr>",
-	-- 			"Get all conflict to quickfix",
-	-- 		},
-	-- 	},
-	-- },
-	-- finder
-	-- f = {
-	-- 	name = "Finder",
-	-- 	o = { "<cmd>lua require('telescope.builtin').oldfiles()<cr>", "find recent files" },
-	-- 	f = { "<cmd>lua require('telescope.builtin').find_files()<cr>", "find files" },
-	-- 	b = { "<cmd>lua require('telescope.builtin').buffers()<cr>", "find buffers" },
-	-- 	-- s = { "<cmd>lua require('telescope.builtin').live_grep({case = 'smart'})<cr>", "live grep" },
-	-- 	s = { live_search_replace_cmd, "Search and Replace" },
-	-- 	S = { "<cmd>lua require('telescope.builtin').live_grep()<cr>", "live grep with case sensitive" },
-	-- 	w = {
-	-- 		"<cmd>lua require('my.finder.utils').grep_word({case = 'smart'})<cr>",
-	-- 		"find word in project",
-	-- 	},
-	-- 	W = {
-	-- 		"<cmd>lua require('my.finder.utils').grep_word()<cr>",
-	-- 		"find word in project with case sensitive",
-	-- 	},
-	--
-	-- 	r = {
-	-- 		"<cmd>lua require('my.finder.utils').grep_last()<cr>",
-	-- 		"repeat last search",
-	-- 	},
-	-- },
-
-	-- lsp
-	-- l = {
-	-- 	name = "LSP",
-	-- 	r = { "<cmd>lua require('telescope.builtin').lsp_references()<cr>", "find references" },
-	-- 	S = { "<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>", "find symbols in document" },
-	-- 	s = { "<cmd>Telescope aerial<cr>", "find symbols in document with filter" },
-	-- 	a = { "<cmd>Lspsaga code_action<cr>", "list code actions" },
-	-- 	d = { "<cmd>TroubleToggle document_diagnostics<cr>", "list diagnostics" },
-	-- 	f = { "<cmd>lua vim.lsp.buf.format()<cr>", "format document" },
-	-- 	o = { "<cmd>Lspsaga outline<cr>", "toggle outline" },
-	-- 	t = { toggle_virtlines, "toggle type hint" },
-	-- },
-}
-
 which_key.setup(setup)
--- which_key.register(mappings, opts)
 
 which_key.add({
 	{ "<space>o", "<cmd>AerialToggle<cr>", desc = "Toogle Lsp Outline" },
@@ -281,7 +160,7 @@ which_key.add({
 	{ "<space>ff", "<cmd>lua require('telescope.builtin').find_files()<cr>", desc = "find files" },
 	{ "<space>fb", "<cmd>lua require('telescope.builtin').buffers()<cr>", desc = "find buffers" },
 	-- { "<space>fs", "<cmd>lua require('telescope.builtin').live_grep({case = 'smart'})<cr>", "live grep" },
-	{ "<space>fs", live_search_replace_cmd, desc = "Search and Replace" },
+	{ "<space>fs", "<Plug>CtrlSFCwordPath", desc = "Search and Replace" },
 	{ "<space>fS", "<cmd>lua require('telescope.builtin').live_grep()<cr>", desc = "live grep with case sensitive" },
 	{
 		"<space>fw",
@@ -319,7 +198,8 @@ map("", "<leader>cp", "<cmd>lua require(\"my.helpers\").cd_root(vim.fn.expand('%
 map("", "<C-p>", "<cmd>lua require('telescope.builtin').oldfiles()<cr>")
 map("", "<F8>", "<cmd>lua vim.diagnostic.goto_next({severity = {min = vim.diagnostic.severity.WARN}})<cr>")
 map("", "<F7>", "<cmd>lua vim.diagnostic.goto_next()<cr>")
-map("", "<leader>f", live_search_replace_cmd)
+map("", "<leader>ff", search_replace_cmd)
+map("", "<leader>fp", search_replace_in_path_cmd)
 map("", "<M-r>", "<cmd>Lspsaga lsp_finder<cr>")
 -- format --
 map("n", "<F5>", "<cmd>lua require('conform').format({lsp_fallback=true})<cr>")

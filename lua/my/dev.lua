@@ -283,9 +283,12 @@ require("aerial").setup({
 	},
 })
 
+-- search & replace --
 require("spectre").setup({
 	live_update = true,
 	is_insert_mode = false,
+	is_block_ui_break = true,
+	use_trouble_qf = true,
 	find_engine = {
 		["rg"] = {
 			cmd = "rg",
@@ -335,6 +338,16 @@ require("spectre").setup({
 		},
 	},
 })
+-- ctrlsf --
+vim.g.ctrlsf_auto_close = {
+	normal = 0,
+}
+vim.g.ctrlsf_auto_focus = {
+	at = "done",
+	duration_less_than = 1000,
+}
+vim.g.ctrlsf_case_sensitive = "yes"
+vim.g.ctrlsf_fold_result = 1
 
 local minimap = require("mini.map")
 minimap.setup({
@@ -346,4 +359,7 @@ minimap.setup({
 	symbols = {
 		encode = minimap.gen_encode_symbols.dot("3x2"),
 	},
+})
+require("notify").setup({
+	level = "warn",
 })
