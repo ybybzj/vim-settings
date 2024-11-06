@@ -144,6 +144,7 @@ return {
 	"williamboman/mason-lspconfig.nvim",
 	"neovim/nvim-lspconfig", -- enable LSP
 	"tamago324/nlsp-settings.nvim", -- language server settings defined in json for
+	"onsails/lspkind.nvim",
 	-- formatter
 	{
 		"stevearc/conform.nvim",

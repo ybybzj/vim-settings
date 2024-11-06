@@ -51,6 +51,9 @@ local kind_icons = {
 	TypeParameter = "󰊄",
 }
 -- find more here: https://www.nerdfonts.com/cheat-sheet
+
+local lspkind = require("lspkind")
+
 cmp.setup({
 	snippet = {
 		-- REQUIRED - you must specify a snippet engine
@@ -87,25 +90,29 @@ cmp.setup({
 		end, { "i", "s" }),
 	}),
 	formatting = {
-		fields = { "kind", "abbr", "menu" },
-		format = function(entry, vim_item)
-			-- 	if entry.source.name == "copilot" then
-			-- 		vim_item.kind = "[] Copilot"
-			-- 		vim_item.kind_hl_group = "CmpItemKindCopilot"
-			-- 		return vim_item
-			-- 	end
-			-- Kind icons
-			vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
-			-- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
-			vim_item.menu = ({
-				nvim_lsp = "[LSP]",
-				copilot = "[Copilot]",
-				luasnip = "[Snippet]",
-				buffer = "[Buffer]",
-				path = "[Path]",
-			})[entry.source.name]
-			return vim_item
-		end,
+		fields = { "abbr", "kind", "menu" },
+		-- format = function(entry, vim_item)
+		-- 	-- 	if entry.source.name == "copilot" then
+		-- 	-- 		vim_item.kind = "[] Copilot"
+		-- 	-- 		vim_item.kind_hl_group = "CmpItemKindCopilot"
+		-- 	-- 		return vim_item
+		-- 	-- 	end
+		-- 	-- Kind icons
+		-- 	vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
+		-- 	-- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatonates the icons with the name of the item kind
+		-- 	vim_item.menu = ({
+		-- 		nvim_lsp = "[LSP]",
+		-- 		copilot = "[Copilot]",
+		-- 		luasnip = "[Snippet]",
+		-- 		buffer = "[Buffer]",
+		-- 		path = "[Path]",
+		-- 	})[entry.source.name]
+		-- 	return vim_item
+		-- end,
+		format = lspkind.cmp_format({
+			mode = "symbol_text",
+			show_labelDetails = true,
+		}),
 	},
 	sources = cmp.config.sources({
 		{ name = "nvim_lsp", priority = 7, max_item_count = 25 },
