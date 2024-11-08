@@ -9,6 +9,9 @@ end
 cmd("let g:neo_tree_remove_legacy_commands = 1")
 vim.fn.sign_define("DiagnosticSignHint", { text = "󰌵", texthl = "DiagnosticSignHint" })
 neoTree.setup({
+	enable_diagnostics = true,
+	open_files_do_not_replace_types = { "terminal", "trouble", "qf", "Spectre", "ctrlsf" },
+	auto_clean_after_session_restore = true,
 	default_component_configs = {
 		icon = {
 			folder_empty = "󰜌",
@@ -30,7 +33,7 @@ neoTree.setup({
 		},
 	},
 	filesystem = {
-		follow_current_file = true,
+		follow_current_file = { enable = false },
 		hijack_netrw_behavior = "open_current",
 		use_libuv_file_watcher = true,
 		window = {

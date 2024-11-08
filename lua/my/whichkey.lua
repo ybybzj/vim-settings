@@ -105,10 +105,10 @@ which_key.add({
 -- session
 which_key.add({
 	{ "<space>s", group = "Session" },
-	{ "<space>sr", "<cmd>lua MiniSessions.read()<cr>", desc = "Read Session" },
-	{ "<space>ss", "<cmd>lua MiniSessions.select()<cr>", desc = "Select Session" },
-	{ "<space>sw", "<cmd>lua MiniSessions.write('Session.vim')<cr>", desc = "Write Local Session" },
-	{ "<space>sW", "<cmd>lua MiniSessions.write('GlobalSession.vim')<cr>", desc = "Write Global Session" },
+	{ "<space>ss", "<cmd>SessionSearch<cr>", desc = "Select Session" },
+	{ "<space>sr", "<cmd>SessionRestore<cr>", desc = "Restore Session" },
+	{ "<space>sw", "<cmd>SessionSave<cr>", desc = "Save Session" },
+	{ "<space>sa", "<cmd>SessionToggleAutoSave<cr>", desc = "Toggle AutoSave Session" },
 })
 
 -- git

@@ -25,6 +25,17 @@ return {
 		end,
 	},
 	{
+		"2kabhishek/nerdy.nvim",
+		dependencies = {
+			"stevearc/dressing.nvim",
+			"nvim-telescope/telescope.nvim",
+		},
+		cmd = "Nerdy",
+		config = function()
+			require("telescope").load_extension("nerdy")
+		end,
+	},
+	{
 		"folke/noice.nvim",
 		event = "VeryLazy",
 		opts = {
@@ -63,9 +74,15 @@ return {
 	"karb94/neoscroll.nvim",
 	"phaazon/hop.nvim",
 
+	-- tmux
+	{
+		"aserowy/tmux.nvim",
+		config = function()
+			return require("tmux").setup()
+		end,
+	},
 	-- session
-	{ "echasnovski/mini.sessions", version = false },
-	-- "antoinemadec/FixCursorHold.nvim", -- This is needed to fix lsp doc highlight
+	{ "rmagatti/auto-session", lazy = false },
 	"folke/which-key.nvim",
 
 	-- dialog ui

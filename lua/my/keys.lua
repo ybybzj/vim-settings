@@ -2,7 +2,8 @@ local map = require("my.shared").mapkey
 local cmd = vim.cmd
 
 ------------------key mappings -----------------------
-map("", "<leader>l", ":Neotree toggle<cr>")
+map("", "<leader>l", ":Neotree toggle reveal=true<cr>")
+map("", "<leader>gf", ":Neotree reveal=true<cr>")
 map("", "<leader>q", ":copen<cr>")
 map("", "<leader>cd", ":cd %:p:h<cr>")
 cmd([[
@@ -19,7 +20,7 @@ map("", "<M-Q>", "<Esc>:qa<cr>")
 map("", "<leader>ct", "<Esc>:tabclose<cr>")
 map("", "<leader>vr", ":Reload<cr>")
 map("n", "<leader>ve", ":e ~/.config/nvim/<cr>")
-map("n", "<leader>i3", ":e ~/.config/i3/config<cr>")
+map("n", "<leader>te", ":e ~/.config/tmux/tmux.conf<cr>")
 map("n", "<cr>", ":noh<cr><cr>")
 map("n", "<Up>", "gk")
 map("n", "<Down>", "gj")
