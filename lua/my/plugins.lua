@@ -40,7 +40,7 @@ return {
 		event = "VeryLazy",
 		opts = {
 			cmdline = {
-				view = "cmdline_popup",
+				view = "cmdline",
 			},
 			lsp = {
 				-- override markdown rendering so that **cmp** and other plugins use **Treesitter**
@@ -78,7 +78,18 @@ return {
 	{
 		"aserowy/tmux.nvim",
 		config = function()
-			return require("tmux").setup()
+			return require("tmux").setup({
+				navigation = {
+					-- cycles to opposite pane while navigating into the border
+					cycle_navigation = true,
+
+					-- enables default keybindings (C-hjkl) for normal mode
+					enable_default_keybindings = false,
+
+					-- prevents unzoom tmux when navigating beyond vim border
+					persist_zoom = false,
+				},
+			})
 		end,
 	},
 	-- session
@@ -174,7 +185,14 @@ return {
 	},
 	"folke/trouble.nvim",
 
-	"glepnir/lspsaga.nvim",
+	{
+		"nvimdev/lspsaga.nvim",
+		event = "LspAttach",
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter", -- optional
+			"nvim-tree/nvim-web-devicons", -- optional
+		},
+	},
 
 	-- DAP
 	"mfussenegger/nvim-dap",

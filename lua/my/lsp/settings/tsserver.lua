@@ -13,7 +13,7 @@ return {
 		handlers.on_attach(client, bufnr)
 	end,
 	settings = {
-		expose_as_code_action = { "all" },
+		expose_as_code_action = "all",
 		tsserver_file_preferences = {
 			importModuleSpecifierPreference = "relative",
 		},

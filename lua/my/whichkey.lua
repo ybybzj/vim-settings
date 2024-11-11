@@ -205,3 +205,9 @@ map("", "<M-r>", "<cmd>Lspsaga lsp_finder<cr>")
 map("n", "<F5>", "<cmd>lua require('conform').format({lsp_fallback=true})<cr>")
 map("n", "<F4>", toggle_virtlines)
 map("i", "<C-CR>", "<cmd>Copilot suggestion<cr>")
+
+-- tmux navigation
+map("", "<C-Left>", '<cmd>lua require("tmux").move_left()<cr>')
+map("", "<C-Right>", '<cmd>lua require("tmux").move_right()<cr>')
+map("", "<C-Up>", '<cmd>lua require("tmux").move_top()<cr>')
+map("", "<C-Down>", '<cmd>lua require("tmux").move_bottom()<cr>')
