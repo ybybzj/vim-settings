@@ -33,7 +33,7 @@ neoTree.setup({
 		},
 	},
 	filesystem = {
-		follow_current_file = { enable = false },
+		follow_current_file = { enable = true },
 		hijack_netrw_behavior = "open_current",
 		use_libuv_file_watcher = true,
 		window = {

@@ -360,6 +360,3 @@ minimap.setup({
 		encode = minimap.gen_encode_symbols.dot("3x2"),
 	},
 })
-require("notify").setup({
-	level = "warn",
-})
