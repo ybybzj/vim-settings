@@ -39,6 +39,7 @@ bqf.setup({
 		tabdrop = "<C-t>",
 		tabc = "",
 		ptogglemode = "z,",
+		del = "<C-x>",
 	},
 	filter = {
 		fzf = {
