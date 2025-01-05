@@ -187,7 +187,7 @@ which_key.add({
 	},
 	{ "<space>ls", "<cmd>Telescope aerial<cr>", desc = "find symbols in document with filter" },
 	{ "<space>la", "<cmd>Lspsaga code_action<cr>", desc = "list code actions" },
-	{ "<space>ld", "<cmd>TroubleToggle document_diagnostics<cr>", desc = "list diagnostics" },
+	{ "<space>ld", "<cmd>Trouble diagnostics toggle<cr>", desc = "list diagnostics" },
 	{ "<space>lf", "<cmd>lua vim.lsp.buf.format()<cr>", desc = "format document" },
 	{ "<space>lo", "<cmd>Lspsaga outline<cr>", desc = "toggle outline" },
 	{ "<space>lt", toggle_virtlines, desc = "toggle type hint" },
