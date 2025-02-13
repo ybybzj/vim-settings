@@ -1,1 +1,1 @@
-require("my.finder.telescope")
+require("my.finder.utils")

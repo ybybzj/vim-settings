@@ -18,9 +18,6 @@ if status_ok then
 	npairs.add_rule(Rule("|", "|", "zig"))
 end
 
--- blank indent line
-require("ibl").setup({})
-
 -- aerial
 require("aerial").setup({
 	-- Priority list of preferred backends for aerial.
@@ -338,16 +335,6 @@ require("spectre").setup({
 		},
 	},
 })
--- ctrlsf --
-vim.g.ctrlsf_auto_close = {
-	normal = 0,
-}
-vim.g.ctrlsf_auto_focus = {
-	at = "done",
-	duration_less_than = 1000,
-}
-vim.g.ctrlsf_case_sensitive = "yes"
-vim.g.ctrlsf_fold_result = 1
 
 local minimap = require("mini.map")
 minimap.setup({

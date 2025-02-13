@@ -8,6 +8,13 @@ end
 
 cmd("let g:neo_tree_remove_legacy_commands = 1")
 vim.fn.sign_define("DiagnosticSignHint", { text = "󰌵", texthl = "DiagnosticSignHint" })
+-- handle rename when file is modified
+local function on_move(data)
+	Snacks.rename.on_rename_file(data.source, data.destination)
+end
+
+local events = require("neo-tree.events")
+
 neoTree.setup({
 	enable_diagnostics = true,
 	open_files_do_not_replace_types = { "terminal", "trouble", "qf", "Spectre", "ctrlsf" },
@@ -166,5 +173,9 @@ neoTree.setup({
 				end
 			end)
 		end,
+	},
+	event_handlers = {
+		{ event = events.FILE_MOVED, handler = on_move },
+		{ event = events.FILE_RENAMED, handler = on_move },
 	},
 })

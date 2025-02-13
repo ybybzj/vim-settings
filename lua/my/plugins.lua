@@ -28,17 +28,10 @@ return {
 		"2kabhishek/nerdy.nvim",
 		dependencies = {
 			"stevearc/dressing.nvim",
-			"nvim-telescope/telescope.nvim",
 		},
 		cmd = "Nerdy",
-		config = function()
-			require("telescope").load_extension("nerdy")
-		end,
+		config = function() end,
 	},
-	"tversteeg/registers.nvim",
-	"folke/zen-mode.nvim",
-	"folke/twilight.nvim",
-	"karb94/neoscroll.nvim",
 	"phaazon/hop.nvim",
 
 	-- tmux
@@ -69,8 +62,6 @@ return {
 	"nvim-lua/popup.nvim",
 	"nvim-lua/plenary.nvim",
 	"kyazdani42/nvim-web-devicons",
-	-- enable reload lua settings
-	"famiu/nvim-reload",
 
 	-- auto completion
 	{
@@ -93,87 +84,6 @@ return {
 
 		-- use a release tag to download pre-built binaries
 		version = "*",
-
-		-- opts = {
-		-- 	-- 'default' for mappings similar to built-in completion
-		-- 	-- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
-		-- 	-- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
-		-- 	-- See the full "keymap" documentation for information on defining your own keymap.
-		-- 	keymap = { preset = "enter" },
-		--
-		-- 	appearance = {
-		-- 		-- Sets the fallback highlight groups to nvim-cmp's highlight groups
-		-- 		-- Useful for when your theme doesn't support blink.cmp
-		-- 		-- Will be removed in a future release
-		-- 		use_nvim_cmp_as_default = true,
-		-- 		-- Set to 'mono' for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
-		-- 		-- Adjusts spacing to ensure icons are aligned
-		-- 		nerd_font_variant = "mono",
-		-- 		kind_icons = {
-		-- 			Copilot = "",
-		-- 			Text = "󰉿",
-		-- 			Method = "󰊕",
-		-- 			Function = "󰊕",
-		-- 			Constructor = "󰒓",
-		--
-		-- 			Field = "󰜢",
-		-- 			Variable = "󰆦",
-		-- 			Property = "󰖷",
-		--
-		-- 			Class = "󱡠",
-		-- 			Interface = "󱡠",
-		-- 			Struct = "󱡠",
-		-- 			Module = "󰅩",
-		--
-		-- 			Unit = "󰪚",
-		-- 			Value = "󰦨",
-		-- 			Enum = "󰦨",
-		-- 			EnumMember = "󰦨",
-		--
-		-- 			Keyword = "󰻾",
-		-- 			Constant = "󰏿",
-		--
-		-- 			Snippet = "󱄽",
-		-- 			Color = "󰏘",
-		-- 			File = "󰈔",
-		-- 			Reference = "󰬲",
-		-- 			Folder = "󰉋",
-		-- 			Event = "󱐋",
-		-- 			Operator = "󰪚",
-		-- 			TypeParameter = "󰬛",
-		-- 		},
-		-- 	},
-		--
-		-- 	-- Default list of enabled providers defined so that you can extend it
-		-- 	-- elsewhere in your config, without redefining it, due to `opts_extend`
-		-- 	sources = {
-		-- 		default = { "lsp", "path", "snippets", "buffer", "cmdline", "copilot" },
-		-- 		providers = {
-		-- 			cmdline = {
-		-- 				name = "cmdline",
-		-- 				module = "blink.compat.source",
-		-- 				score_offset = -3,
-		-- 			},
-		-- 			copilot = {
-		-- 				name = "copilot",
-		-- 				module = "blink-cmp-copilot",
-		-- 				score_offset = 100,
-		-- 				async = true,
-		-- 				transform_items = function(_, items)
-		-- 					local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
-		-- 					local kind_idx = #CompletionItemKind + 1
-		-- 					CompletionItemKind[kind_idx] = "Copilot"
-		-- 					for _, item in ipairs(items) do
-		-- 						item.kind = kind_idx
-		-- 					end
-		-- 					return items
-		-- 				end,
-		-- 			},
-		-- 		},
-		-- 	},
-		-- 	signature = { enabled = true },
-		-- },
-		-- opts_extend = { "sources.default" },
 	},
 	-- nvim and plugins api completion
 	{ "folke/neodev.nvim", opts = {
@@ -194,17 +104,7 @@ return {
 	},
 
 	-- theme
-	-- "shaunsingh/nord.nvim",
-	-- "marko-cerovac/material.nvim",
-	-- "EdenEast/nightfox.nvim",
-	-- {
 	"sainnhe/sonokai",
-
-	-- 	lazy = false, -- make sure we load this during startup if it is your main colorscheme
-	-- 	priority = 1000,
-	-- },
-	-- "folke/tokyonight.nvim",
-	-- "folke/lsp-colors.nvim",
 
 	-- statusline
 	"nvim-lualine/lualine.nvim",
@@ -247,27 +147,24 @@ return {
 	},
 
 	-- DAP
-	"mfussenegger/nvim-dap",
-	{
-		"theHamsta/nvim-dap-virtual-text",
-		dependencies = {
-			"nvim-neotest/nvim-nio",
-			"mfussenegger/nvim-dap",
-			"nvim-treesitter/nvim-treesitter",
-		},
-	},
-	"rcarriga/nvim-dap-ui",
+	-- "mfussenegger/nvim-dap",
+	-- {
+	-- 	"theHamsta/nvim-dap-virtual-text",
+	-- 	dependencies = {
+	-- 		"nvim-neotest/nvim-nio",
+	-- 		"mfussenegger/nvim-dap",
+	-- 		"nvim-treesitter/nvim-treesitter",
+	-- 	},
+	-- },
+	-- "rcarriga/nvim-dap-ui",
 
 	-- dev
 	{ "echasnovski/mini.map", version = false },
-	-- "wfxr/minimap.vim",
 	"windwp/nvim-autopairs",
 	"numToStr/Comment.nvim",
-	"lukas-reineke/indent-blankline.nvim",
 	"stevearc/aerial.nvim",
 	{ "kevinhwang91/nvim-ufo", dependencies = "kevinhwang91/promise-async" },
 	{ "windwp/nvim-spectre" }, -- on Mac: brew install gnu-sed
-	{ "dyng/ctrlsf.vim" },
 	-- bufferline
 	{ "akinsho/bufferline.nvim", dependencies = "kyazdani42/nvim-web-devicons" },
 
@@ -297,12 +194,11 @@ return {
 	},
 
 	-- finder
-	{ "nvim-telescope/telescope.nvim", branch = "0.1.x" },
-	{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
-	-- { "chip/telescope-software-licenses.nvim" },
-	{ "olacin/telescope-cc.nvim" },
-	{ "paopaol/telescope-git-diffs.nvim" },
-	-- { "nvim-telescope/telescope-ui-select.nvim" },
+	{
+		"folke/snacks.nvim",
+		priority = 1000,
+		lazy = false,
+	},
 
 	-- quickfix
 	{ "kevinhwang91/nvim-bqf", ft = "qf" },

@@ -85,21 +85,11 @@ local setup = {
 	debug = false, -- enable wk.log in the current directory
 }
 
-local opts = {
-	mode = "n", -- NORMAL mode
-	prefix = "<space>",
-	buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
-	silent = true, -- use `silent` when creating keymaps
-	noremap = true, -- use `noremap` when creating keymaps
-	nowait = true, -- use `nowait` when creating keymaps
-}
-
 which_key.setup(setup)
 
 which_key.add({
 	{ "<space>o", "<cmd>AerialToggle<cr>", desc = "Toogle Lsp Outline" },
-	{ "space>q", "<cmd>copen<cr>", desc = "Open quickfix list" },
-	{ "<space>b", "<cmd>lua require('telescope.builtin').builtin()<cr>", desc = "Open telescope builtin picker list" },
+	{ "<space>q", "<cmd>copen<cr>", desc = "Open quickfix list" },
 })
 
 -- session
@@ -120,7 +110,7 @@ which_key.add({
 	{ "<space>gsf", "<cmd>DiffviewFileHistory %<cr>", desc = "Open Current File History" },
 
 	{ "<space>gg", "<cmd>lua _git_toggle()<CR>", desc = "GitUI" },
-	{ "<space>gl", "<cmd>lua require 'gitsigns'.blame_line({full=true})<cr>", desc = "Blame" },
+	{ "<space>gl", "<cmd>lua Snacks.git.blame_line()<cr>", desc = "Blame" },
 
 	{ "<space>gh", group = "Hunk" },
 	{ "<space>ghj", "<cmd>lua require 'gitsigns'.next_hunk()<cr>", desc = "Next Hunk" },
@@ -131,15 +121,12 @@ which_key.add({
 	{ "<space>ghs", "<cmd>lua require 'gitsigns'.stage_hunk()<cr>", desc = "Stage Hunk" },
 	{ "<space>ghu", "<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>", desc = "Undo Stage Hunk" },
 
-	{ "<space>go", "<cmd>lua require('my.finder.utils').git_status()<cr>", desc = "Open changed file" },
-	{ "<space>gb", "<cmd>Telescope git_branches<cr>", desc = "Checkout branch" },
+	{ "<space>go", "<cmd>lua Snacks.picker.git_status()<cr>", desc = "Open changed file" },
+	{ "<space>gb", "<cmd>lua Snacks.picker.git_branches()<cr>", desc = "Checkout branch" },
 
 	{ "<space>gc", group = "Commit" },
-	{ "<space>gcl", "<cmd>DiffviewFileHistory<cr>", desc = "Browse Commits" },
-	{ "<space>gcc", "<cmd>Telescope git_commits<cr>", desc = "Checkout commit" },
-	{ "<space>gcd", "<cmd>Telescope git_diffs diff_commits<cr>", desc = "Diff Commit" },
-	{ "<space>gci", "<cmd>Telescope conventional_commits<cr>", desc = "Conventional Commit message" },
-	{ "<space>gcf", "<cmd>lua require('my.finder.utils').git_bcommits()<cr>", desc = "Checkout commit for file" },
+	{ "<space>gcl", "<cmd>lua Snacks.picker.git_log_line()<cr>", desc = "Browse Line Commits" },
+	{ "<space>gcc", "<cmd>lua Snacks.picker.git_log()<cr>", desc = "Checkout commit" },
 
 	{ "<space>gd", "<cmd>Gitsigns diffthis HEAD<cr>", desc = "Diff" },
 
@@ -156,38 +143,31 @@ which_key.add({
 -- finder
 which_key.add({
 	{ "<space>f", group = "Finder" },
-	{ "<space>fo", "<cmd>lua require('telescope.builtin').oldfiles()<cr>", desc = "find recent files" },
-	{ "<space>ff", "<cmd>lua require('telescope.builtin').find_files()<cr>", desc = "find files" },
-	{ "<space>fb", "<cmd>lua require('telescope.builtin').buffers()<cr>", desc = "find buffers" },
-	-- { "<space>fs", "<cmd>lua require('telescope.builtin').live_grep({case = 'smart'})<cr>", "live grep" },
-	{ "<space>fs", "<Plug>CtrlSFCwordPath", desc = "Search and Replace" },
-	{ "<space>fS", "<cmd>lua require('telescope.builtin').live_grep()<cr>", desc = "live grep with case sensitive" },
+	{ "<space>fo", "<cmd>lua Snacks.picker.recent()<cr>", desc = "find recent files" },
+	{ "<space>ff", "<cmd>lua Snacks.picker.smart()<cr>", desc = "find files smart" },
+	{ "<space>fF", "<cmd>lua Snacks.picker.files()<cr>", desc = "find files" },
+	{ "<space>fb", "<cmd>lua Snacks.picker.buffers()<cr>", desc = "find buffers" },
+	{ "<space>fg", "<cmd>lua Snacks.picker.grep()<cr>", desc = "live grep with case sensitive" },
 	{
 		"<space>fw",
-		"<cmd>lua require('my.finder.utils').grep_word({case = 'smart'})<cr>",
+		"<cmd>lua Snacks.picker.grep_word()<cr>",
 		desc = "find word in project",
 	},
-	{
-		"<space>fW",
-		"<cmd>lua require('my.finder.utils').grep_word()<cr>",
-		desc = "find word in project with case sensitive",
-	},
-
-	{ "<space>fr", "<cmd>lua require('my.finder.utils').grep_last()<cr>", desc = "repeat last search" },
 })
 
 -- lsp
 which_key.add({
 	{ "<space>l", group = "LSP" },
-	{ "<space>lr", "<cmd>lua require('telescope.builtin').lsp_references()<cr>", desc = "find references" },
+	{ "<space>lr", "<cmd>lua Snacks.picker.lsp_references()<cr>", desc = "find references" },
 	{
 		"<space>lS",
-		"<cmd>lua require('telescope.builtin').lsp_document_symbols()<cr>",
-		desc = "find symbols in document",
+		"<cmd>lua Snacks.picker.lsp_workspace_symbols()<cr>",
+		desc = "find symbols in workspace",
 	},
-	{ "<space>ls", "<cmd>Telescope aerial<cr>", desc = "find symbols in document with filter" },
+	{ "<space>ls", "<cmd>lua Snacks.picker.lsp_symbols()<cr>", desc = "find symbols in document with filter" },
 	{ "<space>la", "<cmd>Lspsaga code_action<cr>", desc = "list code actions" },
 	{ "<space>ld", "<cmd>Trouble diagnostics toggle<cr>", desc = "list diagnostics" },
+	{ "<space>lb", "<cmd>lua Snacks.picker.diagnostics_buffer()<cr>", desc = "list diagnostics in buffer" },
 	{ "<space>lf", "<cmd>lua vim.lsp.buf.format()<cr>", desc = "format document" },
 	{ "<space>lo", "<cmd>Lspsaga outline<cr>", desc = "toggle outline" },
 	{ "<space>lt", toggle_virtlines, desc = "toggle type hint" },
@@ -195,7 +175,7 @@ which_key.add({
 
 local map = require("my.shared").mapkey
 map("", "<leader>cp", "<cmd>lua require(\"my.helpers\").cd_root(vim.fn.expand('%:p:h'), vim.fn.getcwd())<cr>")
-map("", "<C-p>", "<cmd>lua require('telescope.builtin').oldfiles()<cr>")
+map("", "<C-p>", "<cmd>lua Snacks.picker.recent()<cr>")
 map("", "<F8>", "<cmd>lua vim.diagnostic.goto_next({severity = {min = vim.diagnostic.severity.WARN}})<cr>")
 map("", "<F7>", "<cmd>lua vim.diagnostic.goto_next()<cr>")
 map("", "<leader>ff", search_replace_cmd)

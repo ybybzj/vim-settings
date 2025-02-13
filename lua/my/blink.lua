@@ -73,7 +73,7 @@ local opts = {
 	-- Default list of enabled providers defined so that you can extend it
 	-- elsewhere in your config, without redefining it, due to `opts_extend`
 	sources = {
-		default = { "lsp", "path", "snippets", "buffer", "cmdline", "copilot" },
+		default = { "lsp", "path", "buffer", "cmdline", "copilot" },
 		providers = {
 			cmdline = {
 				name = "cmdline",
