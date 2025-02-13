@@ -1,4 +1,6 @@
 local snacks = require("snacks")
+-- disable animation globally
+vim.g.snacks_animate = false
 
 local picker = {
 	enabled = true,
