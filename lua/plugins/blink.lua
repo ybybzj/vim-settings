@@ -103,6 +103,7 @@ return {
 				},
 			},
 			"folke/lazydev.nvim",
+			"MeanderingProgrammer/render-markdown.nvim",
 		},
 
 		-- use a release tag to download pre-built binaries
@@ -149,7 +150,7 @@ return {
 			-- Default list of enabled providers defined so that you can extend it
 			-- elsewhere in your config, without redefining it, due to `opts_extend`
 			sources = {
-				default = { "lazydev", "lsp", "path", "buffer", "cmdline", "copilot" },
+				default = { "lazydev", "lsp", "path", "buffer", "markdown", "cmdline", "copilot" },
 				providers = {
 					lazydev = {
 						name = "LazyDev",
@@ -176,6 +177,11 @@ return {
 							end
 							return items
 						end,
+					},
+					markdown = {
+						name = "RenderMarkdown",
+						module = "render-markdown.integ.blink",
+						fallbacks = { "lsp" },
 					},
 				},
 			},

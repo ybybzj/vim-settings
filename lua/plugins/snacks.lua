@@ -72,7 +72,7 @@ return {
 		{ "<space>ls", "<cmd>lua Snacks.picker.lsp_symbols()<cr>", desc = "find symbols in document with filter" },
 		{ "<space>lb", "<cmd>lua Snacks.picker.diagnostics_buffer()<cr>", desc = "list diagnostics in buffer" },
 
-		-- zen mode --
+		-- extras --
 		{
 			"<leader>zm",
 			":lua Snacks.zen()<cr>",
