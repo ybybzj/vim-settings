@@ -35,6 +35,7 @@ local function load()
 					on_attach = function(client, bufnr)
 						handlers.lsp_keymaps(client, bufnr, keymaps)
 						handlers.lsp_highlight_document(client, bufnr)
+						handlers.lsp_codelens(client, bufnr)
 					end,
 					capabilities = handlers.make_client_capabilities(),
 				}

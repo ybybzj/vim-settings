@@ -1,21 +1,24 @@
 return {
-	server_name = "ts_ls",
+	server_name = "vtsls",
 	dependencies = {
 		{
 			"dmmulroy/tsc.nvim",
 			opts = {},
 		},
+		-- {
+		-- 	"pmizio/typescript-tools.nvim",
+		-- 	dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+		-- 	opts = {},
+		-- },
 		{
-			"pmizio/typescript-tools.nvim",
-			dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-			opts = {},
+			"yioneko/nvim-vtsls",
 		},
 	},
 	formatter = {
-		javascript = { "prettier" },
-		typescript = { "prettier" },
-		javascriptreact = { "prettier" },
-		typescriptreact = { "prettier" },
+		javascript = { "prettierd", "prettier" },
+		typescript = { "prettierd", "prettier" },
+		javascriptreact = { "prettierd", "prettier" },
+		typescriptreact = { "prettierd", "prettier" },
 	},
 	linter = {
 		javascript = { "eslint" },
@@ -23,13 +26,27 @@ return {
 	},
 	opts = {
 		settings = {
-			expose_as_code_action = "all",
-			tsserver_file_preferences = {
-				importModuleSpecifierPreference = "relative",
+			javascript = {
+				preferences = {
+					importModuleSpecifier = "relative",
+				},
+			},
+			typescript = {
+				preferences = {
+					importModuleSpecifier = "relative",
+				},
+				inlayHints = {
+					parameterNames = { enabled = "literals" },
+					parameterTypes = { enabled = true },
+					variableTypes = { enabled = true },
+					propertyDeclarationTypes = { enabled = true },
+					functionLikeReturnTypes = { enabled = true },
+					enumMemberValues = { enabled = true },
+				},
 			},
 		},
 	},
-	lspconfig = function(_, opts)
+	lspconfig = function(lspconfig, opts)
 		local old_on_attach = opts.on_attach
 		opts.on_attach = function(client, bufnr)
 			client.server_capabilities.documentFormattingProvider = false
@@ -38,14 +55,32 @@ return {
 
 			old_on_attach(client, bufnr)
 		end
-		require("typescript-tools").setup(opts)
+
+		local vtsls = require("vtsls")
+		vtsls.config({
+			refactor_auto_rename = true,
+		})
+		require("lspconfig.configs").vtsls = vtsls.lspconfig
+		lspconfig.vtsls.setup(opts)
+
+		-- setup comment
+		local comment = require("Comment")
+		comment.setup({
+			pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
+		})
 	end,
 	keys = {
 		["<space>oi"] = {
-			cmd = ":TSToolsOrganizeImports<CR>",
+			cmd = ":VtsExec organize_imports<CR>",
 		},
 		["<space>rf"] = {
-			cmd = ":TSToolsRenameFile<CR>",
+			cmd = ":VtsExec rename_file<CR>",
+		},
+		["<space>st"] = {
+			cmd = ":VtsExec select_ts_version<CR>",
+		},
+		["<space>fr"] = {
+			cmd = ":VtsExec file_references<CR>",
 		},
 	},
 }

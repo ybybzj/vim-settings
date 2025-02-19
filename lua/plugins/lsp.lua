@@ -52,11 +52,6 @@ return {
 			{
 				"numToStr/Comment.nvim",
 				config = function()
-					local comment = require("Comment")
-					comment.setup({
-						pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
-					})
-
 					local ft = require("Comment.ft")
 
 					-- set both line and block commentstring
@@ -69,6 +64,23 @@ return {
 				"folke/trouble.nvim",
 				opts = {},
 				cmd = "Trouble",
+			},
+			-- outline
+			{
+				"hedyhli/outline.nvim",
+				cmd = { "Outline", "OutlineOpen" },
+				keys = { -- Example mapping to toggle outline
+					{ "<space>o", "<cmd>Outline<CR>", desc = "Toggle outline" },
+				},
+				opts = {
+					keymaps = {
+						peek_location = "<space>",
+						hover_symbol = "K",
+						toggle_preview = "p",
+						fold = "<left>",
+						unfold = "<right>",
+					},
+				},
 			},
 			-- ui
 			{
@@ -127,6 +139,9 @@ return {
 							toggle_or_open = "<CR>",
 						},
 					},
+					lightbulb = {
+						sign = false,
+					},
 				},
 			},
 
@@ -172,7 +187,6 @@ return {
 			{ "<space>la", "<cmd>Lspsaga code_action<cr>", desc = "list code actions" },
 			{ "<space>lf", "<cmd>lua vim.lsp.buf.format()<cr>", desc = "format document" },
 			{ "<space>lo", "<cmd>Lspsaga outline<cr>", desc = "toggle outline" },
-			{ "<space>o", "<cmd>Lspsaga outline<cr>", desc = "Toogle Lsp Outline" },
 			{ "<space>lt", toggle_virtlines, desc = "toggle type hint" },
 			{ "<F4>", toggle_virtlines, mode = "n", desc = "toggle type hint" },
 		},

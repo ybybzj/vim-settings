@@ -108,12 +108,15 @@ M.toggle_virtlines = function(force)
 	refresh_virtlines()
 end
 
-local lsp_codelens = function()
+local lsp_codelens = function(_, _)
 	autocmd_clear({ group = augroup_codelens, buffer = 0 })
 	autocmd({
 		{
 			-- "BufEnter",
-			"BufWritePost",
+			"TextChanged",
+			"InsertLeave",
+			"LspAttach",
+			-- "BufWritePost",
 			"CursorHold",
 		},
 		augroup_codelens,
@@ -134,6 +137,7 @@ M.make_client_capabilities = function()
 	if status_ok then
 		capabilities = blink_nvim_lsp.get_lsp_capabilities(capabilities)
 	end
+	return capabilities
 end
 
 M.lsp_highlight_document = lsp_highlight_document
