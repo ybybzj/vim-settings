@@ -31,3 +31,11 @@ map("n", "<Down>", "gj")
 map("v", "<M-c>", '"+y<cr>')
 map("n", "<M-v>", '"+P<cr>')
 map("v", "<M-v>", '"+P<cr>')
+
+-------- move line ---------
+map("n", "<M-Up>", ":m .-2<CR>==", { noremap = true, silent = true })
+map("n", "<M-Down>", ":m .+1<CR>==", { noremap = true, silent = true })
+
+-- Move selected lines up/down in visual mode
+map("v", "<M-Up>", ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
+map("v", "<M-Down>", ":m '>+1<CR>gv=gv", { noremap = true, silent = true })

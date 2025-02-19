@@ -47,8 +47,8 @@ return {
 		{ "<space>gcc", "<cmd>lua Snacks.picker.git_log()<cr>", desc = "Checkout commit" },
 		-- finder --
 		{ "<space>fo", "<cmd>lua Snacks.picker.recent()<cr>", desc = "find recent files" },
-		{ "<space>fF", "<cmd>lua Snacks.picker.smart()<cr>", desc = "find files smart" },
-		{ "<space>ff", "<cmd>lua Snacks.picker.files()<cr>", desc = "find files" },
+		{ "<space>ff", "<cmd>lua Snacks.picker.smart()<cr>", desc = "find files smart" },
+		{ "<space>fF", "<cmd>lua Snacks.picker.files()<cr>", desc = "find files" },
 		{ "<space>fb", "<cmd>lua Snacks.picker.buffers()<cr>", desc = "find buffers" },
 		{ "<space>fg", "<cmd>lua Snacks.picker.grep()<cr>", desc = "live grep with case sensitive" },
 		{
