@@ -145,23 +145,79 @@ return {
 	{
 		"folke/flash.nvim",
 		event = "VeryLazy",
-		opts = {},
+		opts = {
+			modes = {
+				search = {
+					enabled = true,
+				},
+			},
+		},
 		keys = {
 			{
 				"s",
 				mode = { "n", "x", "o" },
 				function()
-					require("flash").jump()
+					require("flash").jump({
+						search = {
+							mode = function(str)
+								return "\\<" .. str
+							end,
+						},
+					})
 				end,
-				desc = "Flash",
+				desc = "Jump search word",
 			},
 			{
-				"<c-s>",
+				"<space>jl",
+				mode = { "n", "x", "o" },
+				function()
+					require("flash").jump({
+						search = { mode = "search", max_length = 0 },
+						label = { after = { 0, 0 } },
+						pattern = "^",
+					})
+				end,
+				desc = "Jump to line",
+			},
+			{
+				"<space>jw",
+				mode = { "n", "x", "o" },
+				function()
+					require("flash").jump({
+						pattern = ".", -- initialize pattern with any char
+						search = {
+							mode = function(pattern)
+								-- remove leading dot
+								if pattern:sub(1, 1) == "." then
+									pattern = pattern:sub(2)
+								end
+								-- return word pattern and proper skip pattern
+								return ([[\<%s\w*\>]]):format(pattern), ([[\<%s]]):format(pattern)
+							end,
+						},
+						-- select the range
+						jump = { pos = "range" },
+					})
+				end,
+				desc = "Jump to line",
+			},
+			{
+				"<space>jt",
+				mode = { "n", "x", "o" },
+				function()
+					require("flash").treesitter({
+						jump = { pos = "start" },
+					})
+				end,
+				desc = "Jump Treesitter node",
+			},
+			{
+				"S",
 				mode = { "n", "x", "o" },
 				function()
 					require("flash").treesitter()
 				end,
-				desc = "Flash Treesitter",
+				desc = "Jump Treesitter selection",
 			},
 			{
 				"r",

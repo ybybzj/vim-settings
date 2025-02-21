@@ -93,5 +93,6 @@ return {
 
 		{ "<space>s", group = "Session" },
 		{ "<space>f", group = "Finder" },
+		{ "<space>j", group = "Jump" },
 	},
 }

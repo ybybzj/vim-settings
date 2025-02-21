@@ -1,12 +1,15 @@
 local default_keymaps = {
 	["?"] = {
-		cmd = "<Cmd>Lspsaga peek_definition<CR>",
+		cmd = "<cmd>Lspsaga peek_definition<CR>",
 	},
 	["gd"] = {
-		cmd = "<Cmd>Lspsaga goto_definition<CR>",
+		cmd = "<cmd>Lspsaga goto_definition<CR>",
 	},
 	["gr"] = {
-		cmd = "<Cmd>Lspsaga finder<CR>",
+		cmd = "<cmd>lua Snacks.picker.lsp_references()<cr>",
+	},
+	["gs"] = {
+		cmd = "<cmd>lua Snacks.picker.lsp_symbols()<cr>",
 	},
 	["K"] = {
 		cmd = "<Cmd>Lspsaga hover_doc<CR>",

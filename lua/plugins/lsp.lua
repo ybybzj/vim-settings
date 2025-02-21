@@ -64,6 +64,13 @@ return {
 				"folke/trouble.nvim",
 				opts = {},
 				cmd = "Trouble",
+				keys = {
+					{
+						"<space>d",
+						"<cmd>Trouble diagnostics toggle<cr>",
+						desc = "Toggle Diagnostics",
+					},
+				},
 			},
 			-- outline
 			{
