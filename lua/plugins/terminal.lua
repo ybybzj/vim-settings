@@ -1,6 +1,7 @@
 return {
 	{
-		"akinsho/nvim-toggleterm.lua",
+		"akinsho/toggleterm.nvim",
+		version = "*",
 		config = function()
 			require("toggleterm").setup({
 				size = function(term)
@@ -16,9 +17,9 @@ return {
 			})
 			local Terminal = require("toggleterm.terminal").Terminal
 			local git_term = Terminal:new({
+				display_name = "Lazygit",
 				cmd = "lazygit",
 				hidden = true,
-				size = 20,
 				hide_numbers = true,
 				shade_filetypes = {},
 				shade_terminals = true,
@@ -26,11 +27,11 @@ return {
 				start_in_insert = true,
 				insert_mappings = true,
 				persist_size = true,
-				direction = "float",
+				direction = "tab",
 				close_on_exit = true,
 				shell = vim.o.shell,
 				float_opts = {
-					border = "curved",
+					border = "single",
 					winblend = 0,
 					highlights = {
 						border = "Normal",
