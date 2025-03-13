@@ -150,19 +150,57 @@ return {
 			-- Default list of enabled providers defined so that you can extend it
 			-- elsewhere in your config, without redefining it, due to `opts_extend`
 			sources = {
-				default = { "lazydev", "lsp", "path", "buffer", "markdown", "cmdline", "copilot" },
+				default = function()
+					local success, node = pcall(vim.treesitter.get_node)
+					if vim.bo.filetype == "lua" then
+						return { "lsp", "lazydev", "path" }
+					elseif vim.bo.filetype == "markdown" then
+						return { "lsp", "markdown", "buffer", "path" }
+					elseif
+						success
+						and node
+						and vim.tbl_contains({ "comment", "line_comment", "block_comment" }, node:type())
+					then
+						return { "buffer", "path" }
+					else
+						return { "lsp", "snippets", "buffer", "path", "copilot" }
+					end
+				end,
 				providers = {
+					lsp = {
+						name = "LSP",
+						module = "blink.cmp.sources.lsp",
+						score_offset = 10,
+					},
+					buffer = {
+						opts = {
+							-- get all buffers, even ones like neo-tree
+							-- get_bufnrs = vim.api.nvim_list_bufs
+							-- or (recommended) filter to only "normal" buffers
+							get_bufnrs = function()
+								return vim.tbl_filter(function(bufnr)
+									return vim.bo[bufnr].buftype == ""
+								end, vim.api.nvim_list_bufs())
+							end,
+						},
+					},
+					path = {
+						opts = {
+							get_cwd = function(_)
+								return vim.fn.getcwd()
+							end,
+						},
+					},
 					lazydev = {
 						name = "LazyDev",
 						module = "lazydev.integrations.blink",
 						-- make lazydev completions top priority (see `:h blink.cmp`)
-						score_offset = 100,
 					},
-					cmdline = {
-						name = "cmdline",
-						module = "blink.compat.source",
-						score_offset = -3,
-					},
+					-- cmdline = {
+					-- 	name = "cmdline",
+					-- 	module = "blink.compat.source",
+					-- 	score_offset = -3,
+					-- },
 					copilot = {
 						name = "copilot",
 						module = "blink-cmp-copilot",

@@ -33,10 +33,10 @@ return {
 				incremental_selection = {
 					enable = true,
 					keymaps = {
-						init_selection = "gnn",
-						node_incremental = "g.",
-						scope_incremental = "g]",
-						node_decremental = "g[",
+						init_selection = "gv",
+						node_incremental = "]",
+						scope_incremental = "}",
+						node_decremental = "[",
 					},
 				},
 				matchup = { enable = true },
