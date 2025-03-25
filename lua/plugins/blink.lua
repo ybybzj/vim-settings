@@ -83,22 +83,6 @@ return {
 				dependencies = {
 					{
 						"zbirenbaum/copilot.lua",
-						cmd = "Copilot",
-						config = function()
-							require("copilot").setup({
-								suggestion = { enabled = false },
-								panel = { enabled = false },
-								filetypes = {
-									ocaml = true,
-									lua = true,
-									javascript = true,
-									typescript = true,
-									zig = true,
-									rescript = true,
-									["*"] = false, -- disable for all other filetypes and ignore default `filetypes`
-								},
-							})
-						end,
 					},
 				},
 			},
