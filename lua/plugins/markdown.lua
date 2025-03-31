@@ -13,7 +13,7 @@ return {
 		ft = { "markdown" },
 		build = "cd app && yarn install",
 		init = function()
-			vim.g.mkdp_filetypes = { "markdown" }
+			vim.g.mkdp_filetypes = { "markdown", "copilot-chat" }
 		end,
 
 		keys = {

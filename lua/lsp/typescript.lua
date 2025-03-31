@@ -5,11 +5,13 @@ return {
 			"dmmulroy/tsc.nvim",
 			opts = {},
 		},
-		-- {
-		-- 	"pmizio/typescript-tools.nvim",
-		-- 	dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-		-- 	opts = {},
-		-- },
+		{
+			"mfussenegger/nvim-lint",
+		},
+		{
+
+			"numToStr/Comment.nvim",
+		},
 		{
 			"yioneko/nvim-vtsls",
 		},
