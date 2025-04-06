@@ -1,5 +1,13 @@
 return {
 	{
+		"supermaven-inc/supermaven-nvim",
+		config = function()
+			require("supermaven-nvim").setup({
+				ignore_filetypes = { "zig", "ocaml", "rescript" },
+			})
+		end,
+	},
+	{
 		"zbirenbaum/copilot.lua",
 		cmd = "Copilot",
 		config = function()
@@ -8,9 +16,9 @@ return {
 				panel = { enabled = false },
 				filetypes = {
 					ocaml = true,
-					lua = true,
-					javascript = true,
-					typescript = true,
+					-- lua = true,
+					-- javascript = true,
+					-- typescript = true,
 					zig = true,
 					rescript = true,
 					["*"] = false, -- disable for all other filetypes and ignore default `filetypes`

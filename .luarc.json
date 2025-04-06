@@ -3,5 +3,6 @@
         "vim",
         "Snacks",
         "_toggle_lazygit"
-    ]
+    ],
+    "completion.autoRequire": false
 }
