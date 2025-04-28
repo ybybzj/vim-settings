@@ -18,13 +18,4 @@ return {
 			cmd("colorscheme sonokai")
 		end,
 	},
-	{
-		"alexxGmZ/e-ink.nvim",
-		enabled = false,
-		priority = 1000,
-		config = function()
-			require("e-ink").setup()
-			vim.cmd.colorscheme("e-ink")
-		end,
-	},
 }
