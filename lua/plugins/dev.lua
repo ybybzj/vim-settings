@@ -1,25 +1,4 @@
 return {
-	-- minimap
-	{
-		"echasnovski/mini.map",
-		version = false,
-		config = function()
-			local minimap = require("mini.map")
-			minimap.setup({
-				integrations = {
-					minimap.gen_integration.builtin_search(),
-					minimap.gen_integration.gitsigns(),
-					minimap.gen_integration.diagnostic(),
-				},
-				symbols = {
-					encode = minimap.gen_encode_symbols.dot("3x2"),
-				},
-			})
-		end,
-		keys = {
-			{ "<leader>m", "<cmd>lua MiniMap.toggle()<cr>", desc = "Toggle MiniMap" },
-		},
-	},
 	-- autopairs
 	{
 		"windwp/nvim-autopairs",

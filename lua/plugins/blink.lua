@@ -3,7 +3,6 @@ local kind_icons = {
 		Text = "",
 		Method = "",
 		Function = "",
-		Copilot = "",
 		Constructor = "",
 		Field = "",
 		Variable = "",
@@ -29,7 +28,6 @@ local kind_icons = {
 	},
 
 	default = {
-		Copilot = "",
 		Text = "󰉿",
 		Method = "󰊕",
 		Function = "󰊕",
@@ -78,16 +76,7 @@ return {
 		dependencies = {
 			"rafamadriz/friendly-snippets",
 			"hrsh7th/cmp-cmdline",
-			{
-				"giuxtaposition/blink-cmp-copilot",
-				dependencies = {
-					{
-						"zbirenbaum/copilot.lua",
-					},
-				},
-			},
 			"folke/lazydev.nvim",
-			"MeanderingProgrammer/render-markdown.nvim",
 		},
 
 		-- use a release tag to download pre-built binaries
@@ -138,8 +127,6 @@ return {
 					local success, node = pcall(vim.treesitter.get_node)
 					if vim.bo.filetype == "lua" then
 						return { "lsp", "lazydev", "path" }
-					elseif vim.bo.filetype == "markdown" then
-						return { "lsp", "markdown", "buffer", "path" }
 					elseif
 						success
 						and node
@@ -147,7 +134,7 @@ return {
 					then
 						return { "buffer", "path" }
 					else
-						return { "lsp", "snippets", "buffer", "path", "copilot" }
+						return { "lsp", "snippets", "buffer", "path" }
 					end
 				end,
 				providers = {
@@ -180,30 +167,10 @@ return {
 						module = "lazydev.integrations.blink",
 						-- make lazydev completions top priority (see `:h blink.cmp`)
 					},
-					-- cmdline = {
-					-- 	name = "cmdline",
-					-- 	module = "blink.compat.source",
-					-- 	score_offset = -3,
-					-- },
-					copilot = {
-						name = "copilot",
-						module = "blink-cmp-copilot",
-						score_offset = 100,
-						async = true,
-						transform_items = function(_, items)
-							local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
-							local kind_idx = #CompletionItemKind + 1
-							CompletionItemKind[kind_idx] = "Copilot"
-							for _, item in ipairs(items) do
-								item.kind = kind_idx
-							end
-							return items
-						end,
-					},
-					markdown = {
-						name = "RenderMarkdown",
-						module = "render-markdown.integ.blink",
-						fallbacks = { "lsp" },
+					cmdline = {
+						name = "cmdline",
+						module = "blink.compat.source",
+						score_offset = -3,
 					},
 				},
 			},

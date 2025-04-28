@@ -51,44 +51,9 @@ return {
 			-- comment
 			{
 				"numToStr/Comment.nvim",
-				config = function()
-					local ft = require("Comment.ft")
-
-					-- set both line and block commentstring
-					ft.set("rescript", { "//%s", "/*%s*/" })
-				end,
-			},
-
-			-- diagnostic
-			{
-				"folke/trouble.nvim",
 				opts = {},
-				cmd = "Trouble",
-				keys = {
-					{
-						"<space>d",
-						"<cmd>Trouble diagnostics toggle<cr>",
-						desc = "Toggle Diagnostics",
-					},
-				},
 			},
-			-- outline
-			{
-				"hedyhli/outline.nvim",
-				cmd = { "Outline", "OutlineOpen" },
-				keys = { -- Example mapping to toggle outline
-					{ "<space>o", "<cmd>Outline<CR>", desc = "Toggle outline" },
-				},
-				opts = {
-					keymaps = {
-						peek_location = "<space>",
-						hover_symbol = "K",
-						toggle_preview = "p",
-						fold = "<left>",
-						unfold = "<right>",
-					},
-				},
-			},
+
 			-- ui
 			{
 				"nvimdev/lspsaga.nvim",
