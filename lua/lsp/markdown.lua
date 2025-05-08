@@ -1,5 +1,6 @@
 return {
 	server_name = "marksman",
+	enable = true,
 	dependencies = {
 		{
 			"bullets-vim/bullets.vim",

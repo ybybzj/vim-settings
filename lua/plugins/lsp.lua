@@ -187,11 +187,16 @@ return {
 			},
 			{ "<F7>", "<cmd>Lspsaga diagnostic_jump_prev<cr>", desc = "Goto prev diagnostic" },
 			{
+				"<space>lr",
+				"<cmd>LspRestart<cr>",
+				desc = "Restart LSP server",
+			},
+			{
 				"<space>ld",
 				"<cmd>Trouble diagnostics toggle<cr>",
 				desc = "toggle workspace diagnostics",
 			},
-			{ "<space>la", "<cmd>Lspsaga code_action<cr>", desc = "list code actions" },
+			{ "<space>la", "<cmd>lua vim.lsp.buf.code_action()<cr>", desc = "list code actions" },
 			{ "<space>lf", "<cmd>lua vim.lsp.buf.format()<cr>", desc = "format document" },
 			{ "<space>lo", "<cmd>Lspsaga outline<cr>", desc = "toggle outline" },
 			{ "<space>lt", toggle_virtlines, desc = "toggle type hint" },
