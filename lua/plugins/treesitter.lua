@@ -83,6 +83,7 @@ return {
 							["]b"] = "@block.outer",
 							["]m"] = "@function.outer",
 							["]]"] = "@class.outer",
+							["]c"] = "@call.outer",
 						},
 						goto_previous_start = {
 							["[b"] = "@block.inner",
@@ -93,6 +94,7 @@ return {
 							["[B"] = "@block.outer",
 							["[M"] = "@function.outer",
 							["[]"] = "@class.outer",
+							["[c"] = "@call.outer",
 						},
 					},
 				},

@@ -20,7 +20,7 @@ M.find_and_replace = function(opts)
 	end
 
 	if hasInstance then
-		far.update_instance_prefills(opts.instanceName, prefills, false)
+		far.get_instance(opts.instanceName):update_input_values(prefills, false)
 		if not far.is_instance_open(opts.instanceName) then
 			far.open_instance(opts.instanceName)
 		end
