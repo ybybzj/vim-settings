@@ -26,6 +26,9 @@ local function load()
 		server_names = function()
 			return config("server_name")
 		end,
+		debugegers = function()
+			return config("debugger_name")
+		end,
 		lspconfig = function(lspconfig)
 			local lspcfgs = config({ "lspconfig", "opts", "server_name", "keys" })
 			for _, cfg in ipairs(lspcfgs) do

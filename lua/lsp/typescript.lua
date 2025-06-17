@@ -1,5 +1,6 @@
 return {
 	server_name = "vtsls",
+	debugger_name = "js-debug-adapter",
 	dependencies = {
 		{
 			"dmmulroy/tsc.nvim",

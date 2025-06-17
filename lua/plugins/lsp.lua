@@ -5,7 +5,10 @@ local toggle_virtlines = "<cmd>lua require('lsp.utils.handlers').toggle_virtline
 return {
 	{
 		"williamboman/mason.nvim",
-		opts = {},
+		opts = {
+			ensure_installed = settings.debugegers(),
+			automatic_installation = false,
+		},
 	},
 	{
 		"williamboman/mason-lspconfig.nvim",
