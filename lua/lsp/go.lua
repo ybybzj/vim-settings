@@ -1,5 +1,6 @@
 return {
 	server_name = "gopls",
+  enable = true,
 	dependencies = {
 		{
 			"ray-x/go.nvim",

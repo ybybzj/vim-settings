@@ -3,7 +3,7 @@ return {
 		"supermaven-inc/supermaven-nvim",
 		config = function()
 			require("supermaven-nvim").setup({
-				ignore_filetypes = { "zig", "ocaml", "rescript" },
+				ignore_filetypes = { "zig", "ocaml", "rescript", "copilot-chat", "copilot-overlay" },
 			})
 		end,
 	},
@@ -36,58 +36,58 @@ return {
 		build = "make tiktoken", -- Only on MacOS or Linux
 		opts = function()
 			return {
-				model = "claude-3.7-sonnet-thought",
+				model = "claude-sonnet-4",
 				-- See Configuration section for options
 				providers = {
 					copilot = {},
 					github_models = {},
 					copilot_embeddings = {},
-					ollama = {
-						prepare_input = require("CopilotChat.config.providers").copilot.prepare_input,
-						prepare_output = require("CopilotChat.config.providers").copilot.prepare_output,
-
-						get_models = function(headers)
-							local response, err =
-								require("CopilotChat.utils").curl_get("http://192.168.50.117:5001/v1/models", {
-									headers = headers,
-									json_response = true,
-								})
-
-							if err then
-								error(err)
-							end
-
-							return vim.tbl_map(function(model)
-								return {
-									id = model.id,
-									name = model.id,
-								}
-							end, response.body.data)
-						end,
-
-						embed = function(inputs, headers)
-							local response, err =
-								require("CopilotChat.utils").curl_post("http://192.168.50.117:5001/v1/embeddings", {
-									headers = headers,
-									json_request = true,
-									json_response = true,
-									body = {
-										input = inputs,
-										model = "all-minilm",
-									},
-								})
-
-							if err then
-								error(err)
-							end
-
-							return response.body.data
-						end,
-
-						get_url = function()
-							return "http://192.168.50.117:5001/v1/chat/completions"
-						end,
-					},
+					-- ollama = {
+					-- 	prepare_input = require("CopilotChat.config.providers").copilot.prepare_input,
+					-- 	prepare_output = require("CopilotChat.config.providers").copilot.prepare_output,
+					--
+					-- 	get_models = function(headers)
+					-- 		local response, err =
+					-- 			require("CopilotChat.utils").curl_get("http://192.168.50.117:5001/v1/models", {
+					-- 				headers = headers,
+					-- 				json_response = true,
+					-- 			})
+					--
+					-- 		if err then
+					-- 			error(err)
+					-- 		end
+					--
+					-- 		return vim.tbl_map(function(model)
+					-- 			return {
+					-- 				id = model.id,
+					-- 				name = model.id,
+					-- 			}
+					-- 		end, response.body.data)
+					-- 	end,
+					--
+					-- 	embed = function(inputs, headers)
+					-- 		local response, err =
+					-- 			require("CopilotChat.utils").curl_post("http://192.168.50.117:5001/v1/embeddings", {
+					-- 				headers = headers,
+					-- 				json_request = true,
+					-- 				json_response = true,
+					-- 				body = {
+					-- 					input = inputs,
+					-- 					model = "all-minilm",
+					-- 				},
+					-- 			})
+					--
+					-- 		if err then
+					-- 			error(err)
+					-- 		end
+					--
+					-- 		return response.body.data
+					-- 	end,
+					--
+					-- 	get_url = function()
+					-- 		return "http://192.168.50.117:5001/v1/chat/completions"
+					-- 	end,
+					-- },
 				},
 			}
 		end,
