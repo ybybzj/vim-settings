@@ -18,7 +18,7 @@ return {
 		},
 	},
 
-	lspconfig = function(lspconfig, opts)
+	lspconfig = function(_, opts)
 		local old_on_attach = opts.on_attach
 		opts.on_attach = function(client, bufnr)
 			client.server_capabilities.semanticTokensProvider = false
@@ -39,6 +39,9 @@ return {
 				description = "Switch Implementation/Interface",
 			},
 		}
-		lspconfig.rescriptls.setup(opts)
+
+		-- Define server config using new API
+		-- mason-lspconfig will automatically call vim.lsp.enable('rescriptls')
+		vim.lsp.config('rescriptls', opts)
 	end,
 }

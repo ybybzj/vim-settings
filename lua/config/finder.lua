@@ -1,7 +1,5 @@
 local M = {}
 
-local staticTitle = "Find And Replace"
-
 ---@class FindAndReplaceOptions
 ---@field public search string?
 ---@field public paths string?

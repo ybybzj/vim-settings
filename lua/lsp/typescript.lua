@@ -49,7 +49,7 @@ return {
 			},
 		},
 	},
-	lspconfig = function(lspconfig, opts)
+	lspconfig = function(_, opts)
 		local old_on_attach = opts.on_attach
 		opts.on_attach = function(client, bufnr)
 			client.server_capabilities.documentFormattingProvider = false
@@ -59,12 +59,15 @@ return {
 			old_on_attach(client, bufnr)
 		end
 
+		-- Setup nvim-vtsls plugin (provides helper commands)
 		local vtsls = require("vtsls")
 		vtsls.config({
 			refactor_auto_rename = true,
 		})
-		require("lspconfig.configs").vtsls = vtsls.lspconfig
-		lspconfig.vtsls.setup(opts)
+
+		-- Define server config using new API
+		-- mason-lspconfig will automatically call vim.lsp.enable('vtsls')
+		vim.lsp.config('vtsls', opts)
 
 		-- setup comment
 		local comment = require("Comment")

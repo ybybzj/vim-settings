@@ -160,9 +160,8 @@ return {
 		},
 
 		config = function()
-			-- setup lspconfig
-			local lspconfig = require("lspconfig")
-			settings.lspconfig(lspconfig)
+			-- setup lspconfig (now using vim.lsp.config with mason-lspconfig v2.0+)
+			settings.lspconfig()
 
 			-- setup formatters
 			local conform = require("conform")

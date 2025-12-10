@@ -77,7 +77,6 @@ return {
 		-- optional: provides snippets for the snippet source
 		dependencies = {
 			"rafamadriz/friendly-snippets",
-			"hrsh7th/cmp-cmdline",
 			{
 				"giuxtaposition/blink-cmp-copilot",
 				dependencies = {

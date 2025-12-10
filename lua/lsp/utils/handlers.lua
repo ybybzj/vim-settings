@@ -1,5 +1,9 @@
 local utils = require("utils")
 local M = {}
+
+-- Cache namespace at module level for efficiency
+local codelens_ns = vim.api.nvim_create_namespace("custom-lsp-codelens")
+
 local function lsp_highlight_document(client, bufnr)
 	-- Server capabilities spec:
 	-- https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#serverCapabilities
@@ -58,8 +62,7 @@ local virtlines_enabled = false
 
 local refresh_virtlines = function()
 	local params = { textDocument = vim.lsp.util.make_text_document_params() }
-	vim.lsp.buf_request(0, "textDocument/codeLens", params, function(err, result, ctx, _)
-		-- _G.dump(result)
+	vim.lsp.buf_request(0, "textDocument/codeLens", params, function(err, result, _, _)
 		if err then
 			return
 		end
@@ -68,33 +71,35 @@ local refresh_virtlines = function()
 			return
 		end
 
-		local ns = vim.api.nvim_create_namespace("custom-lsp-codelens")
-		vim.api.nvim_buf_clear_namespace(0, ns, 0, -1)
+		vim.api.nvim_buf_clear_namespace(0, codelens_ns, 0, -1)
 
 		if not virtlines_enabled then
 			return
 		end
 
 		for _, lens in ipairs(result) do
+			if not lens.command or not lens.command.title then
+				goto continue
+			end
 			local title = lens.command.title
 			local range = lens.range
 			local text = string.rep(" ", lens.range.start.character) .. title
 
 			local line_num = range.start.line
 			if line_num <= 0 then
-				vim.api.nvim_buf_set_extmark(0, ns, 0, 0, {
+				vim.api.nvim_buf_set_extmark(0, codelens_ns, 0, 0, {
 					virt_text = { { text, "VirtualTextHint" } },
 					virt_text_pos = "eol",
 				})
 			else
-				-- _G.dump(line_num)
-				vim.api.nvim_buf_set_extmark(0, ns, line_num, 0, {
+				vim.api.nvim_buf_set_extmark(0, codelens_ns, line_num, 0, {
 					virt_lines = {
 						{ { text, "VirtualTextHint" } },
 					},
 					virt_lines_above = true,
 				})
 			end
+			::continue::
 		end
 	end)
 end

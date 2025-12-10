@@ -33,13 +33,15 @@ return {
 			},
 		},
 	},
-	lspconfig = function(lspconfig, opts)
+	lspconfig = function(_, opts)
 		local old_on_attach = opts.on_attach
 		opts.on_attach = function(client, bufnr)
 			client.server_capabilities.documentFormattingProvider = false
 			old_on_attach(client, bufnr)
 		end
 
-		lspconfig.lua_ls.setup(opts)
+		-- Define server config using new API
+		-- mason-lspconfig will automatically call vim.lsp.enable('lua_ls')
+		vim.lsp.config('lua_ls', opts)
 	end,
 }

@@ -29,7 +29,7 @@ local function load()
 		debuggers = function()
 			return config("debugger_name")
 		end,
-		lspconfig = function(lspconfig)
+		lspconfig = function()
 			local lspcfgs = config({ "lspconfig", "opts", "server_name", "keys" })
 			for _, cfg in ipairs(lspcfgs) do
 				local keymaps = utils.extends(default_keymaps, cfg["keys"])
@@ -45,11 +45,14 @@ local function load()
 				local opts = utils.extends(default_opts, cfg["opts"] or {})
 
 				local setup = cfg["lspconfig"]
+				local server_name = cfg["server_name"]
+				
 				if type(setup) == "function" then
-					setup(lspconfig, opts)
+					-- Custom setup function (used by typescript, rescript, etc.)
+					setup(nil, opts)
 				else
-					local server_name = cfg["server_name"]
-					lspconfig[server_name].setup(opts)
+					-- Simple setup: just define the config, mason-lspconfig will enable it
+					vim.lsp.config(server_name, opts)
 				end
 			end
 		end,

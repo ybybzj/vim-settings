@@ -25,4 +25,25 @@ require("lazy").setup({
 	install = {
 		colorscheme = { "sonokai" },
 	},
+	checker = {
+		enabled = true,
+		notify = false, -- Don't notify on update checks
+	},
+	change_detection = {
+		notify = false, -- Don't notify on config changes
+	},
+	performance = {
+		rtp = {
+			disabled_plugins = {
+				"gzip",
+				"matchit",
+				"matchparen",
+				"netrwPlugin",
+				"tarPlugin",
+				"tohtml",
+				"tutor",
+				"zipPlugin",
+			},
+		},
+	},
 })

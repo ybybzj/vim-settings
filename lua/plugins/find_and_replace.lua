@@ -19,12 +19,14 @@ return {
 				pattern = { "grug-far" },
 				callback = function()
 					vim.keymap.set("n", "<localleader>w", function()
-						local state = unpack(require("grug-far").toggle_flags({ "-w" }))
+						local states = require("grug-far").toggle_flags({ "-w" })
+						local state = states[1]
 						vim.notify("grug-far: toggled match exact word " .. (state and "ON" or "OFF"))
 					end, { buffer = true })
 
 					vim.keymap.set("n", "<localleader>u", function()
-						local state = unpack(require("grug-far").toggle_flags({ "--ignore-case" }))
+						local states = require("grug-far").toggle_flags({ "--ignore-case" })
+						local state = states[1]
 						vim.notify("grug-far: toggled --ignore-case " .. (state and "ON" or "OFF"))
 					end, { buffer = true })
 				end,

@@ -169,7 +169,7 @@ local function extend(tab1, tab2)
 	return tab1
 end
 
-local lspconfig = function(lspconfig, opts)
+local lspconfig = function(_, opts)
 	local default_schemas = nil
 	local status_ok, jsonls_settings = pcall(require, "nlspsettings.jsonls")
 	if status_ok then
@@ -184,7 +184,9 @@ local lspconfig = function(lspconfig, opts)
 		},
 	}
 
-	lspconfig.jsonls.setup(opts)
+	-- Define server config using new API
+	-- mason-lspconfig will automatically call vim.lsp.enable('jsonls')
+	vim.lsp.config('jsonls', opts)
 end
 
 local dependencies = {
