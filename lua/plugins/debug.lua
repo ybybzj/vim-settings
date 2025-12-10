@@ -99,7 +99,7 @@ return {
 	{
 		"theHamsta/nvim-dap-virtual-text",
 		dependencies = {
-			"theHamsta/nvim-dap",
+			"mfussenegger/nvim-dap",
 			"nvim-treesitter/nvim-treesitter",
 		},
 		opts = {},

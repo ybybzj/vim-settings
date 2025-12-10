@@ -6,7 +6,7 @@ return {
 	{
 		"williamboman/mason.nvim",
 		opts = {
-			ensure_installed = settings.debugegers(),
+			ensure_installed = settings.debuggers(),
 			automatic_installation = false,
 		},
 	},

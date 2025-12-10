@@ -29,7 +29,7 @@ local function lsp_keymaps(_, bufnr, keymaps)
 	end
 
 	for shortcut, k_opts in pairs(keymaps) do
-		buf_set_keymap("n", shortcut, k_opts.cmd, utils.extends(opts, opts.opts))
+		buf_set_keymap("n", shortcut, k_opts.cmd, utils.extends(opts, k_opts.opts or {}))
 	end
 end
 

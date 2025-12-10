@@ -26,7 +26,7 @@ local function load()
 		server_names = function()
 			return config("server_name")
 		end,
-		debugegers = function()
+		debuggers = function()
 			return config("debugger_name")
 		end,
 		lspconfig = function(lspconfig)
@@ -58,7 +58,7 @@ local function load()
 		end,
 		formatters_setup = function(conform)
 			local setups = config("formatter_setup")
-			for _name, formatter_setup in ipairs(setups) do
+			for _, formatter_setup in ipairs(setups) do
 				formatter_setup(conform)
 			end
 		end,

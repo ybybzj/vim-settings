@@ -1,5 +1,4 @@
 local cmd = vim.cmd
-local keymap = vim.keymap.set
 
 local open_grug_far = require("config.finder").find_and_replace
 
