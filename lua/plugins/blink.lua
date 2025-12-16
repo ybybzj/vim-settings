@@ -1,35 +1,33 @@
 local kind_icons = {
 	codicons = {
-		Text = "",
-		Method = "",
-		Function = "",
-		Copilot = "",
-		Constructor = "",
-		Field = "",
-		Variable = "",
-		Class = "",
-		Interface = "",
-		Module = "",
-		Property = "",
-		Unit = "",
-		Value = "",
-		Enum = "",
-		Keyword = "",
-		Snippet = "",
-		Color = "",
-		File = "",
-		Reference = "",
-		Folder = "",
-		EnumMember = "",
-		Constant = "",
-		Struct = "",
-		Event = "",
-		Operator = "",
-		TypeParameter = "",
+		Text = "",
+		Method = "",
+		Function = "",
+		Constructor = "",
+		Field = "",
+		Variable = "",
+		Class = "",
+		Interface = "",
+		Module = "",
+		Property = "",
+		Unit = "",
+		Value = "",
+		Enum = "",
+		Keyword = "",
+		Snippet = "",
+		Color = "",
+		File = "",
+		Reference = "",
+		Folder = "",
+		EnumMember = "",
+		Constant = "",
+		Struct = "",
+		Event = "",
+		Operator = "",
+		TypeParameter = "",
 	},
 
 	default = {
-		Copilot = "",
 		Text = "󰉿",
 		Method = "󰊕",
 		Function = "󰊕",
@@ -77,14 +75,6 @@ return {
 		-- optional: provides snippets for the snippet source
 		dependencies = {
 			"rafamadriz/friendly-snippets",
-			{
-				"giuxtaposition/blink-cmp-copilot",
-				dependencies = {
-					{
-						"zbirenbaum/copilot.lua",
-					},
-				},
-			},
 			"folke/lazydev.nvim",
 			"MeanderingProgrammer/render-markdown.nvim",
 		},
@@ -96,7 +86,17 @@ return {
 			-- 'super-tab' for mappings similar to vscode (tab to accept, arrow keys to navigate)
 			-- 'enter' for mappings similar to 'super-tab' but with 'enter' to accept
 			-- See the full "keymap" documentation for information on defining your own keymap.
-			keymap = { preset = "enter" },
+			keymap = {
+				preset = "enter",
+				["<Tab>"] = {
+					"snippet_forward",
+					function()
+						-- sidekick NES jump/apply
+						return require("sidekick").nes_jump_or_apply()
+					end,
+					"fallback",
+				},
+			},
 
 			appearance = {
 				-- Sets the fallback highlight groups to nvim-cmp's highlight groups
@@ -146,7 +146,7 @@ return {
 					then
 						return { "buffer", "path" }
 					else
-						return { "lsp", "snippets", "buffer", "path", "copilot" }
+						return { "lsp", "snippets", "buffer", "path" }
 					end
 				end,
 				providers = {
@@ -178,26 +178,6 @@ return {
 						name = "LazyDev",
 						module = "lazydev.integrations.blink",
 						-- make lazydev completions top priority (see `:h blink.cmp`)
-					},
-					-- cmdline = {
-					-- 	name = "cmdline",
-					-- 	module = "blink.compat.source",
-					-- 	score_offset = -3,
-					-- },
-					copilot = {
-						name = "copilot",
-						module = "blink-cmp-copilot",
-						score_offset = 100,
-						async = true,
-						transform_items = function(_, items)
-							local CompletionItemKind = require("blink.cmp.types").CompletionItemKind
-							local kind_idx = #CompletionItemKind + 1
-							CompletionItemKind[kind_idx] = "Copilot"
-							for _, item in ipairs(items) do
-								item.kind = kind_idx
-							end
-							return items
-						end,
 					},
 					markdown = {
 						name = "RenderMarkdown",

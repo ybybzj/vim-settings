@@ -56,4 +56,15 @@ return {
 			{ "<space>ghu", "<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>", desc = "Undo Stage Hunk" },
 		},
 	},
+	{
+		"sindrets/diffview.nvim",
+		cmd = { "DiffviewOpen", "DiffviewFileHistory" },
+		keys = {
+			{ "<space>gd", "<cmd>DiffviewOpen<cr>", desc = "Diff View" },
+			{ "<space>gD", "<cmd>DiffviewClose<cr>", desc = "Close Diff View" },
+			{ "<space>gfh", "<cmd>DiffviewFileHistory %<cr>", desc = "File History" },
+			{ "<space>gfH", "<cmd>DiffviewFileHistory<cr>", desc = "Branch History" },
+		},
+		opts = {},
+	},
 }

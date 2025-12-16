@@ -36,7 +36,7 @@ return {
 		statuscolumn = { enabled = true },
 		words = { enabled = true },
 		git = { enabled = true },
-		terminal = { enabled = false },
+		terminal = { enabled = true },
 	},
 	keys = {
 		-- git --

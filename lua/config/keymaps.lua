@@ -42,3 +42,5 @@ map("n", "<M-Up>", ":m .-2<CR>==", { noremap = true, silent = true, desc = "Move
 map("n", "<M-Down>", ":m .+1<CR>==", { noremap = true, silent = true, desc = "Move line down" })
 map("v", "<M-Up>", ":m '<-2<CR>gv=gv", { noremap = true, silent = true, desc = "Move selection up" })
 map("v", "<M-Down>", ":m '>+1<CR>gv=gv", { noremap = true, silent = true, desc = "Move selection down" })
+
+
