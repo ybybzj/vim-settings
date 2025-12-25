@@ -10,6 +10,9 @@ return {
 		vim.g.opencode_opts = {
 			provider = {
 				enabled = "snacks",
+				snacks = {
+					auto_close = false, -- Keep terminal alive when hidden to persist session
+				},
 			},
 		}
 

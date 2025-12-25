@@ -57,14 +57,46 @@ return {
 		},
 	},
 	{
-		"sindrets/diffview.nvim",
-		cmd = { "DiffviewOpen", "DiffviewFileHistory" },
-		keys = {
-			{ "<space>gd", "<cmd>DiffviewOpen<cr>", desc = "Diff View" },
-			{ "<space>gD", "<cmd>DiffviewClose<cr>", desc = "Close Diff View" },
-			{ "<space>gfh", "<cmd>DiffviewFileHistory %<cr>", desc = "File History" },
-			{ "<space>gfH", "<cmd>DiffviewFileHistory<cr>", desc = "Branch History" },
+		"esmuellert/vscode-diff.nvim",
+		dependencies = { "MunifTanjim/nui.nvim" },
+		cmd = "CodeDiff",
+		opts = {
+			highlights = {
+				line_insert = "DiffAdd",
+				line_delete = "DiffDelete",
+			},
+			explorer = {
+				position = "left",
+				width = 40,
+				view_mode = "tree",
+			},
+			keymaps = {
+				view = {
+					quit = "q",
+					toggle_explorer = "<leader>b",
+					next_hunk = "]c",
+					prev_hunk = "[c",
+					next_file = "]f",
+					prev_file = "[f",
+				},
+			},
 		},
-		opts = {},
+		keys = {
+			{ "<space>gd", "<cmd>CodeDiff<cr>", desc = "Diff View (Explorer)" },
+			{ "<space>gD", "<cmd>tabclose<cr>", desc = "Close Diff View" },
+			{ "<space>gfh", "<cmd>CodeDiff file HEAD<cr>", desc = "File History" },
+		},
+	},
+	{
+		"sindrets/diffview.nvim",
+		cmd = { "DiffviewOpen" },
+		opts = {
+			enhanced_diff_hl = true,
+			view = {
+				default = {
+					layout = "diff2_horizontal",
+				},
+			},
+		},
 	},
 }
