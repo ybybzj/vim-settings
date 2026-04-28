@@ -2,6 +2,7 @@ return {
 	-- minimap
 	{
 		"echasnovski/mini.map",
+		lazy = true,
 		version = false,
 		config = function()
 			local minimap = require("mini.map")
@@ -23,6 +24,7 @@ return {
 	-- autopairs
 	{
 		"windwp/nvim-autopairs",
+		event = "InsertEnter",
 		config = function()
 			local npairs = require("nvim-autopairs")
 			npairs.setup()
@@ -34,6 +36,7 @@ return {
 	-- folding
 	{
 		"kevinhwang91/nvim-ufo",
+		event = { "BufReadPost", "BufNewFile" },
 		dependencies = "kevinhwang91/promise-async",
 		init = function()
 			vim.o.foldcolumn = "1" -- '0' is not bad
@@ -240,12 +243,16 @@ return {
 	-- surround
 	{
 		"kylechui/nvim-surround",
+		event = "VeryLazy",
 		config = function()
 			require("nvim-surround").setup()
 		end,
 	},
 	-- others
-	"tpope/vim-repeat",
+	{
+		"tpope/vim-repeat",
+		event = "VeryLazy",
+	},
 	{
 		"2kabhishek/nerdy.nvim",
 		dependencies = {

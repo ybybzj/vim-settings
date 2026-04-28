@@ -51,17 +51,6 @@ return {
 					})
 				end,
 			},
-			-- comment
-			{
-				"numToStr/Comment.nvim",
-				config = function()
-					local ft = require("Comment.ft")
-
-					-- set both line and block commentstring
-					ft.set("rescript", { "//%s", "/*%s*/" })
-				end,
-			},
-
 			-- diagnostic
 			{
 				"folke/trouble.nvim",
@@ -198,5 +187,23 @@ return {
 			{ "<space>lt", toggle_virtlines, desc = "toggle type hint" },
 			{ "<F4>", toggle_virtlines, mode = "n", desc = "toggle type hint" },
 		},
+	},
+	{
+		"numToStr/Comment.nvim",
+		event = { "BufReadPre", "BufNewFile" },
+		config = function()
+			local ft = require("Comment.ft")
+			local opts = {}
+			local ok, integration = pcall(require, "ts_context_commentstring.integrations.comment_nvim")
+
+			if ok then
+				-- Keep JSX/TSX comments context-aware without making Comment.nvim a startup dependency.
+				opts.pre_hook = integration.create_pre_hook()
+			end
+
+			-- Set both line and block commentstring for ReScript buffers.
+			ft.set("rescript", { "//%s", "/*%s*/" })
+			require("Comment").setup(opts)
+		end,
 	},
 }

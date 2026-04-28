@@ -8,13 +8,19 @@ return {
 		opts = {
 			-- Keep markdown buffers plain by default; render only when toggled.
 			enabled = false,
+			-- LSP hover/documentation floats are markdown buffers too. Do not attach
+			-- there, because Treesitter markdown injections can crash on Nvim 0.12
+			-- with the archived nvim-treesitter master branch.
+			ignore = function(buf)
+				return vim.bo[buf].buftype ~= ""
+			end,
 			completions = {
 				lsp = { enabled = true },
 				blink = { enabled = true },
 			},
 		},
 		keys = {
-			{ "<space>mr", "<cmd>:RenderMarkdown buf_toggle<cr>", desc = "Toggle Markdown Render" },
+			{ "<space>mr", "<cmd>RenderMarkdown buf_toggle<cr>", desc = "Toggle Markdown Render" },
 		},
 	},
 	{

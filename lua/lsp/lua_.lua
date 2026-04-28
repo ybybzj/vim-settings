@@ -3,9 +3,6 @@ return {
 	dependencies = {
 		{
 			"folke/lazydev.nvim",
-			dependencies = {
-				"rcarriga/nvim-dap-ui",
-			},
 			ft = "lua", -- only load on lua files
 			opts = {
 				library = {

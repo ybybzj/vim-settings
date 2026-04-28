@@ -12,6 +12,7 @@ local signs = {
 return {
 	{
 		"lewis6991/gitsigns.nvim",
+		event = { "BufReadPre", "BufNewFile" },
 		opts = {
 			signs = signs,
 			signs_staged = signs,

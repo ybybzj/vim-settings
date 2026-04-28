@@ -99,6 +99,80 @@ return {
 					},
 				},
 			})
+
+			-- nvim-treesitter's archived master branch still registers a few query
+			-- directive handlers with the pre-0.12 capture shape. Neovim 0.12 passes
+			-- captures as lists of nodes, so normalize here to keep markdown
+			-- injections working in files and LSP hover floats without a full migration
+			-- to nvim-treesitter's new main-branch API.
+			local query = vim.treesitter.query
+			local directive_opts = { force = true }
+
+			local html_script_type_languages = {
+				importmap = "json",
+				module = "javascript",
+				["application/ecmascript"] = "javascript",
+				["text/ecmascript"] = "javascript",
+			}
+
+			local language_aliases = {
+				ex = "elixir",
+				pl = "perl",
+				sh = "bash",
+				uxn = "uxntal",
+				ts = "typescript",
+			}
+
+			local function first_node(match, capture_id)
+				local node = match[capture_id]
+				if type(node) == "table" then
+					node = node[1]
+				end
+				return node
+			end
+
+			local function parser_from_markdown_info(injection_alias)
+				local filetype = vim.filetype.match({ filename = "a." .. injection_alias })
+				return filetype or language_aliases[injection_alias] or injection_alias
+			end
+
+			query.add_directive("set-lang-from-mimetype!", function(match, _, source, pred, metadata)
+				local node = first_node(match, pred[2])
+				if not node then
+					return
+				end
+
+				local type_attr_value = vim.treesitter.get_node_text(node, source)
+				local configured = html_script_type_languages[type_attr_value]
+				if configured then
+					metadata["injection.language"] = configured
+				else
+					local parts = vim.split(type_attr_value, "/", {})
+					metadata["injection.language"] = parts[#parts]
+				end
+			end, directive_opts)
+
+			query.add_directive("set-lang-from-info-string!", function(match, _, source, pred, metadata)
+				local node = first_node(match, pred[2])
+				if not node then
+					return
+				end
+
+				local injection_alias = vim.treesitter.get_node_text(node, source):lower()
+				metadata["injection.language"] = parser_from_markdown_info(injection_alias)
+			end, directive_opts)
+
+			query.add_directive("downcase!", function(match, _, source, pred, metadata)
+				local id = pred[2]
+				local node = first_node(match, id)
+				if not node then
+					return
+				end
+
+				local text = vim.treesitter.get_node_text(node, source, { metadata = metadata[id] }) or ""
+				metadata[id] = metadata[id] or {}
+				metadata[id].text = string.lower(text)
+			end, directive_opts)
 		end,
 	},
 	{

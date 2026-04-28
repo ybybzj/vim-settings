@@ -1,8 +1,44 @@
 return {
 	{
 		"mfussenegger/nvim-dap",
+		lazy = true,
 		dependencies = {
 			"williamboman/mason.nvim",
+			{
+				"theHamsta/nvim-dap-virtual-text",
+				dependencies = {
+					"nvim-treesitter/nvim-treesitter",
+				},
+				opts = {},
+			},
+			{
+				"rcarriga/nvim-dap-ui",
+				dependencies = { "nvim-neotest/nvim-nio" },
+				config = function()
+					local dapui = require("dapui")
+					dapui.setup({
+						icons = { expanded = "▾", collapsed = "▸", current_frame = "*" },
+						controls = {
+							icons = {
+								pause = "⏸",
+								play = "▶",
+								step_into = "⏎",
+								step_over = "⏭",
+								step_out = "⏮",
+								step_back = "b",
+								run_last = "▶▶",
+								terminate = "⏹",
+								disconnect = "⏏",
+							},
+						},
+					})
+
+					local dap = require("dap")
+					dap.listeners.after.event_initialized["dapui_config"] = dapui.open
+					dap.listeners.before.event_terminated["dapui_config"] = dapui.close
+					dap.listeners.before.event_exited["dapui_config"] = dapui.close
+				end,
+			},
 		},
 		config = function()
 			local dap = require("dap")
@@ -95,41 +131,5 @@ return {
 			{ "<leader>dr", "<cmd>lua require('dap').repl.open()<cr>", desc = "Open Repl" },
 			{ "<leader>dt", "<cmd>lua require('dap').terminate()<cr>", desc = "Terminate" },
 		},
-	},
-	{
-		"theHamsta/nvim-dap-virtual-text",
-		dependencies = {
-			"mfussenegger/nvim-dap",
-			"nvim-treesitter/nvim-treesitter",
-		},
-		opts = {},
-	},
-	{
-		"rcarriga/nvim-dap-ui",
-		dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
-		config = function()
-			local dapui = require("dapui")
-			dapui.setup({
-				icons = { expanded = "▾", collapsed = "▸", current_frame = "*" },
-				controls = {
-					icons = {
-						pause = "⏸",
-						play = "▶",
-						step_into = "⏎",
-						step_over = "⏭",
-						step_out = "⏮",
-						step_back = "b",
-						run_last = "▶▶",
-						terminate = "⏹",
-						disconnect = "⏏",
-					},
-				},
-			})
-
-			local dap = require("dap")
-			dap.listeners.after.event_initialized["dapui_config"] = dapui.open
-			dap.listeners.before.event_terminated["dapui_config"] = dapui.close
-			dap.listeners.before.event_exited["dapui_config"] = dapui.close
-		end,
 	},
 }
