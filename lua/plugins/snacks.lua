@@ -12,6 +12,17 @@ local picker = {
 	},
 }
 
+local function with_workspace_ui(action, fallback)
+	return function()
+		local ok, workspace = pcall(require, "workspace")
+		if ok and workspace.is_open() then
+			require("workspace.ui")[action]()
+			return
+		end
+		fallback()
+	end
+	end
+
 return {
 	"folke/snacks.nvim",
 	priority = 1000,
@@ -47,13 +58,13 @@ return {
 		{ "<space>gcc", "<cmd>lua Snacks.picker.git_log()<cr>", desc = "Checkout commit" },
 		-- finder --
 		{ "<space>fo", "<cmd>lua Snacks.picker.recent()<cr>", desc = "find recent files" },
-		{ "<space>ff", "<cmd>lua Snacks.picker.smart()<cr>", desc = "find files smart" },
-		{ "<space>fF", "<cmd>lua Snacks.picker.files()<cr>", desc = "find files" },
-		{ "<space>fb", "<cmd>lua Snacks.picker.buffers()<cr>", desc = "find buffers" },
-		{ "<space>fg", "<cmd>lua Snacks.picker.grep()<cr>", desc = "live grep with case sensitive" },
+		{ "<space>ff", with_workspace_ui("context_smart_files", function() Snacks.picker.smart() end), desc = "find files smart" },
+		{ "<space>fF", with_workspace_ui("context_files", function() Snacks.picker.files() end), desc = "find files" },
+		{ "<space>fb", with_workspace_ui("workspace_buffers", function() Snacks.picker.buffers() end), desc = "find buffers" },
+		{ "<space>fg", with_workspace_ui("context_grep", function() Snacks.picker.grep() end), desc = "live grep with case sensitive" },
 		{
 			"<space>fw",
-			"<cmd>lua Snacks.picker.grep_word()<cr>",
+			with_workspace_ui("context_grep_word", function() Snacks.picker.grep_word() end),
 			desc = "find word in project",
 		},
 		{

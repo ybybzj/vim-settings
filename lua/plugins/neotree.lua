@@ -6,7 +6,6 @@ local function config()
 	local neoTree = require("neo-tree")
 
 	cmd("let g:neo_tree_remove_legacy_commands = 1")
-	vim.fn.sign_define("DiagnosticSignHint", { text = "󰌵", texthl = "DiagnosticSignHint" })
 	-- handle rename when file is modified
 	local function on_move(data)
 		Snacks.rename.on_rename_file(data.source, data.destination)

@@ -83,6 +83,8 @@ return {
 			end,
 			desc = "Buffer Local Keymaps (which-key)",
 		},
+		{ "<space>a", group = "AI / OpenCode" },
+		{ "<space>ar", group = "AI Review" },
 		{ "<space>g", group = "Git" },
 		{ "<space>gs", group = "Git Status" },
 		{ "<space>gh", group = "Hunk" },

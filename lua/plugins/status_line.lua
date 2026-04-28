@@ -48,6 +48,14 @@ local spaces = function()
 	return "spaces: " .. vim.api.nvim_buf_get_option(0, "shiftwidth")
 end
 
+local workspace = function()
+	local ok, ws = pcall(require, "workspace")
+	if not ok then
+		return ""
+	end
+	return ws.statusline()
+end
+
 return {
 	"nvim-lualine/lualine.nvim",
 	dependencies = { "nvim-tree/nvim-web-devicons" },
@@ -63,7 +71,7 @@ return {
 		},
 		sections = {
 			lualine_a = { mode },
-			lualine_b = { branch, diff },
+			lualine_b = { branch, diff, workspace },
 			lualine_c = { {
 				"filename",
 				file_status = true,

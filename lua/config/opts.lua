@@ -24,6 +24,7 @@ opt.wildmode = { "list", "longest" } -- Command-line completion mode
 opt.wrap = true -- Disable line wrap
 opt.mouse = "a" -- Enable mouse support
 opt.swapfile = false -- Disable swap file
+opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
 
 -- copypaste with system clipboard
 opt.clipboard = "unnamedplus"

@@ -101,23 +101,17 @@ return {
 					"nvim-tree/nvim-web-devicons", -- optional
 				},
 				init = function()
-					local signs = {
-						{ name = "DiagnosticSignError", text = "" },
-						{ name = "DiagnosticSignWarn", text = "" },
-						{ name = "DiagnosticSignHint", text = "" },
-						{ name = "DiagnosticSignInfo", text = "" },
-					}
-
-					for _, sign in ipairs(signs) do
-						vim.fn.sign_define(sign.name, { texthl = sign.name, text = sign.text, numhl = "" })
-					end
-
 					local config = {
 						-- disable virtual text
 						virtual_text = false,
 						-- show signs
 						signs = {
-							active = signs,
+							text = {
+								[vim.diagnostic.severity.ERROR] = "",
+								[vim.diagnostic.severity.WARN] = "",
+								[vim.diagnostic.severity.HINT] = "",
+								[vim.diagnostic.severity.INFO] = "",
+							},
 						},
 						update_in_insert = true,
 						underline = true,
@@ -189,7 +183,7 @@ return {
 			},
 			{ "<F7>", "<cmd>Lspsaga diagnostic_jump_prev<cr>", desc = "Goto prev diagnostic" },
 			{
-				"<space>lr",
+				"<space>lR",
 				"<cmd>LspRestart<cr>",
 				desc = "Restart LSP server",
 			},

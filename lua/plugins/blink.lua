@@ -76,7 +76,6 @@ return {
 		dependencies = {
 			"rafamadriz/friendly-snippets",
 			"folke/lazydev.nvim",
-			"MeanderingProgrammer/render-markdown.nvim",
 		},
 
 		-- use a release tag to download pre-built binaries
