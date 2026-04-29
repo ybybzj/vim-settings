@@ -6,6 +6,16 @@ return {
 		},
 		build = ":TSUpdate",
 		config = function()
+			local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
+			parser_config.moonbit = {
+				install_info = {
+					url = "https://github.com/moonbitlang/tree-sitter-moonbit",
+					files = { "src/parser.c", "src/scanner.c" },
+					branch = "main",
+				},
+				filetype = "moonbit",
+			}
+
 			local configs = require("nvim-treesitter.configs")
 
 			configs.setup({
@@ -25,6 +35,7 @@ return {
 					"markdown",
 					"markdown_inline",
 					"latex",
+					"moonbit",
 				},
 				sync_install = false,
 				highlight = { enable = true },

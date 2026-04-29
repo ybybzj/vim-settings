@@ -9,8 +9,8 @@ local function load()
 		return m["enable"] ~= false
 	end
 
-	local config = function(key, mode)
-		local setting_maps = utils.selectKeyFromTbls(key, settings, checkEnable)
+	local config = function(key, mode, filter)
+		local setting_maps = utils.selectKeyFromTbls(key, settings, filter or checkEnable)
 		local ret = {}
 		for _, v in pairs(setting_maps) do
 			if mode == "merge" then
@@ -24,7 +24,9 @@ local function load()
 
 	return {
 		server_names = function()
-			return config("server_name")
+			return config("server_name", nil, function(_, m)
+				return checkEnable(_, m) and m["mason"] ~= false
+			end)
 		end,
 		debuggers = function()
 			return config("debugger_name")

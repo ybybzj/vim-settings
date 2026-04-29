@@ -9,6 +9,8 @@ local signs = {
 	untracked = { text = "┆" },
 }
 
+local hunk_focus = require("config.git_hunk_focus")
+
 return {
 	{
 		"lewis6991/gitsigns.nvim",
@@ -48,8 +50,11 @@ return {
 			},
 		},
 		keys = {
-			{ "<space>ghj", "<cmd>lua require 'gitsigns'.next_hunk()<cr>", desc = "Next Hunk" },
-			{ "<space>ghk", "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", desc = "Prev Hunk" },
+			{ "]h", "<cmd>lua require('gitsigns').nav_hunk('next')<cr>", desc = "Next Git Hunk" },
+			{ "[h", "<cmd>lua require('gitsigns').nav_hunk('prev')<cr>", desc = "Prev Git Hunk" },
+			{ "<space>ghd", hunk_focus.toggle, desc = "Toggle Git Hunk Focus" },
+			{ "<space>ghj", "<cmd>lua require('gitsigns').nav_hunk('next')<cr>", desc = "Next Hunk" },
+			{ "<space>ghk", "<cmd>lua require('gitsigns').nav_hunk('prev')<cr>", desc = "Prev Hunk" },
 			{ "<space>ghp", "<cmd>lua require 'gitsigns'.preview_hunk()<cr>", desc = "Preview Hunk" },
 			{ "<space>ghr", "<cmd>lua require 'gitsigns'.reset_hunk()<cr>", desc = "Reset Hunk" },
 			{ "<space>ghR", "<cmd>lua require 'gitsigns'.reset_buffer()<cr>", desc = "Reset Buffer" },

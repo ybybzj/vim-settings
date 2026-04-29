@@ -21,7 +21,16 @@ local function with_workspace_ui(action, fallback)
 		end
 		fallback()
 	end
-	end
+end
+
+local function open_lazygit()
+	-- Neo-tree's git_status source refreshes on repository changes, which competes
+	-- with lazygit and makes the TUI noticeably sluggish while both are open.
+	pcall(function()
+		require("neo-tree.command").execute({ action = "close", source = "git_status", position = "left" })
+	end)
+	Snacks.lazygit()
+end
 
 return {
 	"folke/snacks.nvim",
@@ -48,9 +57,12 @@ return {
 		words = { enabled = true },
 		git = { enabled = true },
 		terminal = { enabled = true },
+		lazygit = {},
 	},
 	keys = {
 		-- git --
+		{ "<space>gg", open_lazygit, desc = "GitUI (Snacks)" },
+		{ "<leader>gg", open_lazygit, desc = "GitUI (Snacks)" },
 		{ "<space>gl", "<cmd>lua Snacks.git.blame_line()<cr>", desc = "Blame" },
 		{ "<space>go", "<cmd>lua Snacks.picker.git_status()<cr>", desc = "Open changed file" },
 		{ "<space>gb", "<cmd>lua Snacks.picker.git_branches()<cr>", desc = "Checkout branch" },

@@ -2,6 +2,42 @@ local cmd = vim.cmd
 
 local open_grug_far = require("config.finder").find_and_replace
 
+local function refresh_on_next_open(source)
+	local ok, manager = pcall(require, "neo-tree.sources.manager")
+	if not ok then
+		return
+	end
+
+	manager.get_state(source).dirty = true
+end
+
+local function toggle_filesystem_view()
+	local command = require("neo-tree.command")
+
+	-- Keep Neo-tree as one sidebar: switching back to files should replace the
+	-- git-status source instead of leaving a second Neo-tree window around.
+	command.execute({ action = "close", source = "git_status", position = "left" })
+	refresh_on_next_open("filesystem")
+	command.execute({ action = "focus", source = "filesystem", position = "left", toggle = true, reveal = true })
+end
+
+local function toggle_git_status_view()
+	local command = require("neo-tree.command")
+
+	-- Use Neo-tree's git_status source as the compact "what changed?" view.
+	-- Closing filesystem first makes this replace the normal file list in-place.
+	command.execute({ action = "close", source = "filesystem", position = "left" })
+	refresh_on_next_open("git_status")
+	command.execute({ action = "focus", source = "git_status", position = "left", toggle = true })
+end
+
+local function reveal_filesystem_view()
+	local command = require("neo-tree.command")
+
+	command.execute({ action = "close", source = "git_status", position = "left" })
+	command.execute({ action = "focus", source = "filesystem", position = "left", reveal = true })
+end
+
 local function config()
 	local neoTree = require("neo-tree")
 
@@ -14,7 +50,13 @@ local function config()
 	local events = require("neo-tree.events")
 
 	neoTree.setup({
+		sources = {
+			"filesystem",
+			"buffers",
+			"config.neotree_async_git_status",
+		},
 		enable_diagnostics = true,
+		git_status_scope_to_path = true,
 		open_files_do_not_replace_types = { "terminal", "trouble", "qf", "Spectre", "ctrlsf" },
 		auto_clean_after_session_restore = true,
 		default_component_configs = {
@@ -40,9 +82,12 @@ local function config()
 		filesystem = {
 			follow_current_file = { enable = true },
 			hijack_netrw_behavior = "open_current",
-			use_libuv_file_watcher = true,
+			-- Keep Neo-tree from refreshing on every external .git/filesystem change.
+			-- This makes git_status usable in large repos; press `R` to refresh manually.
+			use_libuv_file_watcher = false,
 			window = {
 				mappings = {
+					["u"] = "navigate_up",
 					["H"] = "toggle_hidden",
 					["/"] = "fuzzy_finder",
 					["D"] = "fuzzy_finder_directory",
@@ -62,7 +107,7 @@ local function config()
 				force_visible_in_empty_folder = false, -- when true, hidden files will be shown if the root folder is otherwise empty
 				show_hidden_count = true, -- when true, the number of hidden items in each folder will be shown as the last entry
 				hide_dotfiles = false,
-				hide_gitignored = true,
+				hide_gitignored = false,
 				hide_hidden = true, -- only works on Windows for hidden files/directories
 				hide_by_name = {
 					".DS_Store",
@@ -89,7 +134,6 @@ local function config()
 		use_default_mappings = false,
 		window = {
 			mappings = {
-				["u"] = "navigate_up",
 				["<2-LeftMouse>"] = "open",
 				["<cr>"] = "open",
 				["<right>"] = "open",
@@ -208,7 +252,8 @@ return {
 	},
 	config = config,
 	keys = {
-		{ "<leader>l", "<cmd>Neotree toggle reveal=true<cr>", desc = "Toggle Neotree" },
-		{ "<leader>gf", "<cmd>Neotree reveal=true<cr>", desc = "Reveal In Noetree" },
+		{ "<leader>l", toggle_filesystem_view, desc = "Toggle Neotree" },
+		{ "<leader>k", toggle_git_status_view, desc = "Toggle Git Status Tree" },
+		{ "<leader>gf", reveal_filesystem_view, desc = "Reveal In Noetree" },
 	},
 }
