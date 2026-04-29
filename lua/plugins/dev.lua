@@ -125,6 +125,22 @@ return {
 				silent = true,
 			})
 
+			vim.api.nvim_create_autocmd({ "TextChangedI", "TextChangedP" }, {
+				group = vim.api.nvim_create_augroup("MiniMapSourceSync", { clear = true }),
+				callback = function(args)
+					local current = minimap.current
+					local source_buf = current and current.buf_data and current.buf_data.source
+					if source_buf ~= args.buf or vim.bo[args.buf].buftype ~= "" then
+						return
+					end
+
+					-- mini.map refreshes normal-mode edits by default, but it does not
+					-- listen to insert/paste text changes. Refresh the active source map
+					-- so the minimap tracks typing without needing a close/open cycle.
+					minimap.refresh()
+				end,
+			})
+
 			vim.api.nvim_create_autocmd("FileType", {
 				group = vim.api.nvim_create_augroup("MiniMapMouseJump", { clear = true }),
 				pattern = "minimap",
