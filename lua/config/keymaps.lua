@@ -46,6 +46,36 @@ local function current_file_label()
 	return vim.fn.fnamemodify(name, ":p")
 end
 
+local function current_real_file_path()
+	if vim.bo.buftype ~= "" then
+		return nil
+	end
+
+	local name = vim.api.nvim_buf_get_name(0)
+	if name == "" then
+		return nil
+	end
+
+	local path = vim.fn.fnamemodify(name, ":p")
+	local stat = vim.uv.fs_stat(path)
+	if not stat or stat.type ~= "file" then
+		return nil
+	end
+
+	return vim.uv.fs_realpath(path) or path
+end
+
+local function copy_current_file_path()
+	local path = current_real_file_path()
+	if not path then
+		vim.notify("Current buffer has no real local file path", vim.log.levels.WARN)
+		return
+	end
+
+	vim.fn.setreg("+", path)
+	vim.notify("Copied file path: " .. path)
+end
+
 local function normalize_range(start_line, start_col, end_line, end_col)
 	if start_line > end_line or (start_line == end_line and start_col > end_col) then
 		return end_line, end_col, start_line, start_col
@@ -97,6 +127,7 @@ end
 
 map({ "n", "v" }, "<leader>cc", copy_context, { desc = "Copy code context" })
 map({ "n", "v" }, "<space>cc", copy_context, { desc = "Copy code context" })
+map("n", "<space>cf", copy_current_file_path, { desc = "Copy current file path" })
 
 -- Move lines up/down
 map("n", "<M-Up>", ":m .-2<CR>==", { noremap = true, silent = true, desc = "Move line up" })

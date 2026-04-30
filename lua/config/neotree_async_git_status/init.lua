@@ -17,8 +17,11 @@ local M = {
 }
 
 local watchers = {}
+local worktree_watchers = {}
 local refresh_tokens = {}
 local status_cache_by_root = {}
+local full_untracked_roots = {}
+local full_untracked_tokens = {}
 local config = {}
 
 local function normalize_path(path)
@@ -39,6 +42,25 @@ end
 
 local function status_under_root(root, path)
 	return utils.is_subpath(root, path) or utils.is_subpath(path, root)
+end
+
+local function force_full_untracked_status(args)
+	local git_root = args.git_root and normalize_root_path(args.git_root)
+	if not git_root or not full_untracked_roots[git_root] then
+		return
+	end
+
+	-- Built-in git_status uses `--untracked-files=all` so untracked directories
+	-- are expanded into individual files. Neo-tree's async path defaults to
+	-- `normal`, which can render only the parent directory and disagree with
+	-- lazygit. Keep the async first pass (`no`) intact and only upgrade full scans
+	-- while a git_status tree for this worktree is actually visible.
+	for index, value in ipairs(args.status_args or {}) do
+		if value == "--untracked-files=normal" then
+			args.status_args[index] = "--untracked-files=all"
+			return
+		end
+	end
 end
 
 local function create_root(state, root_path)
@@ -120,6 +142,18 @@ local function request_async_status(state)
 		-- Request full-worktree async status and filter locally while rendering.
 		-- Neo-tree's async git cache is keyed only by worktree root, so scoped
 		-- requests cannot be safely attributed to individual source states.
+		local root_key = worktree_root and cache_key(worktree_root)
+		if root_key then
+			full_untracked_roots[root_key] = true
+			full_untracked_tokens[root_key] = (full_untracked_tokens[root_key] or 0) + 1
+			local token = full_untracked_tokens[root_key]
+			vim.defer_fn(function()
+				if full_untracked_tokens[root_key] == token then
+					full_untracked_roots[root_key] = nil
+					full_untracked_tokens[root_key] = nil
+				end
+			end, config.full_untracked_window_ms or 10000)
+		end
 		git.status_async(worktree_root or path, state.git_base_by_worktree, config.git_status_async_options or {})
 	end)
 
@@ -134,6 +168,21 @@ local function request_async_status(state)
 	end, config.async_cache_render_delay or 250)
 end
 
+local function schedule_visible_refresh(worktree_root)
+	utils.debounce("async_neotree_git_status:" .. worktree_root, function()
+		manager._for_each_state(M.name, function(state)
+			if state.path and renderer.window_exists(state) and status_under_root(worktree_root, state.path) then
+				request_async_status(state)
+			end
+		end)
+	end, config.watch_debounce or 1000, utils.debounce_strategy.CALL_LAST_ONLY)
+end
+
+local function start_fs_event(handle, path, opts, callback)
+	local ok, result = pcall(handle.start, handle, path, opts, callback)
+	return ok and result ~= nil
+end
+
 local function watch_git_dir(worktree_root, git_dir)
 	if not worktree_root or not git_dir or watchers[worktree_root] then
 		return
@@ -144,24 +193,54 @@ local function watch_git_dir(worktree_root, git_dir)
 		return
 	end
 
-	local ok = pcall(handle.start, handle, git_dir, { watch_entry = false, stat = false, recursive = false }, function(err, fname)
+	local started = start_fs_event(handle, git_dir, { watch_entry = false, stat = false, recursive = false }, function(err, fname)
 		if err or not fname or vim.endswith(fname, ".lock") or fname:find("_null%-ls_") then
 			return
 		end
 
 		vim.schedule(function()
-			utils.debounce("async_neotree_git_status:" .. worktree_root, function()
-				manager._for_each_state(M.name, function(state)
-					if state.path and renderer.window_exists(state) and status_under_root(worktree_root, state.path) then
-						request_async_status(state)
-					end
-				end)
-			end)
-		end, config.watch_debounce or 1000, utils.debounce_strategy.CALL_LAST_ONLY)
+			schedule_visible_refresh(worktree_root)
+		end)
 	end)
 
-	if ok then
+	if started then
 		watchers[worktree_root] = handle
+	else
+		handle:close()
+	end
+end
+
+local function watch_worktree(worktree_root)
+	if not worktree_root or worktree_watchers[worktree_root] then
+		return
+	end
+
+	local handle = uv.new_fs_event()
+	if not handle then
+		return
+	end
+
+	local callback = function(err, fname)
+		if err then
+			return
+		end
+
+		-- Git metadata changes are handled by the dedicated git-dir watcher. Filtering
+		-- them here avoids duplicate refresh storms while lazygit or Git updates `.git`.
+		if fname == ".git" or (fname and fname:find("^%.git[/\\]")) then
+			return
+		end
+
+		vim.schedule(function()
+			schedule_visible_refresh(worktree_root)
+		end)
+	end
+
+	local started = start_fs_event(handle, worktree_root, { watch_entry = false, stat = false, recursive = true }, callback)
+		or start_fs_event(handle, worktree_root, { watch_entry = false, stat = false, recursive = false }, callback)
+
+	if started then
+		worktree_watchers[worktree_root] = handle
 	else
 		handle:close()
 	end
@@ -170,6 +249,7 @@ end
 local function ensure_git_watcher(path)
 	git.find_worktree_info(path, function(worktree_root, git_dir)
 		watch_git_dir(worktree_root, git_dir)
+		watch_worktree(worktree_root)
 	end)
 end
 
@@ -220,6 +300,11 @@ function M.setup(source_config, global_config)
 		watch_debounce = 1000,
 		git_status_async_options = global_config.git_status_async_options or {},
 	}, source_config.async_git_status or {})
+
+	manager.subscribe(M.name, {
+		event = events.BEFORE_GIT_STATUS,
+		handler = force_full_untracked_status,
+	})
 
 	manager.subscribe(M.name, {
 		event = events.GIT_STATUS_CHANGED,
@@ -295,6 +380,11 @@ function M.setup(source_config, global_config)
 				handle:stop()
 				handle:close()
 				watchers[root] = nil
+			end
+			for root, handle in pairs(worktree_watchers) do
+				handle:stop()
+				handle:close()
+				worktree_watchers[root] = nil
 			end
 		end,
 	})

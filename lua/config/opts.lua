@@ -25,6 +25,7 @@ opt.wrap = true -- Disable line wrap
 opt.mouse = "a" -- Enable mouse support
 opt.swapfile = false -- Disable swap file
 opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+opt.autoread = true -- Reload unchanged buffers when files change on disk
 
 -- copypaste with system clipboard
 opt.clipboard = "unnamedplus"
