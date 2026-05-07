@@ -68,8 +68,22 @@ return {
 		vim.o.autoread = true
 
 		local opencode = require("opencode")
-		local function code_diff(cmd)
-			vim.cmd(cmd)
+		local current_hunk_diff = require("config.current_hunk_diff")
+		local function with_mini_diff(callback)
+			local ok, mini_diff = pcall(require, "mini.diff")
+			if not ok then
+				vim.notify("mini.diff is not available", vim.log.levels.WARN)
+				return
+			end
+
+			mini_diff.enable(0)
+			callback(mini_diff)
+		end
+
+		local function goto_diff_hunk(direction)
+			with_mini_diff(function(mini_diff)
+				mini_diff.goto_hunk(direction)
+			end)
 		end
 
 		-- CLI toggles (matching your <space>a* prefix)
@@ -125,54 +139,60 @@ return {
 
 		-- Review workflow for opencode edits
 		vim.keymap.set("n", "<space>aw", function()
-			code_diff("CodeDiff")
-		end, { desc = "Review Workspace Diff" })
+			current_hunk_diff.show()
+		end, { desc = "Review Current Hunk Diff" })
 		vim.keymap.set("n", "<space>arw", function()
-			code_diff("CodeDiff")
-		end, { desc = "Review Workspace Diff" })
+			current_hunk_diff.show()
+		end, { desc = "Review Current Hunk Diff" })
 
 		vim.keymap.set("n", "<space>aH", function()
-			code_diff("CodeDiff file HEAD")
-		end, { desc = "Review File vs HEAD" })
+			current_hunk_diff.show()
+		end, { desc = "Review Current Hunk Diff" })
 		vim.keymap.set("n", "<space>arh", function()
-			code_diff("CodeDiff file HEAD")
-		end, { desc = "Review File vs HEAD" })
+			current_hunk_diff.show()
+		end, { desc = "Review Current Hunk Diff" })
 
 		vim.keymap.set("n", "<space>aj", function()
-			require("gitsigns").next_hunk()
+			goto_diff_hunk("next")
 		end, { desc = "Next Hunk" })
 		vim.keymap.set("n", "<space>arj", function()
-			require("gitsigns").next_hunk()
+			goto_diff_hunk("next")
 		end, { desc = "Next Hunk" })
 
 		vim.keymap.set("n", "<space>ak", function()
-			require("gitsigns").prev_hunk()
+			goto_diff_hunk("prev")
 		end, { desc = "Prev Hunk" })
 		vim.keymap.set("n", "<space>ark", function()
-			require("gitsigns").prev_hunk()
+			goto_diff_hunk("prev")
 		end, { desc = "Prev Hunk" })
 
 		vim.keymap.set("n", "<space>aP", function()
-			require("gitsigns").preview_hunk()
-		end, { desc = "Preview Hunk" })
+			current_hunk_diff.toggle()
+		end, { desc = "Toggle Current Hunk Diff" })
 		vim.keymap.set("n", "<space>arp", function()
-			require("gitsigns").preview_hunk()
-		end, { desc = "Preview Hunk" })
+			current_hunk_diff.toggle()
+		end, { desc = "Toggle Current Hunk Diff" })
+		vim.keymap.set("n", "<space>aB", function()
+			current_hunk_diff.toggle_buffer_overlay()
+		end, { desc = "Toggle Buffer Diff Overlay" })
+		vim.keymap.set("n", "<space>arb", function()
+			current_hunk_diff.toggle_buffer_overlay()
+		end, { desc = "Toggle Buffer Diff Overlay" })
 
 		vim.keymap.set("n", "<space>aq", function()
-			vim.cmd("tabclose")
+			current_hunk_diff.clear()
 		end, { desc = "Close Diff Review" })
 		vim.keymap.set("n", "<space>arq", function()
-			vim.cmd("tabclose")
+			current_hunk_diff.clear()
 		end, { desc = "Close Diff Review" })
 
 		vim.api.nvim_create_user_command("OpenCodeReview", function()
-			code_diff("CodeDiff")
-		end, { desc = "Open workspace diff review for opencode edits" })
+			current_hunk_diff.show()
+		end, { desc = "Open current hunk diff review for opencode edits" })
 
 		vim.api.nvim_create_user_command("OpenCodeReviewFile", function()
-			code_diff("CodeDiff file HEAD")
-		end, { desc = "Open current file diff review against HEAD" })
+			current_hunk_diff.show()
+		end, { desc = "Open current hunk diff review" })
 
 		-- Operator for ranges (vim-native feel, bonus feature)
 		vim.keymap.set({ "n", "x" }, "go", function()

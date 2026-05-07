@@ -10,6 +10,7 @@ local signs = {
 }
 
 local hunk_focus = require("config.git_hunk_focus")
+local current_hunk_diff = require("config.current_hunk_diff")
 
 return {
 	{
@@ -63,46 +64,29 @@ return {
 		},
 	},
 	{
-		"esmuellert/vscode-diff.nvim",
-		dependencies = { "MunifTanjim/nui.nvim" },
-		cmd = "CodeDiff",
+		"nvim-mini/mini.diff",
+		version = false,
+		event = { "BufReadPre", "BufNewFile" },
 		opts = {
-			highlights = {
-				line_insert = "DiffAdd",
-				line_delete = "DiffDelete",
+			view = {
+				style = "sign",
+				signs = { add = signs.add.text, change = signs.change.text, delete = signs.delete.text },
 			},
-			explorer = {
-				position = "left",
-				width = 40,
-				view_mode = "tree",
-			},
-			keymaps = {
-				view = {
-					quit = "q",
-					toggle_explorer = "<leader>b",
-					next_hunk = "]c",
-					prev_hunk = "[c",
-					next_file = "]f",
-					prev_file = "[f",
-				},
+			mappings = {
+				apply = "gh",
+				reset = "gH",
+				textobject = "gh",
+				goto_first = "",
+				goto_prev = "",
+				goto_next = "",
+				goto_last = "",
 			},
 		},
 		keys = {
-			{ "<space>gd", "<cmd>CodeDiff<cr>", desc = "Diff View (Explorer)" },
-			{ "<space>gD", "<cmd>tabclose<cr>", desc = "Close Diff View" },
-			{ "<space>gfh", "<cmd>CodeDiff file HEAD<cr>", desc = "File History" },
-		},
-	},
-	{
-		"sindrets/diffview.nvim",
-		cmd = { "DiffviewOpen" },
-		opts = {
-			enhanced_diff_hl = true,
-			view = {
-				default = {
-					layout = "diff2_horizontal",
-				},
-			},
+			{ "<space>gd", current_hunk_diff.toggle, desc = "Toggle Current Hunk Diff" },
+			{ "<space>gfd", current_hunk_diff.toggle_buffer_overlay, desc = "Toggle Buffer Diff Overlay" },
+			{ "<space>gD", current_hunk_diff.toggle_tracking, desc = "Toggle Buffer Diff Tracking" },
+			{ "<space>gfh", current_hunk_diff.toggle, desc = "Toggle Current Hunk Diff" },
 		},
 	},
 }
