@@ -2,6 +2,76 @@ local cmd = vim.cmd
 
 local open_grug_far = require("config.finder").find_and_replace
 
+local CURATED_CONFIG_FILENAMES = {
+	".neotree-curated",
+	".nvim/neotree-curated",
+}
+
+local curated_renderer_patched = false
+local curated_config_watchers = {}
+
+local function get_curated_project_root(config_path)
+	local utils = require("neo-tree.utils")
+	local config_dir = utils.normalize_path(vim.fs.dirname(config_path))
+	if vim.fs.basename(config_dir) == ".nvim" then
+		return utils.normalize_path(vim.fs.dirname(config_dir))
+	end
+	return config_dir
+end
+
+local function refresh_curated_states(config_path)
+	local manager = require("neo-tree.sources.manager")
+	local should_refresh = false
+	manager._for_each_state("filesystem", function(state)
+		local cached = state.curated_spec
+		if cached and cached.config_path == config_path then
+			state.curated_spec = nil
+			should_refresh = true
+		end
+	end)
+	if should_refresh then
+		manager.refresh("filesystem")
+	end
+end
+
+local function ensure_curated_config_watcher(config_path)
+	if curated_config_watchers[config_path] then
+		return
+	end
+
+	local watcher = vim.uv.new_fs_event()
+	if not watcher then
+		return
+	end
+
+	-- Curated view depends on a project-local line-based config that may be edited outside the
+	-- current buffer, so watch the chosen config file and invalidate cached specs.
+	local ok, err = watcher:start(config_path, {}, function(watch_err)
+		if watch_err then
+			vim.schedule(function()
+				vim.notify(
+					("Neo-tree curated watcher error: %s (%s)"):format(watch_err, config_path),
+					vim.log.levels.WARN
+				)
+			end)
+			return
+		end
+		vim.schedule(function()
+			refresh_curated_states(config_path)
+		end)
+	end)
+	if not ok then
+		watcher:close()
+		vim.notify(
+			("Neo-tree curated watcher failed: %s (%s)"):format(err or "unknown error", config_path),
+			vim.log.levels.WARN
+		)
+		return
+	end
+
+	curated_config_watchers[config_path] = watcher
+end
+
 local function refresh_on_next_open(source)
 	local ok, manager = pcall(require, "neo-tree.sources.manager")
 	if not ok then
@@ -38,8 +108,215 @@ local function reveal_filesystem_view()
 	command.execute({ action = "focus", source = "filesystem", position = "left", reveal = true })
 end
 
+local function get_curated_config_path(start_path)
+	local utils = require("neo-tree.utils")
+	local path = start_path or vim.fn.getcwd()
+	local stat = vim.uv.fs_stat(path)
+	if stat and stat.type == "file" then
+		path = vim.fs.dirname(path)
+	end
+	local matches = vim.fs.find(CURATED_CONFIG_FILENAMES, {
+		path = path,
+		upward = true,
+		type = "file",
+	})
+	if not matches or not matches[1] then
+		return nil
+	end
+	return utils.normalize_path(matches[1])
+end
+
+local function parse_curated_config(config_path)
+	local utils = require("neo-tree.utils")
+	local stat = vim.uv.fs_stat(config_path)
+	if not stat then
+		return nil, "config file is missing"
+	end
+
+	local lines = vim.fn.readfile(config_path)
+	local root_path = get_curated_project_root(config_path)
+	local entries = {}
+	local seen_paths = {}
+	local warnings = {}
+	for index, raw_line in ipairs(lines) do
+		local line = vim.trim(raw_line)
+		if line ~= "" and not vim.startswith(line, "#") then
+			local absolute_path
+			if utils.abspath_prefix(line) then
+				absolute_path = utils.normalize_path(line)
+			else
+				absolute_path = utils.normalize_path(utils.path_join(root_path, line))
+			end
+
+			if absolute_path ~= root_path and not utils.is_subpath(root_path, absolute_path) then
+				return nil, ("line %d must stay inside the project root: %s"):format(index, line)
+			end
+
+			local entry_stat = vim.uv.fs_stat(absolute_path)
+			if not entry_stat or (entry_stat.type ~= "directory" and entry_stat.type ~= "file") then
+				warnings[#warnings + 1] = ("Skipping missing path: %s"):format(line)
+			elseif not seen_paths[absolute_path] then
+				seen_paths[absolute_path] = true
+				entries[#entries + 1] = {
+					path = absolute_path,
+					kind = entry_stat.type,
+				}
+			end
+		end
+	end
+
+	if vim.tbl_isempty(entries) then
+		return nil, "config file has no valid existing file or directory entries"
+	end
+
+	return {
+		config_path = config_path,
+		root_path = root_path,
+		entries = entries,
+		mtime = stat.mtime,
+		warnings = warnings,
+	}
+end
+
+local function get_curated_spec(state)
+	local config_path = get_curated_config_path(state.path)
+	if not config_path then
+		state.curated_spec = nil
+		return nil
+	end
+
+	local stat = vim.uv.fs_stat(config_path)
+	if not stat then
+		state.curated_spec = nil
+		return nil
+	end
+
+	local cached = state.curated_spec
+	if cached and cached.config_path == config_path then
+		local cached_mtime = cached.mtime or {}
+		local stat_mtime = stat.mtime or {}
+		if cached_mtime.sec == stat_mtime.sec and cached_mtime.nsec == stat_mtime.nsec then
+			return cached
+		end
+	end
+
+	local spec, err = parse_curated_config(config_path)
+	if not spec then
+		vim.notify(
+			("Neo-tree curated view: %s (%s)"):format(err, config_path),
+			vim.log.levels.WARN
+		)
+		state.curated_spec = nil
+		return nil
+	end
+
+	ensure_curated_config_watcher(config_path)
+	for _, warning in ipairs(spec.warnings or {}) do
+		vim.notify(("Neo-tree curated view: %s"):format(warning), vim.log.levels.WARN)
+	end
+	state.curated_spec = spec
+	return spec
+end
+
+local function item_matches_curated_entry(item_path, entry)
+	local utils = require("neo-tree.utils")
+	if item_path == entry.path then
+		return true
+	end
+	if utils.is_subpath(item_path, entry.path) then
+		return true
+	end
+	if entry.kind == "directory" and utils.is_subpath(entry.path, item_path) then
+		return true
+	end
+	return false
+end
+
+local function should_keep_curated_item(item, spec)
+	for _, entry in ipairs(spec.entries) do
+		if item_matches_curated_entry(item.path, entry) then
+			return true
+		end
+	end
+	return false
+end
+
+local function prune_curated_items(items, spec)
+	local pruned = {}
+	for _, item in ipairs(items or {}) do
+		local children = nil
+		if item.children then
+			children = prune_curated_items(item.children, spec)
+		end
+
+		if should_keep_curated_item(item, spec) or (children and #children > 0) then
+			local copy = vim.deepcopy(item)
+			if copy.children then
+				copy.children = children or {}
+			end
+			-- Show an in-tree mode badge without creating a separate Neo-tree source.
+			if copy.path == spec.root_path then
+				copy.name = copy.name .. " [curated]"
+			end
+			pruned[#pruned + 1] = copy
+		end
+	end
+	return pruned
+end
+
+local function setup_curated_renderer_patch()
+	if curated_renderer_patched then
+		return
+	end
+	curated_renderer_patched = true
+
+	local renderer = require("neo-tree.ui.renderer")
+	local original_show_nodes = renderer.show_nodes
+
+	renderer.show_nodes = function(source_items, state, parent_id, callback)
+		if state and state.name == "filesystem" and state.curated_mode then
+			local spec = get_curated_spec(state)
+			if spec and #spec.entries > 0 then
+				source_items = prune_curated_items(source_items, spec)
+			else
+				state.curated_mode = false
+			end
+		end
+		return original_show_nodes(source_items, state, parent_id, callback)
+	end
+end
+
+local function toggle_curated_filesystem_view(state)
+	local manager = require("neo-tree.sources.manager")
+	local command = require("neo-tree.command")
+
+	if not state or state.name ~= "filesystem" then
+		command.execute({ action = "focus", source = "filesystem", position = "left" })
+		state = manager.get_state("filesystem")
+	end
+
+	local spec = get_curated_spec(state)
+	if not spec or vim.tbl_isempty(spec.entries) then
+		vim.notify(
+			("Neo-tree curated view: no config found (looked for %s)"):format(table.concat(CURATED_CONFIG_FILENAMES, ", ")),
+			vim.log.levels.INFO
+		)
+		return
+	end
+
+	state.curated_mode = not state.curated_mode
+	manager.refresh("filesystem")
+	command.execute({ action = "focus", source = "filesystem", position = "left" })
+	vim.notify(
+		("Neo-tree curated view: %s"):format(state.curated_mode and "on" or "off"),
+		vim.log.levels.INFO
+	)
+end
+
 local function config()
 	local neoTree = require("neo-tree")
+
+	setup_curated_renderer_patch()
 
 	cmd("let g:neo_tree_remove_legacy_commands = 1")
 	-- handle rename when file is modified
@@ -48,6 +325,15 @@ local function config()
 	end
 
 	local events = require("neo-tree.events")
+
+	vim.api.nvim_create_autocmd("BufWritePost", {
+		group = vim.api.nvim_create_augroup("NeoTreeCuratedConfig", { clear = true }),
+		pattern = CURATED_CONFIG_FILENAMES,
+		callback = function(args)
+			local utils = require("neo-tree.utils")
+			refresh_curated_states(utils.normalize_path(args.file))
+		end,
+	})
 
 	neoTree.setup({
 		sources = {
@@ -89,6 +375,7 @@ local function config()
 				mappings = {
 					["u"] = "navigate_up",
 					["H"] = "toggle_hidden",
+					["J"] = "toggle_curated_view",
 					["/"] = "fuzzy_finder",
 					["D"] = "fuzzy_finder_directory",
 					--["/"] = "filter_as_you_type", -- this was the default until v1.28
@@ -228,6 +515,10 @@ local function config()
 				}
 				open_grug_far(opts)
 			end,
+
+			toggle_curated_view = function(state)
+				toggle_curated_filesystem_view(state)
+			end,
 		},
 		event_handlers = {
 			{ event = events.FILE_MOVED, handler = on_move },
@@ -255,5 +546,6 @@ return {
 		{ "<leader>l", toggle_filesystem_view, desc = "Toggle Neotree" },
 		{ "<leader>k", toggle_git_status_view, desc = "Toggle Git Status Tree" },
 		{ "<leader>gf", reveal_filesystem_view, desc = "Reveal In Noetree" },
+		{ "<leader>j", toggle_curated_filesystem_view, desc = "Toggle Neotree Curated View" },
 	},
 }
