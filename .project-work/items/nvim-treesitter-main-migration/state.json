@@ -1,0 +1,22 @@
+{
+  "id": "nvim-treesitter-main-migration",
+  "title": "Migrate nvim-treesitter from archived master to main branch",
+  "status": "active",
+  "goal": "Remove the archived-branch fragility permanently (audit issue #2): migrate nvim-treesitter to the main branch, port textobjects, moonbit, markdown handling; preserve highlighting/folds/indent/textobjects; verify per-language; commit and close.",
+  "currentStep": "Phase 4 verification + commit (Phases 1-3 done)",
+  "completedSteps": [
+    "Phase 1: nvim-treesitter on main, config rewritten, patch deleted, moonbit via User TSUpdate",
+    "Phase 2: textobjects ported to keymap-based move API",
+    "Phase 3: 21 parsers installed, vendored moonbit queries refreshed, per-language verified"
+  ],
+  "blockedSteps": [],
+  "deferredSteps": [
+    "incremental_selection dropped (no successor exists)"
+  ],
+  "parent": null,
+  "children": [],
+  "planRevision": 2,
+  "updatedAt": "2026-08-03T06:30:00Z",
+  "lastRole": "agent",
+  "lastSummary": "Phases 1-3 complete and verified: highlighting, markdown injections, textobjects keymaps, mini.ai, ufo compat, moonbit parser+queries all PASS; startup 120ms vs 118ms baseline. Phase 4: health+startup verified, commit pending."
+}

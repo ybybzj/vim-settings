@@ -1,6 +1,7 @@
 return {
 	server_name = "vtsls",
 	debugger_name = "js-debug-adapter",
+	tools = { "prettierd", "eslint_d" },
 	dependencies = {
 		{
 			"dmmulroy/tsc.nvim",
@@ -20,8 +21,8 @@ return {
 		typescriptreact = { "prettierd", "prettier" },
 	},
 	linter = {
-		javascript = { "eslint" },
-		typescript = { "eslint" },
+		javascript = { "eslint_d" },
+		typescript = { "eslint_d" },
 	},
 	opts = {
 		settings = {

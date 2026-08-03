@@ -1,6 +1,4 @@
-;; MoonBit queries vendored from moonbitlang/tree-sitter-moonbit so the
-;; custom nvim-treesitter parser has runtime highlight definitions.
-
+;; MoonBit queries synced from moonbitlang/tree-sitter-moonbit @ 5435c307c6cf2ef0d508a99047b06f35a4308444 (2026-08-03)
 ;; Interpolation
 
 (interpolator) @none
@@ -76,6 +74,7 @@
 ; Type definitions
 
 (enum_definition (identifier) @type.definition)
+(extenum_definition (identifier) @type.definition)
 (struct_definition (identifier) @type.definition)
 (tuple_struct_definition (identifier) @type.definition)
 (type_definition (identifier) @type.definition)
@@ -87,6 +86,8 @@
 (trait_alias_targets (identifier) @type.definition)
 (trait_alias_targets (dot_identifier) @type.definition)
 (trait_alias_target (identifier) @type.definition)
+(extenum_extension (identifier) @type)
+(extenum_extension (dot_uppercase_identifier) @type)
 
 ; Builtin types
 
@@ -125,6 +126,10 @@
 (struct_field_declaration (lowercase_identifier) @variable.member)
 (struct_expression (labeled_expression (lowercase_identifier) @variable.member))
 (struct_expression (labeled_expression_pun (lowercase_identifier) @variable.member))
+(struct_expression (labeled_expression (lowercase_identifier) @variable.member))
+(struct_expression (labeled_expression_pun (lowercase_identifier) @variable.member))
+(struct_field_expression (labeled_expression (lowercase_identifier) @variable.member))
+(struct_field_expression (labeled_expression_pun (lowercase_identifier) @variable.member))
 (struct_field_expression (labeled_expression (lowercase_identifier) @variable.member))
 (struct_field_expression (labeled_expression_pun (lowercase_identifier) @variable.member))
 (struct_pattern (struct_field_pattern (labeled_pattern (lowercase_identifier) @variable.member)))
@@ -141,7 +146,7 @@
           "#coverage.skip"))
 ((attribute) @attribute.builtin
  (#match? @attribute.builtin
-          "^#deprecated\(.*\)"))
+          "^#deprecated\\(.*\\)"))
 
 ;; Functions
 
@@ -164,9 +169,11 @@
 (struct_constructor_declaration (lowercase_identifier) @function)
 (function_alias_targets (lowercase_identifier) @function)
 (function_alias_targets (dot_lowercase_identifier) @function)
+(function_alias_targets (dot_lowercase_identifier) @function)
 (function_alias_target (lowercase_identifier) @function)
 (trait_method_declaration (function_identifier) @function)
 (impl_definition (function_identifier) @function)
+(trait_method_extension (extended_method) @function.method)
 
 ; Method definitions
 
@@ -193,7 +200,7 @@
   "=" "+=" "-=" "*=" "/=" "%="
   "<" ">" ">=" "<=" "==" "!="
   "&&" "||"
-  "|>"
+  "|>" "<|" "<+" "<?"
   "=>" "->"
   "!" "!!" "?"
 ] @operator
@@ -203,16 +210,16 @@
 [ (mutability) "mut" ] @keyword.modifier
 
 [
-  "struct" "enum" "type" "trait" "typealias" "traitalias" "suberror"
+  "struct" "enum" "extenum" "type" "trait" "typealias" "traitalias" "suberror"
 ] @keyword.type
 
 [
-  "pub" "priv" "readonly" "all" "open" "extern"
+  "pub" "priv" "readonly" "all" "open" "extern" "declare"
 ] @keyword.modifier
 
 [
   "guard" "let" "letrec" "and" "const"
-  "with" "as" "is" "lexmatch?" "using" "where" "longest" "nobreak"
+  "with" "as" "is" "lexmatch?" "lexscan" "using" "where" "longest" "nobreak"
   "defer"
 ] @keyword
 
@@ -220,7 +227,7 @@
 
 [ "package" "import" ] @keyword.import
 
-[ "fn" "test" "impl" "fnalias" ] @keyword.function
+[ "fn" "test" "impl" "fnalias" "extend" ] @keyword.function
 "return" @keyword.return
 [ "while" "loop" "for" "break" "continue" "in" ] @keyword.repeat
 
@@ -270,6 +277,8 @@
   "..<="
   "..>"
   "..>="
+  ">.."
+  ">=.."
 ] @operator
 
 [
@@ -282,6 +291,7 @@
 
 (string_interpolation) @string
 (string_literal) @string
+(bytes_literal) @string
 (multiline_string_literal) @string
 (escape_sequence) @string.escape
 
@@ -292,6 +302,8 @@
 (integer_literal) @number
 (float_literal) @number.float
 (boolean_literal) @boolean
+(byte_literal) @character
+(byte_escape_literal) @character
 (char_literal) @character
 
 ;; Comments

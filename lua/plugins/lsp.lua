@@ -6,7 +6,7 @@ return {
 	{
 		"williamboman/mason.nvim",
 		opts = {
-			ensure_installed = settings.debuggers(),
+			ensure_installed = vim.list_extend(settings.debuggers(), settings.tools()),
 			automatic_installation = false,
 		},
 	},

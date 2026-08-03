@@ -1,191 +1,186 @@
+-- nvim-treesitter main branch (v1.x rewrite).
+--
+-- Migration from the frozen `master` branch (last commit 2025-05, locked for
+-- Nvim 0.11) to `main` (actively maintained, requires Nvim 0.12+). The main
+-- branch is an incompatible rewrite:
+--   * does NOT support lazy-loading (lazy = false)
+--   * parsers install to stdpath('data')/site, NOT into the plugin dir
+--   * highlight/folds/indent are opt-in per filetype (not auto-enabled)
+--   * custom parsers register via a `User TSUpdate` autocmd
+--   * old configs.setup() monolith is gone; use setup{} + install{}
+-- The 70-line directive patch (old master's set-lang-from-info-string! shims)
+-- is deleted: main's markdown injections use native #set! predicates.
+--
+-- Folds are deliberately NOT configured here: nvim-ufo owns folds (it forces
+-- foldmethod=manual and reads folds.scm through its own provider). Enabling
+-- native vim.treesitter.foldexpr() would fight ufo.
+
+local PARSERS = {
+	"c",
+	"lua",
+	"rust",
+	"zig",
+	"javascript",
+	"typescript",
+	"go",
+	"css",
+	"html",
+	"tsx",
+	"toml",
+	"yaml",
+	"markdown",
+	"markdown_inline",
+	"latex",
+	"moonbit",
+	-- injection helper parsers (needed for lua/js/markdown injections)
+	"comment",
+	"query",
+	"regex",
+	"bash",
+	"vim",
+}
+
+-- Filetypes that get treesitter-based indentation. indentexpr is experimental
+-- on main, so gate it to known code languages only (not help/qf/terminal/etc).
+local INDENT_FTS = {
+	c = true,
+	lua = true,
+	rust = true,
+	zig = true,
+	javascript = true,
+	typescript = true,
+	javascriptreact = true,
+	typescriptreact = true,
+	go = true,
+	css = true,
+	html = true,
+	tsx = true,
+	toml = true,
+	yaml = true,
+	markdown = true,
+	moonbit = true,
+}
+
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
+		branch = "main", -- REQUIRED: default branch is the frozen master
+		lazy = false, -- main does not support lazy-loading
+		build = ":TSUpdate", -- updates already-installed parsers only
 		dependencies = {
-			"nvim-treesitter/nvim-treesitter-textobjects",
+			"JoosepAlviste/nvim-ts-context-commentstring",
 		},
-		build = ":TSUpdate",
 		config = function()
-			local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-			parser_config.moonbit = {
-				install_info = {
-					url = "https://github.com/moonbitlang/tree-sitter-moonbit",
-					files = { "src/parser.c", "src/scanner.c" },
-					branch = "main",
-				},
-				filetype = "moonbit",
+			require("nvim-treesitter").setup {
+				-- install_dir defaults to stdpath('data')/site — fine.
 			}
 
-			local configs = require("nvim-treesitter.configs")
-
-			configs.setup({
-				ensure_installed = {
-					"c",
-					"lua",
-					"rust",
-					"zig",
-					"javascript",
-					"typescript",
-					"go",
-					"css",
-					"html",
-					"tsx",
-					"toml",
-					"yaml",
-					"markdown",
-					"markdown_inline",
-					"latex",
-					"moonbit",
-				},
-				sync_install = false,
-				highlight = { enable = true },
-				indent = { enable = true },
-
-				incremental_selection = {
-					enable = true,
-					keymaps = {
-						init_selection = "gv",
-						node_incremental = "]",
-						scope_incremental = "}",
-						node_decremental = "[",
-					},
-				},
-				matchup = { enable = true },
-				autopairs = { enable = true },
-				textobjects = {
-					select = {
-						enabled = false,
-					},
-					-- select = {
-					-- 	enable = true,
-					--
-					-- 	-- Automatically jump forward to textobj, similar to targets.vim
-					-- 	lookahead = true,
-					--
-					-- 	keymaps = {
-					-- 		-- You can use the capture groups defined in textobjects.scm
-					-- 		["af"] = "@function.outer",
-					-- 		["if"] = "@function.inner",
-					-- 		["ac"] = "@call.outer",
-					-- 		["ic"] = "@call.inner",
-					-- 		["ib"] = "@block.inner",
-					-- 		["ab"] = "@block.outer",
-					-- 		["ip"] = "@parameter.inner",
-					-- 		["ap"] = "@parameter.outer",
-					--
-					-- 		-- Or you can define your own textobjects like this
-					-- 		-- ["iF"] = {
-					-- 		-- 	python = "(function_definition) @function",
-					-- 		-- 	cpp = "(function_definition) @function",
-					-- 		-- 	c = "(function_definition) @function",
-					-- 		-- 	java = "(method_declaration) @function",
-					-- 		-- },
-					-- 	},
-					-- },
-					move = {
-						enable = true,
-						set_jumps = true, -- whether to set jumps in the jumplist
-						goto_next_start = {
-							["]B"] = "@block.outer",
-							["]M"] = "@function.outer",
-							["]["] = "@class.outer",
+			-- Custom moonbit parser (not in main's manifest).
+			-- Registration MUST happen in a `User TSUpdate` autocmd: install{}
+			-- fires reload_parsers() first (which executes this autocmd), then
+			-- norm_languages() filters by parsers[lang] ~= nil. Registered here
+			-- BEFORE install{...} below so moonbit is not skipped as unsupported.
+			vim.api.nvim_create_autocmd("User", {
+				pattern = "TSUpdate",
+				callback = function()
+					require("nvim-treesitter.parsers").moonbit = {
+						install_info = {
+							url = "https://github.com/moonbitlang/tree-sitter-moonbit",
+							-- Pin to a known-good commit for reproducibility. The repo
+							-- ships pre-generated src/parser.c, so no generate=true.
+							revision = "5435c307c6cf2ef0d508a99047b06f35a4308444",
 						},
-						goto_next_end = {
-							["]b"] = "@block.outer",
-							["]m"] = "@function.outer",
-							["]]"] = "@class.outer",
-							["]c"] = "@call.outer",
-						},
-						goto_previous_start = {
-							["[b"] = "@block.inner",
-							["[m"] = "@function.inner",
-							["[["] = "@class.inner",
-						},
-						goto_previous_end = {
-							["[B"] = "@block.outer",
-							["[M"] = "@function.outer",
-							["[]"] = "@class.outer",
-							["[c"] = "@call.outer",
-						},
-					},
-				},
+					}
+				end,
 			})
 
-			-- nvim-treesitter's archived master branch still registers a few query
-			-- directive handlers with the pre-0.12 capture shape. Neovim 0.12 passes
-			-- captures as lists of nodes, so normalize here to keep markdown
-			-- injections working in files and LSP hover floats without a full migration
-			-- to nvim-treesitter's new main-branch API.
-			local query = vim.treesitter.query
-			local directive_opts = { force = true }
+			-- Highlighting + (gated) indentation per filetype.
+			-- Folds are left to nvim-ufo (see header comment).
+			vim.api.nvim_create_autocmd("FileType", {
+				callback = function(ev)
+					local ok = pcall(vim.treesitter.start)
+					if not ok then
+						return
+					end
+					if INDENT_FTS[vim.bo[ev.buf].filetype] then
+						vim.bo[ev.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+					end
+				end,
+			})
 
-			local html_script_type_languages = {
-				importmap = "json",
-				module = "javascript",
-				["application/ecmascript"] = "javascript",
-				["text/ecmascript"] = "javascript",
-			}
-
-			local language_aliases = {
-				ex = "elixir",
-				pl = "perl",
-				sh = "bash",
-				uxn = "uxntal",
-				ts = "typescript",
-			}
-
-			local function first_node(match, capture_id)
-				local node = match[capture_id]
-				if type(node) == "table" then
-					node = node[1]
-				end
-				return node
-			end
-
-			local function parser_from_markdown_info(injection_alias)
-				local filetype = vim.filetype.match({ filename = "a." .. injection_alias })
-				return filetype or language_aliases[injection_alias] or injection_alias
-			end
-
-			query.add_directive("set-lang-from-mimetype!", function(match, _, source, pred, metadata)
-				local node = first_node(match, pred[2])
-				if not node then
-					return
-				end
-
-				local type_attr_value = vim.treesitter.get_node_text(node, source)
-				local configured = html_script_type_languages[type_attr_value]
-				if configured then
-					metadata["injection.language"] = configured
-				else
-					local parts = vim.split(type_attr_value, "/", {})
-					metadata["injection.language"] = parts[#parts]
-				end
-			end, directive_opts)
-
-			query.add_directive("set-lang-from-info-string!", function(match, _, source, pred, metadata)
-				local node = first_node(match, pred[2])
-				if not node then
-					return
-				end
-
-				local injection_alias = vim.treesitter.get_node_text(node, source):lower()
-				metadata["injection.language"] = parser_from_markdown_info(injection_alias)
-			end, directive_opts)
-
-			query.add_directive("downcase!", function(match, _, source, pred, metadata)
-				local id = pred[2]
-				local node = first_node(match, id)
-				if not node then
-					return
-				end
-
-				local text = vim.treesitter.get_node_text(node, source, { metadata = metadata[id] }) or ""
-				metadata[id] = metadata[id] or {}
-				metadata[id].text = string.lower(text)
-			end, directive_opts)
+			-- First install: async (do NOT block startup with :wait()). The build
+			-- step (:TSUpdate) only updates already-installed parsers, so the
+			-- initial install must happen here. First open after a fresh install
+			-- may lack highlights until the async install finishes.
+			require("nvim-treesitter").install(PARSERS)
 		end,
 	},
+
+	-- Textobjects: ported to main's keymap-based API.
+	-- Current config keeps `select` DISABLED (only move is enabled) — preserved.
+	{
+		"nvim-treesitter/nvim-treesitter-textobjects",
+		branch = "main",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+		event = "BufReadPost",
+		config = function()
+			require("nvim-treesitter-textobjects").setup {
+				move = { set_jumps = true },
+			}
+
+			local move = require("nvim-treesitter-textobjects.move")
+
+			-- goto_next_start
+			vim.keymap.set({ "n", "x", "o" }, "]B", function()
+				move.goto_next_start("@block.outer", "textobjects")
+			end, { desc = "Next block start" })
+			vim.keymap.set({ "n", "x", "o" }, "]M", function()
+				move.goto_next_start("@function.outer", "textobjects")
+			end, { desc = "Next function start" })
+			vim.keymap.set({ "n", "x", "o" }, "][", function()
+				move.goto_next_start("@class.outer", "textobjects")
+			end, { desc = "Next class start" })
+			-- goto_next_end
+			vim.keymap.set({ "n", "x", "o" }, "]b", function()
+				move.goto_next_end("@block.outer", "textobjects")
+			end, { desc = "Next block end" })
+			vim.keymap.set({ "n", "x", "o" }, "]m", function()
+				move.goto_next_end("@function.outer", "textobjects")
+			end, { desc = "Next function end" })
+			vim.keymap.set({ "n", "x", "o" }, "]]", function()
+				move.goto_next_end("@class.outer", "textobjects")
+			end, { desc = "Next class end" })
+			vim.keymap.set({ "n", "x", "o" }, "]c", function()
+				move.goto_next_end("@call.outer", "textobjects")
+			end, { desc = "Next call end" })
+			-- goto_previous_start
+			vim.keymap.set({ "n", "x", "o" }, "[b", function()
+				move.goto_previous_start("@block.inner", "textobjects")
+			end, { desc = "Prev block start" })
+			vim.keymap.set({ "n", "x", "o" }, "[m", function()
+				move.goto_previous_start("@function.inner", "textobjects")
+			end, { desc = "Prev function start" })
+			vim.keymap.set({ "n", "x", "o" }, "[[", function()
+				move.goto_previous_start("@class.inner", "textobjects")
+			end, { desc = "Prev class start" })
+			-- goto_previous_end
+			vim.keymap.set({ "n", "x", "o" }, "[B", function()
+				move.goto_previous_end("@block.outer", "textobjects")
+			end, { desc = "Prev block end" })
+			vim.keymap.set({ "n", "x", "o" }, "[M", function()
+				move.goto_previous_end("@function.outer", "textobjects")
+			end, { desc = "Prev function end" })
+			vim.keymap.set({ "n", "x", "o" }, "[]", function()
+				move.goto_previous_end("@class.outer", "textobjects")
+			end, { desc = "Prev class end" })
+			vim.keymap.set({ "n", "x", "o" }, "[c", function()
+				move.goto_previous_end("@call.outer", "textobjects")
+			end, { desc = "Prev call end" })
+		end,
+	},
+
+	-- mini.ai: treesitter textobjects via queries (unchanged by the migration;
+	-- verified against main's textobjects.scm query format).
 	{
 		"echasnovski/mini.ai",
 		version = "*",
@@ -205,5 +200,4 @@ return {
 			})
 		end,
 	},
-	"JoosepAlviste/nvim-ts-context-commentstring",
 }
