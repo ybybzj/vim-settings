@@ -31,7 +31,8 @@ local PARSERS = {
 	"markdown",
 	"markdown_inline",
 	"latex",
-	"moonbit",
+	-- moonbit parser install/update is owned by moonbit-community/moonbit.nvim
+	-- (see lua/plugins/moonbit.lua)
 	-- injection helper parsers (needed for lua/js/markdown injections)
 	"comment",
 	"query",
@@ -75,24 +76,9 @@ return {
 				-- install_dir defaults to stdpath('data')/site — fine.
 			}
 
-			-- Custom moonbit parser (not in main's manifest).
-			-- Registration MUST happen in a `User TSUpdate` autocmd: install{}
-			-- fires reload_parsers() first (which executes this autocmd), then
-			-- norm_languages() filters by parsers[lang] ~= nil. Registered here
-			-- BEFORE install{...} below so moonbit is not skipped as unsupported.
-			vim.api.nvim_create_autocmd("User", {
-				pattern = "TSUpdate",
-				callback = function()
-					require("nvim-treesitter.parsers").moonbit = {
-						install_info = {
-							url = "https://github.com/moonbitlang/tree-sitter-moonbit",
-							-- Pin to a known-good commit for reproducibility. The repo
-							-- ships pre-generated src/parser.c, so no generate=true.
-							revision = "5435c307c6cf2ef0d508a99047b06f35a4308444",
-						},
-					}
-				end,
-			})
+			-- moonbit parser registration/install is owned by
+			-- moonbit-community/moonbit.nvim (its `User TSUpdate` autocmd +
+			-- auto_install), see lua/plugins/moonbit.lua.
 
 			-- Highlighting + (gated) indentation per filetype.
 			-- Folds are left to nvim-ufo (see header comment).

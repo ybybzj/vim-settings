@@ -37,4 +37,6 @@ Each file exports: `{ server_name, opts, formatter, linter, lspconfig, keys }`
 - nvim-treesitter runs on the `main` branch (v1.x rewrite), not frozen master.
 - Maintenance/API notes live in `docs/treesitter-main-migration.md` — read that
   before editing `lua/plugins/treesitter.lua` or `queries/moonbit/`.
+- The moonbit parser is owned by moonbit-community/moonbit.nvim
+  (`lua/plugins/moonbit.lua`); vendored queries stay in `queries/moonbit/`.
 

@@ -24,6 +24,7 @@
   "mini.ai": { "branch": "main", "commit": "bfb26d9072670c3aaefab0f53024b2f3729c8083" },
   "mini.diff": { "branch": "main", "commit": "626b8a5b93874c4d05ca25aedec56cfff0b378fb" },
   "mini.map": { "branch": "main", "commit": "86a150f1556d0293194d0327f7b4cb97c87920bb" },
+  "moonbit.nvim": { "branch": "main", "commit": "907c8240d3d2f96fa8e8569c73973e8604a7b1e6" },
   "neo-tree.nvim": { "branch": "v3.x", "commit": "84c75e7a7e443586f60508d12fc50f90d9aee14e" },
   "nerdy.nvim": { "branch": "main", "commit": "8fd18f0075c480b4e0865464dcd4fb7a42c6889e" },
   "nlsp-settings.nvim": { "branch": "main", "commit": "d337022c9f8d4e81c4ce6a95b5736d68c2a20d20" },

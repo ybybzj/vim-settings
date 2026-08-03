@@ -33,13 +33,14 @@ when editing the config. Migration performed 2026-08-03 (commits `6d2abf0`,
 
 ## moonbit parser
 
-- Custom-registered via a `User TSUpdate` autocmd (see
-  `lua/plugins/treesitter.lua`), pinned to a specific tree-sitter-moonbit
-  revision. It must be registered BEFORE `install{...}` runs, otherwise
-  `norm_languages` skips it as unsupported.
+- Owned by **moonbit-community/moonbit.nvim** (see `lua/plugins/moonbit.lua`):
+  it registers moonbitlang/tree-sitter-moonbit via its own `User TSUpdate`
+  autocmd and auto-installs it (`treesitter.auto_install`). Do NOT re-add the
+  old custom registration here — the plugin is the single owner.
 - Vendored queries in `queries/moonbit/` are synced from upstream
-  moonbitlang/tree-sitter-moonbit (with a provenance header). Refresh from
-  upstream rather than hand-editing.
+  moonbitlang/tree-sitter-moonbit (with a provenance header) and take runtime
+  precedence over the plugin's own queries. Refresh from upstream rather than
+  hand-editing.
 
 ## Markdown
 

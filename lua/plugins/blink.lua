@@ -145,7 +145,7 @@ return {
 					then
 						return { "buffer", "path" }
 					else
-						return { "lsp", "snippets", "buffer", "path" }
+						return { "lsp", "mooncake", "snippets", "buffer", "path" }
 					end
 				end,
 				providers = {
@@ -182,6 +182,11 @@ return {
 						name = "RenderMarkdown",
 						module = "render-markdown.integ.blink",
 						fallbacks = { "lsp" },
+					},
+					mooncake = {
+						name = "Mooncakes",
+						module = "moonbit.mooncakes.completion.blink",
+						opts = { max_items = 100 },
 					},
 				},
 			},

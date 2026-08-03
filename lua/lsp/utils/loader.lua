@@ -51,11 +51,14 @@ local function load()
 
 				local setup = cfg["lspconfig"]
 				local server_name = cfg["server_name"]
-				
-				if type(setup) == "function" then
+
+				-- Modules may contribute only formatters/linters (e.g. the
+				-- MoonBit formatter-only module) and have no server_name;
+				-- vim.lsp.config(nil, ...) would error, so skip them.
+				if server_name and type(setup) == "function" then
 					-- Custom setup function (used by typescript, rescript, etc.)
 					setup(nil, opts)
-				else
+				elseif server_name then
 					-- Simple setup: just define the config, mason-lspconfig will enable it
 					vim.lsp.config(server_name, opts)
 				end
@@ -65,8 +68,11 @@ local function load()
 			return config("formatter", "merge")
 		end,
 		formatters_setup = function(conform)
+			-- config() returns a dict keyed by module name (not an array), so
+			-- iterate with pairs. ipairs() here silently skipped every custom
+			-- formatter setup (moonbit's moon_fmt never registered).
 			local setups = config("formatter_setup")
-			for _, formatter_setup in ipairs(setups) do
+			for _, formatter_setup in pairs(setups) do
 				formatter_setup(conform)
 			end
 		end,
