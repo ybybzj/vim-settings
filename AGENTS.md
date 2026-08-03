@@ -31,7 +31,7 @@ Each file exports: `{ server_name, opts, formatter, linter, lspconfig, keys }`
 ### Globals (defined in .luarc.json)
 `vim`, `Snacks`, `_toggle_lazygit`
 
-### AI Assistant Capabilities(supermaven + Sidekick + Opencode-Cli)
+### AI Assistant Capabilities(supermaven + Sidekick)
 
 ### Treesitter setup
 - nvim-treesitter runs on the `main` branch (v1.x rewrite), not frozen master.

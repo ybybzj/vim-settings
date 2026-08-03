@@ -12,6 +12,23 @@ local signs = {
 local hunk_focus = require("config.git_hunk_focus")
 local current_hunk_diff = require("config.current_hunk_diff")
 
+-- Hunk navigation for the diff review workflow (AI-review tooling, was opencode.nvim)
+local function with_mini_diff(callback)
+	local ok, mini_diff = pcall(require, "mini.diff")
+	if not ok then
+		vim.notify("mini.diff is not available", vim.log.levels.WARN)
+		return
+	end
+	mini_diff.enable(0)
+	callback(mini_diff)
+end
+
+local function goto_diff_hunk(direction)
+	with_mini_diff(function(mini_diff)
+		mini_diff.goto_hunk(direction)
+	end)
+end
+
 return {
 	{
 		"lewis6991/gitsigns.nvim",
@@ -87,6 +104,21 @@ return {
 			{ "<space>gfd", current_hunk_diff.toggle_buffer_overlay, desc = "Toggle Buffer Diff Overlay" },
 			{ "<space>gD", current_hunk_diff.toggle_tracking, desc = "Toggle Buffer Diff Tracking" },
 			{ "<space>gfh", current_hunk_diff.toggle, desc = "Toggle Current Hunk Diff" },
+			-- Diff review workflow (formerly under <space>a*, moved here when opencode.nvim was dropped)
+			{ "<space>grw", current_hunk_diff.show, desc = "Review Current Hunk Diff" },
+			{ "<space>grh", current_hunk_diff.show, desc = "Review Current Hunk Diff" },
+			{ "<space>grj", function() goto_diff_hunk("next") end, desc = "Next Hunk" },
+			{ "<space>grk", function() goto_diff_hunk("prev") end, desc = "Prev Hunk" },
+			{ "<space>grp", current_hunk_diff.toggle, desc = "Toggle Current Hunk Diff" },
+			{ "<space>grb", current_hunk_diff.toggle_buffer_overlay, desc = "Toggle Buffer Diff Overlay" },
+			{ "<space>grq", current_hunk_diff.clear, desc = "Close Diff Review" },
 		},
+		cmd = { "DiffReview" },
+		config = function(_, opts)
+			require("mini.diff").setup(opts)
+			vim.api.nvim_create_user_command("DiffReview", function()
+				current_hunk_diff.show()
+			end, { desc = "Open current hunk diff review" })
+		end,
 	},
 }

@@ -1,5 +1,5 @@
 -- sidekick.nvim: NES (Next Edit Suggestions) only
--- CLI interactions are handled by opencode.nvim
+-- CLI mode disabled by design (agent CLIs like pi provide their own TUI)
 return {
 	"folke/sidekick.nvim",
 	dependencies = {
@@ -10,7 +10,7 @@ return {
 			enabled = true,
 			debounce = 100,
 		},
-		-- CLI disabled - handled by opencode.nvim
+		-- CLI disabled by design (pi provides its own TUI)
 		cli = {
 			enabled = false,
 		},
