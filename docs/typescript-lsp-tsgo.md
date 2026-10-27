@@ -32,7 +32,9 @@ multi-GB transient spike.
 
 ## How it is wired
 
-`lua/lsp/typescript.lua` sets `USE_TSGO = true` and registers a `tsgo` client
+`lua/lsp/typescript.lua` sets `USE_TSGO = true` and registers a `tsc` client
+(named `tsgo` until nvim-lspconfig deprecated that name; lspconfig's
+`lsp/tsc.lua` turns on per-function code lenses, which the config switches off)
 (`--lsp -stdio`) alongside the existing `vtsls` config. Both backends decide
 per buffer through `root_dir(bufnr, on_dir)`, which Neovim treats as an
 activation gate:
@@ -90,7 +92,7 @@ Two equivalent ways:
 ## Verifying
 
 ```bash
-# which server is attached, and its root (should be tsgo + the worktree root)
+# which server is attached, and its root (should be tsc + the worktree root)
 nvim --headless -u ~/.config/nvim/init.lua \
   -c 'edit packages/excel/front/sdk/plugins/emptySheetTip/index.tsx' \
   -c 'sleep 8' -c 'lua =vim.lsp.get_clients()' -c 'qa!'

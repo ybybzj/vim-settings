@@ -117,7 +117,13 @@ local function merge_statuses(primary, secondary)
 end
 
 local function render_cached_status(state)
-	local worktree_root, worktree = git.find_existing_worktree(state.path)
+	-- find_existing_worktree only looks for a worktree *above* the path, so a
+	-- view opened at the worktree root itself would find nothing and render an
+	-- empty tree over the real status.
+	local worktree_root, worktree = state.path, git.worktrees[state.path]
+	if not worktree then
+		worktree_root, worktree = git.find_existing_worktree(state.path)
+	end
 	local cached = worktree_root and status_cache_by_root[cache_key(worktree_root)]
 	if cached then
 		render_status(state, cached, state.path or worktree_root)

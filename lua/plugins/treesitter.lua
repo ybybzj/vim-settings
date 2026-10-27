@@ -67,7 +67,15 @@ return {
 		"nvim-treesitter/nvim-treesitter",
 		branch = "main", -- REQUIRED: default branch is the frozen master
 		lazy = false, -- main does not support lazy-loading
-		build = ":TSUpdate", -- updates already-installed parsers only
+		-- Updates already-installed parsers only. moonbit.nvim registers the
+		-- moonbit parser on `User TSUpdate` but is lazy-loaded by filetype, so
+		-- load it first or the update fails with "Parser not available for
+		-- language moonbit". (Hooking the event instead would load it at every
+		-- startup: install() below fires TSUpdate once.)
+		build = function()
+			require("lazy").load({ plugins = { "moonbit.nvim" } })
+			vim.cmd("TSUpdate")
+		end,
 		dependencies = {
 			"JoosepAlviste/nvim-ts-context-commentstring",
 		},

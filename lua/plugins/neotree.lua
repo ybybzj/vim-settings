@@ -532,13 +532,16 @@ end
 
 return {
 	"nvim-neo-tree/neo-tree.nvim",
-	branch = "v3.x",
+	-- main, not v3.x: the git-status job leaked its process handle, and with it
+	-- the whole `git status` output, on every refresh (several GB a day in the
+	-- editor monorepo). Fixed in 82da62d (#2106), which is on main only; v3.x
+	-- (the README's default) can come back once that fix is cherry-picked.
+	branch = "main",
 	lazy = false,
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		"nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
 		"MunifTanjim/nui.nvim",
-		"stevearc/dressing.nvim",
 		"MagicDuck/grug-far.nvim",
 	},
 	config = config,

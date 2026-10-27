@@ -86,11 +86,24 @@ return {
 			-- root_dir/on_dir (returning without calling on_dir skips the
 			-- client), so tsgo claims workspaces that ship native TS 7 while
 			-- vtsls only takes over workspaces that do not.
-			vim.lsp.config("tsgo", {
+			--
+			-- Client name "tsc": nvim-lspconfig deprecated "tsgo" in favour of
+			-- it. Every key below overrides lspconfig's lsp/tsc.lua, except the
+			-- settings it adds under "js/ts", the section TS 7 reads first.
+			-- Those turn on reference/implementation code lenses for every
+			-- function (a find-references per function, in a 24k-file
+			-- monorepo) and variable-type inlay hints, so "js/ts" restates our
+			-- own typescript settings with the lenses off.
+			vim.lsp.config("tsc", {
 				filetypes = TS_FILETYPES,
 				capabilities = opts.capabilities,
 				on_attach = opts.on_attach,
-				settings = opts.settings,
+				settings = vim.tbl_deep_extend("force", opts.settings, {
+					["js/ts"] = vim.tbl_deep_extend("force", opts.settings.typescript, {
+						referencesCodeLens = { enabled = false },
+						implementationsCodeLens = { enabled = false },
+					}),
+				}),
 				cmd = function(dispatchers, config)
 					local exe = tsgo.command(config.root_dir)
 					if not exe then
@@ -107,7 +120,7 @@ return {
 					end
 				end,
 			})
-			vim.lsp.enable("tsgo")
+			vim.lsp.enable("tsc")
 
 			opts.root_dir = function(bufnr, on_dir)
 				local root = workspace_root(bufnr)
