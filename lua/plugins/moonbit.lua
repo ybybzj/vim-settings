@@ -26,19 +26,42 @@ return {
 			"BufReadPre *.mbt.md",
 		},
 		dependencies = { "nvim-treesitter/nvim-treesitter" },
-		opts = {
-			-- Parser install/update is owned by the plugin (registers
-			-- moonbitlang/tree-sitter-moonbit on `User TSUpdate`). Highlight/
-			-- indent/fold queries stay vendored locally in queries/moonbit/
-			-- (config runtime dir takes precedence over the plugin's).
-			treesitter = { enabled = true, auto_install = true },
-			-- Native OCaml LSP is the default; set lsp = { native = false }
-			-- to fall back to the legacy TS moonbit-lsp.
-			lsp = { native = true },
-			mooncakes = { virtual_text = true, use_local = true },
-			-- Registers moon.mod.json / moon.pkg.json schemas with jsonls
-			-- (merged into the existing json.lua settings).
-			jsonls = {},
-		},
+		-- opts is a function so it is evaluated only when this plugin actually
+		-- loads (first moonbit buffer): by then blink.cmp is already up, and
+		-- make_client_capabilities() can include its completion capabilities.
+		opts = function()
+			local handlers = require("lsp.utils.handlers")
+			local default_keymaps = require("lsp.utils.keymaps")
+
+			return {
+				-- Parser install/update is owned by the plugin (registers
+				-- moonbitlang/tree-sitter-moonbit on `User TSUpdate`). Highlight/
+				-- indent/fold queries stay vendored locally in queries/moonbit/
+				-- (config runtime dir takes precedence over the plugin's).
+				treesitter = { enabled = true, auto_install = true },
+				-- moonbit.nvim owns the moonbit-lsp client config and calls
+				-- vim.lsp.enable() itself, bypassing lua/lsp/utils/loader.lua's
+				-- on_attach. Inject the same shared on_attach / capabilities
+				-- here (they are deep-merged into vim.lsp.config("moonbit-lsp"))
+				-- so moonbit buffers get the default LSP keymaps (gd/gr/gi/gt/
+				-- K/F2/...), document highlight, codelens and blink completion
+				-- just like every other server.
+				lsp = {
+					-- Native OCaml LSP is the default; set native = false
+					-- to fall back to the legacy TS moonbit-lsp.
+					native = true,
+					on_attach = function(client, bufnr)
+						handlers.lsp_keymaps(client, bufnr, default_keymaps)
+						handlers.lsp_highlight_document(client, bufnr)
+						handlers.lsp_codelens(client, bufnr)
+					end,
+					capabilities = handlers.make_client_capabilities(),
+				},
+				mooncakes = { virtual_text = true, use_local = true },
+				-- Registers moon.mod.json / moon.pkg.json schemas with jsonls
+				-- (merged into the existing json.lua settings).
+				jsonls = {},
+			}
+		end,
 	},
 }

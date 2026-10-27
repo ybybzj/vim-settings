@@ -91,7 +91,14 @@ return {
 				},
 				init = function()
 					local config = {
-						-- disable virtual text
+						-- Built-in eol virtual text stays off; Lspsaga's
+						-- diagnostic_only_current renders the current
+						-- line's message instead (see the diagnostic opts
+						-- below). That hint is a virt_text extmark, and
+						-- Neovim never wraps virtual text, so it is clipped
+						-- without ellipsis in a narrow window. `ge`
+						-- (vim.diagnostic.open_float) is the readable path,
+						-- hence float.wrap below.
 						virtual_text = false,
 						-- show signs
 						signs = {
@@ -112,6 +119,9 @@ return {
 							source = "always",
 							header = "",
 							prefix = "",
+							-- Explicit: open_float() wraps long messages so
+							-- the full text is readable in narrow splits.
+							wrap = true,
 						},
 					}
 

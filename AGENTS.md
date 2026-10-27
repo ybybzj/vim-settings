@@ -28,6 +28,12 @@ Personal Neovim config using lazy.nvim plugin manager with LSP, treesitter, and 
 ### LSP Config Pattern (lua/lsp/*.lua)
 Each file exports: `{ server_name, opts, formatter, linter, lspconfig, keys }`
 
+### TypeScript backend switch
+- TS/JS LSP runs native TypeScript 7 (`tsgo`) when the workspace ships it, with
+  vtsls as a per-workspace fallback. Maintenance/revert notes live in
+  `docs/typescript-lsp-tsgo.md` — read that before editing
+  `lua/lsp/typescript.lua` or `lua/lsp/utils/tsgo.lua`.
+
 ### Globals (defined in .luarc.json)
 `vim`, `Snacks`, `_toggle_lazygit`
 
